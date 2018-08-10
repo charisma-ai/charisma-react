@@ -14,6 +14,7 @@ interface ICharismaChildProps extends ICharismaState {
   messages: IMessage[];
   start: ({ startNodeId }: { startNodeId: string }) => void;
   reply: ({ text }: { text: string }) => void;
+  changeInput: (newInput: string) => void;
   changeIsListening: (newIsListening: boolean) => void;
   changeIsMuted: (newIsMuted: boolean) => void;
 }
@@ -55,6 +56,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
   public render() {
     return this.props.children({
+      changeInput: this.changeInput,
       changeIsListening: this.changeIsListening,
       changeIsMuted: this.changeIsMuted,
       messages: this.state.messages,
