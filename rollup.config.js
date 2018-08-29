@@ -4,38 +4,36 @@ import typescript from "rollup-plugin-typescript2";
 
 import pkg from "./package.json";
 
-const externalLibs = ["react"];
-
+const externalLibs = ["react", "react-dom"];
 const globalLibs = {
-  react: "React"
+  react: "React",
+  "react-dom": "ReactDOM"
 };
 
 const name = "Charisma";
 
 export default {
   input: "src/Charisma.tsx",
+  external: externalLibs,
   output: [
     {
-      external: externalLibs,
+      exports: "named",
       file: pkg.main,
       format: "umd",
       globals: globalLibs,
-      name: "Charisma",
+      name,
       sourcemap: true
     },
     {
-      external: externalLibs,
+      exports: "named",
       file: pkg.module,
       format: "es",
-      globals: globalLibs,
-      name: "Charisma",
+      name,
       sourcemap: true
     }
   ],
   plugins: [
-    resolve({
-      browser: true
-    }),
+    resolve(),
     commonjs(),
     typescript({
       typescript: require("typescript")
