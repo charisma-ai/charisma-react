@@ -7,6 +7,7 @@ interface IMessage {
   author: string;
   avatar: string | undefined;
   media: string | undefined;
+  metadata: {};
   timestamp: number;
 }
 
@@ -47,7 +48,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     disabled: false,
     inputValue: "",
     isListening: false,
-    isMuted: false,
+    isMuted: true,
     isSpeaking: false,
     isTyping: false,
     messages: [],
@@ -94,6 +95,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         author: reply.character,
         avatar: reply.avatar,
         media: reply.media,
+        metadata: reply.metadata,
         text: reply.message,
         timestamp: Date.now()
       });
@@ -157,7 +159,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
   }: {
     startNodeId?: string;
     characterId?: string;
-  }) => {
+  } = {}) => {
     this.clearMessages();
     this.clearInput();
 
@@ -186,6 +188,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       author: "Me",
       avatar: undefined,
       media: undefined,
+      metadata: {},
       text,
       timestamp: Date.now()
     });
