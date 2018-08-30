@@ -113,7 +113,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       const messageInfo = { endStory, ...rest };
 
       if (this.props.onReply) {
-        this.props.onReply(reply, messageInfo);
+        this.props.onReply(message, messageInfo);
       }
 
       if (endStory) {
