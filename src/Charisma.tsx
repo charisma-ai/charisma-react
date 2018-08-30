@@ -26,6 +26,7 @@ interface ICharismaProps {
   version: number;
   userToken?: string;
   baseURL: string;
+  onReply: (message: IMessage) => void;
 }
 
 interface ICharismaState {
@@ -86,6 +87,10 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     });
 
     charisma.on("reply", async ({ reply, endStory }) => {
+      if (this.props.onReply) {
+        this.props.onReply(reply);
+      }
+
       if (endStory) {
         this.changeIsListening(false);
         this.setState({ disabled: true });
