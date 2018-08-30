@@ -11,6 +11,16 @@ interface IMessage {
   timestamp: number;
 }
 
+interface IPathItem {
+  id: number;
+  type: "node" | "edge";
+}
+
+interface IMessageInfo {
+  endStory: boolean;
+  path: IPathItem[];
+}
+
 interface ICharismaChildProps extends ICharismaState {
   messages: IMessage[];
   start: ({ startNodeId }: { startNodeId: string }) => void;
@@ -26,7 +36,9 @@ interface ICharismaProps {
   version: number;
   userToken?: string;
   baseURL: string;
-  onReply: (message: IMessage) => void;
+  onReply?: (message: IMessage, info: IMessageInfo) => void;
+  onSpeakStart?: (message: IMessage, info: IMessageInfo) => void;
+  onSpeakStop?: (message: IMessage, info: IMessageInfo) => void;
 }
 
 interface ICharismaState {
@@ -86,9 +98,22 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       version: this.props.version
     });
 
-    charisma.on("reply", async ({ reply, endStory }) => {
+    charisma.on("reply", async ({ reply, endStory, ...rest }) => {
+      const message = {
+        author: reply.character,
+        avatar: reply.avatar,
+        media: reply.media,
+        metadata: reply.metadata,
+        text: reply.message,
+        timestamp: Date.now()
+      };
+
+      this.addMessage(message);
+
+      const messageInfo = { endStory, ...rest };
+
       if (this.props.onReply) {
-        this.props.onReply(reply);
+        this.props.onReply(reply, messageInfo);
       }
 
       if (endStory) {
@@ -96,20 +121,18 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         this.setState({ disabled: true });
       }
 
-      this.addMessage({
-        author: reply.character,
-        avatar: reply.avatar,
-        media: reply.media,
-        metadata: reply.metadata,
-        text: reply.message,
-        timestamp: Date.now()
-      });
-
       if (reply.speech) {
         this.setState({ isSpeaking: true });
+        if (this.props.onSpeakStart) {
+          this.props.onSpeakStart(message, messageInfo);
+        }
+
         await charisma.speak(reply.speech.data);
+
         this.setState({ isSpeaking: false });
-        await new Promise(resolve => setTimeout(resolve, 500));
+        if (this.props.onSpeakStop) {
+          this.props.onSpeakStop(message, messageInfo);
+        }
       }
     });
 
