@@ -1,5 +1,5 @@
 {
-  "name": "charisma-react",
+  "name": "@charisma-ai/react",
   "version": "0.0.0-development",
   "description": "Charisma.ai chat component for React",
   "main": "dist/umd/index.js",
@@ -21,7 +21,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "charisma-sdk-js": "^0.2.0"
+    "@charisma-ai/sdk": "^0.3.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.12",

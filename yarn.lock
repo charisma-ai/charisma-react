@@ -16,6 +16,14 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@charisma-ai/sdk@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-0.3.0.tgz#089ccf3238b4bc652b010b5ada2a4482843ff95a"
+  dependencies:
+    "@types/socket.io-client" "^1.4.32"
+    eventemitter3 "^3.1.0"
+    socket.io-client "^2.1.0"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -284,14 +292,6 @@ chalk@^2.0.0, chalk@^2.0.1, chalk@^2.3.0, chalk@^2.3.1:
 chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
-
-charisma-sdk-js@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/charisma-sdk-js/-/charisma-sdk-js-0.2.0.tgz#340e66cb22b40aaad0e90a7179954d800a95043a"
-  dependencies:
-    "@types/socket.io-client" "^1.4.32"
-    eventemitter3 "^3.1.0"
-    socket.io-client "^2.1.0"
 
 ci-info@^1.0.0:
   version "1.1.3"

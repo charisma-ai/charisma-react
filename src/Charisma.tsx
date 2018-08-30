@@ -1,6 +1,6 @@
 import React from "react";
 
-import CharismaSDK, { CharismaInstance } from "charisma-sdk-js";
+import CharismaSDK, { CharismaInstance } from "@charisma-ai/sdk";
 
 interface IMessage {
   text: string;
