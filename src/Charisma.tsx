@@ -80,9 +80,9 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
     const charisma = await CharismaSDK.connect({
       baseUrl: this.props.baseURL,
-      debug: false,
       storyId: this.props.storyId,
-      userToken: this.props.userToken
+      userToken: this.props.userToken,
+      version: this.props.version
     });
 
     charisma.on("reply", async ({ reply, endStory }) => {

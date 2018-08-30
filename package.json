@@ -21,7 +21,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "charisma-sdk-js": "^0.1.2"
+    "charisma-sdk-js": "^0.2.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.12",

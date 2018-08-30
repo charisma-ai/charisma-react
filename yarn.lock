@@ -285,9 +285,9 @@ chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
 
-charisma-sdk-js@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/charisma-sdk-js/-/charisma-sdk-js-0.1.2.tgz#5d6ee5e0c449d39498d84e28c5f45d9cd815a6bb"
+charisma-sdk-js@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/charisma-sdk-js/-/charisma-sdk-js-0.2.0.tgz#340e66cb22b40aaad0e90a7179954d800a95043a"
   dependencies:
     "@types/socket.io-client" "^1.4.32"
     eventemitter3 "^3.1.0"
