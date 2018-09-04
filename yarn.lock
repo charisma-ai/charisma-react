@@ -16,9 +16,9 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@charisma-ai/sdk@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-0.3.0.tgz#089ccf3238b4bc652b010b5ada2a4482843ff95a"
+"@charisma-ai/sdk@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-0.3.1.tgz#5aee287d7310a4fa19dc6e6b9e8df452d89ff8f5"
   dependencies:
     "@types/socket.io-client" "^1.4.32"
     eventemitter3 "^3.1.0"

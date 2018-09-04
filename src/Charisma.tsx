@@ -33,7 +33,7 @@ interface ICharismaChildProps extends ICharismaState {
 interface ICharismaProps {
   children: (bag: ICharismaChildProps) => React.ReactNode;
   storyId: string;
-  version: number;
+  version?: number;
   userToken?: string;
   baseURL: string;
   onReply?: (message: IMessage, info: IMessageInfo) => void;
