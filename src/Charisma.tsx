@@ -1,6 +1,7 @@
 import React from "react";
 
 import CharismaSDK, { CharismaInstance } from "@charisma-ai/sdk";
+import update from "immutability-helper";
 
 interface IMessage {
   text: string;
@@ -21,6 +22,14 @@ interface IMessageInfo {
   path: IPathItem[];
 }
 
+interface ICharacterMood {
+  happiness: number;
+  anger: number;
+  trust: number;
+  patience: number;
+  fearlessness: number;
+}
+
 interface ICharismaChildProps extends ICharismaState {
   messages: IMessage[];
   start: ({ startNodeId }: { startNodeId: string }) => void;
@@ -36,12 +45,14 @@ interface ICharismaProps {
   version?: number;
   userToken?: string;
   baseURL: string;
+  onStart?: () => void;
   onReply?: (message: IMessage, info: IMessageInfo) => void;
   onSpeakStart?: (message: IMessage, info: IMessageInfo) => void;
   onSpeakStop?: (message: IMessage, info: IMessageInfo) => void;
 }
 
 interface ICharismaState {
+  characterMoods: { [id: number]: ICharacterMood };
   disabled: boolean;
   inputValue: string;
   isListening: boolean;
@@ -54,10 +65,11 @@ interface ICharismaState {
 
 class Charisma extends React.Component<ICharismaProps, ICharismaState> {
   public static defaultProps = {
-    baseURL: "https://api.charisma.ai/play"
+    baseURL: "https://api.charisma.ai"
   };
 
   public readonly state: ICharismaState = {
+    characterMoods: {},
     disabled: false,
     inputValue: "",
     isListening: false,
@@ -86,6 +98,22 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     }
   }
 
+  private updateCharacterMoods = (
+    newCharacterMoods: Array<{ id: number; mood: ICharacterMood }>
+  ) => {
+    const patch: { [id: number]: { $set: ICharacterMood } } = {};
+    newCharacterMoods.forEach(({ id, mood }) => {
+      patch[id] = {
+        $set: mood
+      };
+    });
+    const updatedCharacterMoods = update(this.state.characterMoods, patch);
+    this.setState(() => ({
+      characterMoods: updatedCharacterMoods
+    }));
+    return updatedCharacterMoods;
+  };
+
   private getSocket = async () => {
     if (this.state.socket) {
       return this.state.socket;
@@ -98,43 +126,51 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       version: this.props.version
     });
 
-    charisma.on("reply", async ({ reply, endStory, ...rest }) => {
-      const message = {
-        author: reply.character,
-        avatar: reply.avatar,
-        media: reply.media,
-        metadata: reply.metadata,
-        text: reply.message,
-        timestamp: Date.now()
-      };
+    charisma.on(
+      "reply",
+      async ({ reply, endStory, characterMoods, ...rest }) => {
+        const message = {
+          author: reply.character,
+          avatar: reply.avatar,
+          media: reply.media,
+          metadata: reply.metadata,
+          text: reply.message,
+          timestamp: Date.now()
+        };
 
-      this.addMessage(message);
+        this.addMessage(message);
+        const updatedCharacterMoods = this.updateCharacterMoods(characterMoods);
 
-      const messageInfo = { endStory, ...rest };
+        const messageInfo = {
+          characterMoods: updatedCharacterMoods,
+          endStory,
+          ...rest
+        };
 
-      if (this.props.onReply) {
-        this.props.onReply(message, messageInfo);
-      }
-
-      if (endStory) {
-        this.changeIsListening(false);
-        this.setState({ disabled: true });
-      }
-
-      if (reply.speech) {
-        this.setState({ isSpeaking: true });
-        if (this.props.onSpeakStart) {
-          this.props.onSpeakStart(message, messageInfo);
+        if (this.props.onReply) {
+          this.props.onReply(message, messageInfo);
         }
 
-        await charisma.speak(reply.speech.data);
+        if (endStory) {
+          this.changeIsListening(false);
+          this.setState({ disabled: true });
+        }
 
-        this.setState({ isSpeaking: false });
-        if (this.props.onSpeakStop) {
-          this.props.onSpeakStop(message, messageInfo);
+        if (reply.speech) {
+          this.setState({ isSpeaking: true });
+          if (this.props.onSpeakStart) {
+            this.props.onSpeakStart(message, messageInfo);
+          }
+
+          await charisma.speak(reply.speech.data);
+
+          this.setState({ isSpeaking: false });
+          if (this.props.onSpeakStop) {
+            this.props.onSpeakStop(message, messageInfo);
+          }
         }
       }
-    });
+    );
 
     charisma.on("start-typing", () => {
       this.setState({ isTyping: true });
@@ -190,6 +226,10 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
   } = {}) => {
     this.clearMessages();
     this.clearInput();
+
+    if (this.props.onStart) {
+      this.props.onStart();
+    }
 
     const socket = await this.getSocket();
     socket.start({

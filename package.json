@@ -21,7 +21,8 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "^0.3.1"
+    "@charisma-ai/sdk": "^0.3.1",
+    "immutability-helper": "^2.7.1"
   },
   "devDependencies": {
     "@types/react": "^16.4.12",
