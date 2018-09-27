@@ -188,7 +188,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       this.reply({ text });
     });
 
-    this.setState({ socket: charisma, disabled: false });
+    this.setState({ socket: charisma });
     return charisma;
   };
 
@@ -236,6 +236,10 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       characterId,
       speech: !this.state.isMuted,
       startNodeId
+    });
+
+    this.setState({
+      disabled: false
     });
   };
 
