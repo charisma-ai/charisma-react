@@ -5,7 +5,7 @@
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
   "browser": "dist/umd/index.js",
-  "types": "dist/esm/index.d.ts",
+  "types": "dist/esm/Charisma.d.ts",
   "repository": "https://github.com/charisma-ai/charisma-react",
   "author": "charisma.ai <ben@charisma.ai>",
   "license": "MIT",
