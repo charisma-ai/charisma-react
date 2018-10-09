@@ -3,7 +3,7 @@ import React from "react";
 import CharismaSDK, { CharismaInstance } from "@charisma-ai/sdk";
 import update from "immutability-helper";
 
-interface IMessage {
+export interface IMessage {
   text: string;
   author: string;
   avatar: string | undefined;
@@ -12,17 +12,17 @@ interface IMessage {
   timestamp: number;
 }
 
-interface IPathItem {
+export interface IPathItem {
   id: number;
   type: "node" | "edge";
 }
 
-interface IMessageInfo {
+export interface IMessageInfo {
   endStory: boolean;
   path: IPathItem[];
 }
 
-interface ICharacterMood {
+export interface ICharacterMood {
   happiness: number;
   anger: number;
   trust: number;
@@ -30,7 +30,7 @@ interface ICharacterMood {
   fearlessness: number;
 }
 
-interface ICharismaChildProps extends ICharismaState {
+export interface ICharismaChildProps extends ICharismaState {
   messages: IMessage[];
   start: ({ startNodeId }: { startNodeId: string }) => void;
   reply: ({ text }: { text: string }) => void;
@@ -39,7 +39,7 @@ interface ICharismaChildProps extends ICharismaState {
   changeIsMuted: (newIsMuted: boolean) => void;
 }
 
-interface ICharismaProps {
+export interface ICharismaProps {
   children: (bag: ICharismaChildProps) => React.ReactNode;
   storyId: string;
   version?: number;
@@ -51,7 +51,7 @@ interface ICharismaProps {
   onSpeakStop?: (message: IMessage, info: IMessageInfo) => void;
 }
 
-interface ICharismaState {
+export interface ICharismaState {
   characterMoods: { [id: number]: ICharacterMood };
   disabled: boolean;
   inputValue: string;
