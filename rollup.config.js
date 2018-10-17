@@ -1,8 +1,10 @@
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
-import typescript from "rollup-plugin-typescript2";
+import minify from "rollup-plugin-babel-minify";
 
 import pkg from "./package.json";
+
+const input = "./compiled/Charisma.js";
 
 const externalLibs = ["react", "react-dom"];
 const globalLibs = {
@@ -10,33 +12,47 @@ const globalLibs = {
   "react-dom": "ReactDOM"
 };
 
-const name = "Charisma";
-
-export default {
-  input: "src/Charisma.tsx",
-  external: externalLibs,
-  output: [
-    {
+export default [
+  {
+    input,
+    external: externalLibs,
+    output: {
       exports: "named",
-      file: pkg.main,
+      file: pkg.browser,
       format: "umd",
       globals: globalLibs,
-      name,
+      name: "Charisma",
       sourcemap: true
     },
-    {
-      exports: "named",
-      file: pkg.module,
-      format: "es",
-      name,
-      sourcemap: true
-    }
-  ],
-  plugins: [
-    resolve(),
-    commonjs(),
-    typescript({
-      typescript: require("typescript")
-    })
-  ]
-};
+    plugins: [
+      resolve({
+        browser: true
+      }),
+      commonjs({
+        include: /node_modules/
+      }),
+      minify({
+        comments: false
+      })
+    ]
+  },
+  {
+    input,
+    external: externalLibs.concat(Object.keys(pkg.dependencies)),
+    output: [
+      {
+        exports: "named",
+        file: pkg.module,
+        format: "es",
+        sourcemap: true
+      },
+      {
+        exports: "named",
+        file: pkg.main,
+        format: "cjs",
+        sourcemap: true
+      }
+    ],
+    plugins: [resolve()]
+  }
+];

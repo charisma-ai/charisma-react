@@ -32,8 +32,8 @@ export interface ICharacterMood {
 
 export interface ICharismaChildProps extends ICharismaState {
   messages: IMessage[];
-  start: ({ startNodeId }: { startNodeId: string }) => void;
-  reply: ({ text }: { text: string }) => void;
+  start: (options?: { startNodeId?: number }) => void;
+  reply: (options: { text: string }) => void;
   changeInput: (newInput: string) => void;
   changeIsListening: (newIsListening: boolean) => void;
   changeIsMuted: (newIsMuted: boolean) => void;
@@ -41,7 +41,7 @@ export interface ICharismaChildProps extends ICharismaState {
 
 export interface ICharismaProps {
   children: (bag: ICharismaChildProps) => React.ReactNode;
-  storyId: string;
+  storyId: number;
   version?: number;
   userToken?: string;
   baseURL: string;
@@ -221,8 +221,8 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     startNodeId,
     characterId
   }: {
-    startNodeId?: string;
-    characterId?: string;
+    startNodeId?: number;
+    characterId?: number;
   } = {}) => {
     this.clearMessages();
     this.clearInput();
@@ -248,7 +248,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     characterId
   }: {
     text: string;
-    characterId?: string;
+    characterId?: number;
   }) => {
     if (text === "") {
       return;
