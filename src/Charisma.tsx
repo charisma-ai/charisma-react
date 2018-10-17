@@ -34,6 +34,7 @@ export interface ICharismaChildProps extends ICharismaState {
   messages: IMessage[];
   start: (options?: { startNodeId?: number }) => void;
   reply: (options: { text: string }) => void;
+  setMemory: (options: { memoryId: string; saveValue: string }) => void;
   changeInput: (newInput: string) => void;
   changeIsListening: (newIsListening: boolean) => void;
   changeIsMuted: (newIsMuted: boolean) => void;
@@ -87,6 +88,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       changeIsMuted: this.changeIsMuted,
       messages: this.state.messages,
       reply: this.reply,
+      setMemory: this.setMemory,
       start: this.start,
       ...this.state
     });
@@ -271,6 +273,17 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       message: text,
       speech: !this.state.isMuted
     });
+  };
+
+  private setMemory = async ({
+    memoryId,
+    saveValue
+  }: {
+    memoryId: string;
+    saveValue: string;
+  }) => {
+    const socket = await this.getSocket();
+    socket.setMemory({ memoryId, saveValue });
   };
 }
 
