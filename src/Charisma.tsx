@@ -81,6 +81,8 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     socket: null
   };
 
+  private socketPromise: Promise<CharismaInstance> | null = null;
+
   public render() {
     return this.props.children({
       changeInput: this.changeInput,
@@ -116,11 +118,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     return updatedCharacterMoods;
   };
 
-  private getSocket = async () => {
-    if (this.state.socket) {
-      return this.state.socket;
-    }
-
+  private initSocket = async () => {
     const charisma = await CharismaSDK.connect({
       baseUrl: this.props.baseURL,
       storyId: this.props.storyId,
@@ -192,6 +190,19 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
     this.setState({ socket: charisma });
     return charisma;
+  };
+
+  private getSocket = async () => {
+    if (this.state.socket) {
+      return this.state.socket;
+    }
+
+    /* De-duplicate multiple requests for the socket */
+    if (this.socketPromise) {
+      return this.socketPromise;
+    }
+    this.socketPromise = this.initSocket();
+    return this.socketPromise;
   };
 
   private addMessage = (message: IMessage) =>
