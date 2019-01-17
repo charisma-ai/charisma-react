@@ -18,7 +18,7 @@ export default [
     external: externalLibs,
     output: {
       exports: "named",
-      file: pkg.browser,
+      file: "dist/umd/index.js",
       format: "umd",
       globals: globalLibs,
       name: "Charisma",
