@@ -181,7 +181,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
       if (data.type === "tap" && this.state.mode === "chat") {
         this.setState({ mode: "tap" });
-      } else if (this.state.mode === "tap") {
+      } else if (data.type !== "tap" && this.state.mode === "tap") {
         this.setState({ mode: "chat" });
       }
 
