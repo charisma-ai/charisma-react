@@ -22,17 +22,21 @@ export interface IPathItem {
   type: "node" | "edge";
 }
 
-export interface IMessageInfo {
-  endStory: boolean;
-  path: IPathItem[];
-}
-
 export interface ICharacterMood {
   happiness: number;
   anger: number;
   trust: number;
   patience: number;
   fearlessness: number;
+}
+
+export interface IMessageInfo {
+  characterMoods: {
+    [id: number]: ICharacterMood;
+  };
+  endStory: boolean;
+  path: IPathItem[];
+  type: "character" | "media" | "tap";
 }
 
 export interface ICharismaChildProps extends ICharismaState {
@@ -52,7 +56,7 @@ export interface ICharismaProps {
   userToken?: string;
   baseURL: string;
   onStart?: () => void;
-  onReply?: (message: IMessage, info: IMessageInfo) => void;
+  onMessage?: (message: IMessage, info: IMessageInfo) => void;
   onSpeakStart?: (message: IMessage, info: IMessageInfo) => void;
   onSpeakStop?: (message: IMessage, info: IMessageInfo) => void;
 }
@@ -162,8 +166,8 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         type: data.type
       };
 
-      if (this.props.onReply) {
-        this.props.onReply(message, messageInfo);
+      if (this.props.onMessage) {
+        this.props.onMessage(message, messageInfo);
       }
 
       if (data.endStory) {
