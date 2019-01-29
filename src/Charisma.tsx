@@ -1,14 +1,19 @@
 import React from "react";
 
-import CharismaSDK, { CharismaInstance } from "@charisma-ai/sdk";
+import CharismaSDK, {
+  CharismaInstance,
+  CharismaMessage
+} from "@charisma-ai/sdk";
 import update from "immutability-helper";
 
 export interface IMessage {
-  text: string;
-  author: string;
-  avatar: string | undefined;
-  media: string | undefined;
-  metadata: {};
+  author: string | null;
+  avatar: string | null;
+  media: string | null;
+  metadata: {
+    [key: string]: string;
+  } | null;
+  text: string | null;
   timestamp: number;
 }
 
@@ -126,51 +131,63 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       version: this.props.version
     });
 
-    charisma.on(
-      "reply",
-      async ({ reply, endStory, characterMoods, ...rest }) => {
-        const message = {
-          author: reply.character,
-          avatar: reply.avatar,
-          media: reply.media,
-          metadata: reply.metadata,
-          text: reply.message,
-          timestamp: Date.now()
-        };
+    charisma.on("message", async (data: CharismaMessage) => {
+      const message = {
+        author:
+          data.type === "character" && data.message.character !== null
+            ? data.message.character.name
+            : null,
+        avatar:
+          data.type === "character" && data.message.character !== null
+            ? data.message.character.avatar
+            : null,
+        media: data.type === "media" ? data.message.url : null,
+        metadata: data.type === "character" ? data.message.metadata : null,
+        text:
+          data.type === "character" || data.type === "tap"
+            ? data.message.text
+            : null,
+        timestamp: Date.now()
+      };
 
-        this.addMessage(message);
-        const updatedCharacterMoods = this.updateCharacterMoods(characterMoods);
+      this.addMessage(message);
+      const updatedCharacterMoods = this.updateCharacterMoods(
+        data.characterMoods
+      );
 
-        const messageInfo = {
-          characterMoods: updatedCharacterMoods,
-          endStory,
-          ...rest
-        };
+      const messageInfo = {
+        characterMoods: updatedCharacterMoods,
+        endStory: data.endStory,
+        path: data.path,
+        type: data.type
+      };
 
-        if (this.props.onReply) {
-          this.props.onReply(message, messageInfo);
+      if (this.props.onReply) {
+        this.props.onReply(message, messageInfo);
+      }
+
+      if (data.endStory) {
+        this.changeIsListening(false);
+        this.setState({ disabled: true });
+      }
+
+      if (data.type === "character" && data.message.speech) {
+        this.setState({ isSpeaking: true });
+        if (this.props.onSpeakStart) {
+          this.props.onSpeakStart(message, messageInfo);
         }
 
-        if (endStory) {
-          this.changeIsListening(false);
-          this.setState({ disabled: true });
-        }
+        const audio = ((data.message.speech.audio as unknown) as {
+          data: number[];
+        }).data;
+        await charisma.speak(audio);
 
-        if (reply.speech) {
-          this.setState({ isSpeaking: true });
-          if (this.props.onSpeakStart) {
-            this.props.onSpeakStart(message, messageInfo);
-          }
-
-          await charisma.speak(reply.speech.data);
-
-          this.setState({ isSpeaking: false });
-          if (this.props.onSpeakStop) {
-            this.props.onSpeakStop(message, messageInfo);
-          }
+        this.setState({ isSpeaking: false });
+        if (this.props.onSpeakStop) {
+          this.props.onSpeakStop(message, messageInfo);
         }
       }
-    );
+    });
 
     charisma.on("start-typing", () => {
       this.setState({ isTyping: true });
@@ -271,8 +288,8 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
     this.addMessage({
       author: "Me",
-      avatar: undefined,
-      media: undefined,
+      avatar: null,
+      media: null,
       metadata: {},
       text,
       timestamp: Date.now()
