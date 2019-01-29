@@ -44,6 +44,7 @@ export interface ICharismaChildProps extends ICharismaState {
   start: (options?: { startNodeId?: number }) => void;
   reply: (options: { text: string }) => void;
   setMemory: (options: { memoryId: string; saveValue: string }) => void;
+  tap: () => void;
   changeInput: (newInput: string) => void;
   changeIsListening: (newIsListening: boolean) => void;
   changeIsMuted: (newIsMuted: boolean) => void;
@@ -70,6 +71,7 @@ export interface ICharismaState {
   isSpeaking: boolean;
   isTyping: boolean;
   messages: IMessage[];
+  mode: "chat" | "tap";
   socket: CharismaInstance | null;
 }
 
@@ -87,6 +89,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     isSpeaking: false,
     isTyping: false,
     messages: [],
+    mode: "chat",
     socket: null
   };
 
@@ -101,6 +104,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       reply: this.reply,
       setMemory: this.setMemory,
       start: this.start,
+      tap: this.tap,
       ...this.state
     });
   }
@@ -173,6 +177,12 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       if (data.endStory) {
         this.changeIsListening(false);
         this.setState({ disabled: true });
+      }
+
+      if (data.type === "tap" && this.state.mode === "chat") {
+        this.setState({ mode: "tap" });
+      } else if (this.state.mode === "tap") {
+        this.setState({ mode: "chat" });
       }
 
       if (data.type === "character" && data.message.speech) {
@@ -305,6 +315,11 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       message: text,
       speech: !this.state.isMuted
     });
+  };
+
+  private tap = async () => {
+    const socket = await this.getSocket();
+    socket.tap();
   };
 
   private setMemory = async ({

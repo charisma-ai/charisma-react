@@ -126,10 +126,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@charisma-ai/sdk@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-0.6.0.tgz#56d1765c30c7cd64e1a67ab892263467bcd104b6"
-  integrity sha512-uVii2FAbkhZGxbH6jMVW2BXcd8X01iGMf8XPLg/4mrZCCG1cUe/1nTkqdhsZgnTXFhs0Js/OTfpUTiWlIlms3w==
+"@charisma-ai/sdk@^0.7.0-next.0":
+  version "0.7.0-next.0"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-0.7.0-next.0.tgz#8695f6ee7e8bf2ba14484c216efc2a000126e35d"
+  integrity sha512-vjpXq8gKhyoieVRiq0165BjBdg1rkSOl2kzCW6UELRHqfG4IC50sBJ70ztjdNc/6FKG57E/N9WMGov/ky21KKg==
   dependencies:
     "@types/socket.io-client" "^1.4.32"
     eventemitter3 "^3.1.0"
