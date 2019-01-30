@@ -9,12 +9,14 @@ import update from "immutability-helper";
 export interface IMessage {
   author: string | null;
   avatar: string | null;
+  image: string | null;
   media: string | null;
   metadata: {
     [key: string]: string;
   } | null;
   text: string | null;
   timestamp: number;
+  type: "character" | "media" | "player" | "tap";
 }
 
 export interface IPathItem {
@@ -149,13 +151,15 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
           data.type === "character" && data.message.character !== null
             ? data.message.character.avatar
             : null,
+        image: data.type === "tap" ? data.message.image : null,
         media: data.type === "media" ? data.message.url : null,
         metadata: data.type === "character" ? data.message.metadata : null,
         text:
           data.type === "character" || data.type === "tap"
             ? data.message.text
             : null,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        type: data.type
       };
 
       this.addMessage(message);
@@ -303,10 +307,12 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     this.addMessage({
       author: "Me",
       avatar: null,
+      image: null,
       media: null,
       metadata: {},
       text,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      type: "player"
     });
 
     const socket = await this.getSocket();
