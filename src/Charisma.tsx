@@ -9,14 +9,13 @@ import update from "immutability-helper";
 export interface IMessage {
   author: string | null;
   avatar: string | null;
-  image: string | null;
   media: string | null;
   metadata: {
     [key: string]: string;
   } | null;
   text: string | null;
   timestamp: number;
-  type: "character" | "media" | "player" | "tap";
+  type: "character" | "media" | "player";
 }
 
 export interface IPathItem {
@@ -37,8 +36,9 @@ export interface IMessageInfo {
     [id: number]: ICharacterMood;
   };
   endStory: boolean;
+  tapToContinue: boolean;
   path: IPathItem[];
-  type: "character" | "media" | "tap";
+  type: "character" | "media";
 }
 
 export interface ICharismaChildProps extends ICharismaState {
@@ -151,13 +151,9 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
           data.type === "character" && data.message.character !== null
             ? data.message.character.avatar
             : null,
-        image: data.type === "tap" ? data.message.image : null,
         media: data.type === "media" ? data.message.url : null,
         metadata: data.type === "character" ? data.message.metadata : null,
-        text:
-          data.type === "character" || data.type === "tap"
-            ? data.message.text
-            : null,
+        text: data.type === "character" ? data.message.text : null,
         timestamp: Date.now(),
         type: data.type
       };
@@ -171,11 +167,13 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         characterMoods: updatedCharacterMoods,
         endStory: data.endStory,
         path: data.path,
+        tapToContinue: data.tapToContinue,
         type: data.type
       };
 
-      if (this.props.onMessage) {
-        this.props.onMessage(message, messageInfo);
+      const { onMessage } = this.props;
+      if (onMessage) {
+        onMessage(message, messageInfo);
       }
 
       if (data.endStory) {
@@ -183,9 +181,10 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         this.setState({ disabled: true });
       }
 
-      if (data.type === "tap" && this.state.mode === "chat") {
+      const { mode } = this.state;
+      if (data.tapToContinue && mode === "chat") {
         this.setState({ mode: "tap" });
-      } else if (data.type !== "tap" && this.state.mode === "tap") {
+      } else if (!data.tapToContinue && mode === "tap") {
         this.setState({ mode: "chat" });
       }
 
@@ -307,7 +306,6 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     this.addMessage({
       author: "Me",
       avatar: null,
-      image: null,
       media: null,
       metadata: {},
       text,
