@@ -321,9 +321,9 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     });
   };
 
-  private tap = async () => {
+  private tap = async ({ speech = false }: { speech?: boolean } = {}) => {
     const socket = await this.getSocket();
-    socket.tap();
+    socket.tap({ speech });
   };
 
   private setMemory = async ({
