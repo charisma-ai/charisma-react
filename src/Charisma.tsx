@@ -56,7 +56,11 @@ export interface ICharismaProps {
   children: (bag: ICharismaChildProps) => React.ReactNode;
   storyId: number;
   version?: number;
-  userToken?: string;
+  userToken:
+    | string
+    | null
+    | (() => string | null)
+    | (() => Promise<string | null>);
   baseURL: string;
   onStart?: () => void;
   onMessage?: (message: IMessage, info: IMessageInfo) => void;
@@ -79,7 +83,8 @@ export interface ICharismaState {
 
 class Charisma extends React.Component<ICharismaProps, ICharismaState> {
   public static defaultProps = {
-    baseURL: "https://api.charisma.ai"
+    baseURL: "https://api.charisma.ai",
+    userToken: null
   };
 
   public readonly state: ICharismaState = {
@@ -134,11 +139,16 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
   };
 
   private initSocket = async () => {
+    const { userToken } = this.props;
+    const foundUserToken =
+      typeof userToken === "function" ? await userToken() : userToken;
+
+    const { baseURL, storyId, version } = this.props;
     const charisma = await CharismaSDK.connect({
-      baseUrl: this.props.baseURL,
-      storyId: this.props.storyId,
-      userToken: this.props.userToken,
-      version: this.props.version
+      baseUrl: baseURL,
+      storyId,
+      userToken: foundUserToken || undefined,
+      version
     });
 
     charisma.on("message", async (data: CharismaMessage) => {
