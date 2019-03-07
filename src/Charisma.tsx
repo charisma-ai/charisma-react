@@ -60,6 +60,7 @@ export interface ICharismaProps {
   baseURL: string;
   onStart?: () => void;
   onMessage?: (message: IMessage, messageInfo: MessageInfo) => void;
+  onSpeak?: (audio: string | number[]) => void;
   onSpeakStart?: (message: IMessage, messageInfo: MessageInfo) => void;
   onSpeakStop?: (message: IMessage, messageInfo: MessageInfo) => void;
 }
@@ -191,17 +192,20 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         this.setState({ mode: "chat" });
       }
 
-      if (data.type === "character" && data.message.speech) {
+      const { isMuted } = this.state;
+      if (!isMuted && data.type === "character" && data.message.speech) {
         this.setState({ isSpeaking: true });
-        const { onSpeakStart, onSpeakStop } = this.props;
+        const { onSpeakStart, onSpeak, onSpeakStop } = this.props;
         if (onSpeakStart) {
           onSpeakStart(message, messageInfo);
         }
 
-        const audio = ((data.message.speech.audio as unknown) as {
-          data: number[];
-        }).data;
-        await charisma.speak(audio);
+        const { audio } = data.message.speech;
+        if (onSpeak) {
+          await onSpeak(typeof audio === "string" ? audio : audio.data);
+        } else if (typeof audio !== "string") {
+          await charisma.speak(audio.data);
+        }
 
         this.setState({ isSpeaking: false });
         if (onSpeakStop) {
