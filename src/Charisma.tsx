@@ -2,7 +2,8 @@ import React from "react";
 
 import CharismaSDK, {
   CharismaInstance,
-  CharismaMessage
+  CharismaMessage,
+  ISynthesisConfig
 } from "@charisma-ai/sdk";
 import update from "immutability-helper";
 
@@ -61,6 +62,7 @@ export interface ICharismaProps {
     | null
     | (() => string | null)
     | (() => Promise<string | null>);
+  speechConfig?: boolean | ISynthesisConfig;
   baseURL: string;
   onStart?: () => void;
   onMessage?: (message: IMessage, info: IMessageInfo) => void;
@@ -291,7 +293,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     const socket = await this.getSocket();
     socket.start({
       characterId,
-      speech: !this.state.isMuted,
+      speech: this.state.isMuted ? false : this.props.speechConfig || true,
       startNodeId
     });
 
@@ -327,13 +329,15 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     socket.reply({
       characterId,
       message: text,
-      speech: !this.state.isMuted
+      speech: this.state.isMuted ? false : this.props.speechConfig || true
     });
   };
 
-  private tap = async ({ speech = false }: { speech?: boolean } = {}) => {
+  private tap = async () => {
     const socket = await this.getSocket();
-    socket.tap({ speech });
+    socket.tap({
+      speech: this.state.isMuted ? false : this.props.speechConfig || true
+    });
   };
 
   private setMemory = async ({
