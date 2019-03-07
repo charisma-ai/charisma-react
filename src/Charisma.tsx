@@ -32,16 +32,6 @@ export interface ICharacterMood {
   fearlessness: number;
 }
 
-export interface IMessageInfo {
-  characterMoods: {
-    [id: number]: ICharacterMood;
-  };
-  endStory: boolean;
-  tapToContinue: boolean;
-  path: IPathItem[];
-  type: "character" | "media";
-}
-
 export interface ICharismaChildProps extends ICharismaState {
   messages: IMessage[];
   start: (options?: { startNodeId?: number }) => void;
@@ -52,6 +42,10 @@ export interface ICharismaChildProps extends ICharismaState {
   changeIsListening: (newIsListening: boolean) => void;
   changeIsMuted: (newIsMuted: boolean) => void;
 }
+
+export type MessageInfo = CharismaMessage & {
+  allCharacterMoods: { [id: number]: ICharacterMood };
+};
 
 export interface ICharismaProps {
   children: (bag: ICharismaChildProps) => React.ReactNode;
@@ -65,9 +59,9 @@ export interface ICharismaProps {
   speechConfig?: boolean | ISynthesisConfig;
   baseURL: string;
   onStart?: () => void;
-  onMessage?: (message: IMessage, info: IMessageInfo) => void;
-  onSpeakStart?: (message: IMessage, info: IMessageInfo) => void;
-  onSpeakStop?: (message: IMessage, info: IMessageInfo) => void;
+  onMessage?: (message: IMessage, messageInfo: MessageInfo) => void;
+  onSpeakStart?: (message: IMessage, messageInfo: MessageInfo) => void;
+  onSpeakStop?: (message: IMessage, messageInfo: MessageInfo) => void;
 }
 
 export interface ICharismaState {
@@ -175,12 +169,9 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         data.characterMoods
       );
 
-      const messageInfo = {
-        characterMoods: updatedCharacterMoods,
-        endStory: data.endStory,
-        path: data.path,
-        tapToContinue: data.tapToContinue,
-        type: data.type
+      const messageInfo: MessageInfo = {
+        ...data,
+        allCharacterMoods: updatedCharacterMoods
       };
 
       const { onMessage } = this.props;
@@ -202,8 +193,9 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
       if (data.type === "character" && data.message.speech) {
         this.setState({ isSpeaking: true });
-        if (this.props.onSpeakStart) {
-          this.props.onSpeakStart(message, messageInfo);
+        const { onSpeakStart, onSpeakStop } = this.props;
+        if (onSpeakStart) {
+          onSpeakStart(message, messageInfo);
         }
 
         const audio = ((data.message.speech.audio as unknown) as {
@@ -212,8 +204,8 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         await charisma.speak(audio);
 
         this.setState({ isSpeaking: false });
-        if (this.props.onSpeakStop) {
-          this.props.onSpeakStop(message, messageInfo);
+        if (onSpeakStop) {
+          onSpeakStop(message, messageInfo);
         }
       }
     });
