@@ -51,6 +51,11 @@ export interface ICharismaProps {
   children: (bag: ICharismaChildProps) => React.ReactNode;
   storyId: number;
   version?: number;
+  playthroughToken:
+    | string
+    | null
+    | (() => string | null)
+    | (() => Promise<string | null>);
   userToken:
     | string
     | null
@@ -81,6 +86,7 @@ export interface ICharismaState {
 class Charisma extends React.Component<ICharismaProps, ICharismaState> {
   public static defaultProps = {
     baseURL: "https://api.charisma.ai",
+    playthroughToken: null,
     userToken: null
   };
 
@@ -113,6 +119,11 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     });
   }
 
+  public componentDidMount() {
+    // Initialises the socket and fetches message history on mount.
+    this.getSocket();
+  }
+
   public componentWillUnmount() {
     if (this.state.isListening) {
       this.changeIsListening(false);
@@ -140,9 +151,16 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     const foundUserToken =
       typeof userToken === "function" ? await userToken() : userToken;
 
+    const { playthroughToken } = this.props;
+    const foundPlaythroughToken =
+      typeof playthroughToken === "function"
+        ? await playthroughToken()
+        : playthroughToken;
+
     const { baseURL, storyId, version } = this.props;
     const charisma = await CharismaSDK.connect({
       baseUrl: baseURL,
+      playthroughToken: foundPlaythroughToken || undefined,
       storyId,
       userToken: foundUserToken || undefined,
       version
@@ -230,7 +248,45 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       this.reply({ text });
     });
 
-    this.setState({ socket: charisma });
+    let fixedMessages: IMessage[] = [];
+    if (foundUserToken && foundPlaythroughToken) {
+      const messages = await charisma.getMessageHistory();
+      fixedMessages = messages.map(message => {
+        const fixedMessage: IMessage = {
+          author: null,
+          avatar: null,
+          media: null,
+          metadata: null,
+          text: message.text,
+          timestamp: message.timestamp,
+          type: message.type
+        };
+        if (message.type === "character") {
+          if (message.character) {
+            fixedMessage.author = message.character.name;
+            fixedMessage.avatar = message.character.avatar;
+          }
+          if (message.media) {
+            fixedMessage.media = message.media;
+            fixedMessage.type = "media";
+          }
+          if (message.metadata) {
+            fixedMessage.metadata = message.metadata;
+          }
+        }
+
+        if (message.type === "player") {
+          fixedMessage.author = "Me";
+        }
+
+        return fixedMessage;
+      });
+    }
+
+    this.setState({
+      messages: fixedMessages,
+      socket: charisma
+    });
     return charisma;
   };
 

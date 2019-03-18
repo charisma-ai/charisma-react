@@ -126,13 +126,14 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@charisma-ai/sdk@^0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-0.7.3.tgz#9dcf7ec958b17d329a24f364f4a03b1411f38a34"
-  integrity sha512-VCM0bmOdlczG5OaJO6w2xmR6owmVliQZVxTWMXt9EcsOFaqzarl5QEK4vomLiQOKCwHtKr0m/Q+gn5v03A71QA==
+"@charisma-ai/sdk@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-0.8.1.tgz#cc247580b606a1d7f7548c462335b4f9727b12e6"
+  integrity sha512-IMk5T5I7v1tAwW6cEBgVAC2IMenEkoC56p/oJxKRMQB6stFmmh4jWWi40Izvx5WBxYNJi5F2Z5356n8bTAIbuw==
   dependencies:
     "@types/socket.io-client" "^1.4.32"
     eventemitter3 "^3.1.0"
+    jwt-decode "^2.2.0"
     socket.io-client "^2.2.0"
 
 "@comandeer/babel-plugin-banner@^4.0.0":
@@ -1550,6 +1551,11 @@ jsonfile@^4.0.0:
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
   optionalDependencies:
     graceful-fs "^4.1.6"
+
+jwt-decode@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
+  integrity sha1-fYa9VmefWM5qhHBKZX3TkruoGnk=
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
