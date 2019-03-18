@@ -70,6 +70,8 @@ export interface ICharismaProps {
   onSpeakStop?: (message: IMessage, messageInfo: MessageInfo) => void;
 }
 
+type CharismaMode = "chat" | "tap";
+
 export interface ICharismaState {
   characterMoods: { [id: number]: ICharacterMood };
   disabled: boolean;
@@ -79,7 +81,7 @@ export interface ICharismaState {
   isSpeaking: boolean;
   isTyping: boolean;
   messages: IMessage[];
-  mode: "chat" | "tap";
+  mode: CharismaMode;
   socket: CharismaInstance | null;
 }
 
@@ -249,8 +251,15 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     });
 
     let fixedMessages: IMessage[] = [];
+    let fixedMode: CharismaMode = "chat";
     if (foundUserToken && foundPlaythroughToken) {
       const messages = await charisma.getMessageHistory();
+      if (messages.length > 0) {
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage.type === "character" && lastMessage.tapToContinue) {
+          fixedMode = "tap";
+        }
+      }
       fixedMessages = messages.map(message => {
         const fixedMessage: IMessage = {
           author: null,
@@ -285,6 +294,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
     this.setState({
       messages: fixedMessages,
+      mode: fixedMode,
       socket: charisma
     });
     return charisma;
