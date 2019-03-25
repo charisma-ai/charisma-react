@@ -8,6 +8,11 @@ import CharismaSDK, {
 import update from "immutability-helper";
 
 export interface IMessage {
+  _media: {
+    imageLayers: Array<string | null>;
+    soundBackground: string | null;
+    soundEffect: string | null;
+  } | null;
   author: string | null;
   avatar: string | null;
   media: string | null;
@@ -170,6 +175,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
     charisma.on("message", async (data: CharismaMessage) => {
       const message = {
+        _media: data.type === "character" ? data.message.media : null,
         author:
           data.type === "character" && data.message.character !== null
             ? data.message.character.name
@@ -262,6 +268,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       }
       fixedMessages = messages.map(message => {
         const fixedMessage: IMessage = {
+          _media: null,
           author: null,
           avatar: null,
           media: null,
@@ -378,6 +385,7 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     this.clearInput();
 
     this.addMessage({
+      _media: null,
       author: "Me",
       avatar: null,
       media: null,
