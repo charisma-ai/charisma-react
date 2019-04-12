@@ -73,6 +73,7 @@ export interface ICharismaProps {
   onSpeak?: (audio: string | number[]) => void;
   onSpeakStart?: (message: IMessage, messageInfo: MessageInfo) => void;
   onSpeakStop?: (message: IMessage, messageInfo: MessageInfo) => void;
+  onSceneCompleted?: () => void;
 }
 
 type CharismaMode = "chat" | "tap";
@@ -242,6 +243,13 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
     charisma.on("recognise", (text: string) => {
       this.reply({ text });
+    });
+
+    charisma.on("scene-completed", () => {
+      const { onSceneCompleted } = this.props;
+      if (onSceneCompleted) {
+        onSceneCompleted();
+      }
     });
 
     let fixedMessages: IMessage[] = [];
