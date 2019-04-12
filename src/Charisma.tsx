@@ -74,6 +74,7 @@ export interface ICharismaProps {
   onSpeakStart?: (message: IMessage, messageInfo: MessageInfo) => void;
   onSpeakStop?: (message: IMessage, messageInfo: MessageInfo) => void;
   onSceneCompleted?: () => void;
+  stopOnSceneComplete?: boolean;
 }
 
 type CharismaMode = "chat" | "tap";
@@ -153,11 +154,12 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         ? await playthroughToken()
         : playthroughToken;
 
-    const { baseURL, storyId, version } = this.props;
+    const { baseURL, storyId, version, stopOnSceneComplete } = this.props;
     const charisma = await CharismaSDK.connect({
       baseUrl: baseURL,
       playthroughToken: foundPlaythroughToken || undefined,
       storyId,
+      stopOnSceneComplete,
       userToken: foundUserToken || undefined,
       version
     });

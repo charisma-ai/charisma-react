@@ -21,7 +21,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "^0.9.0",
+    "@charisma-ai/sdk": "^0.9.1",
     "immutability-helper": "^3.0.0"
   },
   "devDependencies": {
