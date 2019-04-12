@@ -9,7 +9,7 @@ import update from "immutability-helper";
 
 export interface IMessage {
   _media: {
-    imageLayers: Array<string | null>;
+    imageLayers: (string | null)[];
     soundBackground: string | null;
     soundEffect: string | null;
   } | null;
@@ -112,33 +112,20 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
 
   private socketPromise: Promise<CharismaInstance> | null = null;
 
-  public render() {
-    return this.props.children({
-      changeInput: this.changeInput,
-      changeIsListening: this.changeIsListening,
-      changeIsMuted: this.changeIsMuted,
-      messages: this.state.messages,
-      reply: this.reply,
-      setMemory: this.setMemory,
-      start: this.start,
-      tap: this.tap,
-      ...this.state
-    });
-  }
-
   public componentDidMount() {
     // Initialises the socket and fetches message history on mount.
     this.getSocket();
   }
 
   public componentWillUnmount() {
-    if (this.state.isListening) {
+    const { isListening } = this.state;
+    if (isListening) {
       this.changeIsListening(false);
     }
   }
 
   private updateCharacterMoods = (
-    newCharacterMoods: Array<{ id: number; mood: ICharacterMood }>
+    newCharacterMoods: { id: number; mood: ICharacterMood }[]
   ) => {
     const patch: { [id: number]: { $set: ICharacterMood } } = {};
     newCharacterMoods.forEach(({ id, mood }) => {
@@ -146,7 +133,8 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
         $set: mood
       };
     });
-    const updatedCharacterMoods = update(this.state.characterMoods, patch);
+    const { characterMoods } = this.state;
+    const updatedCharacterMoods = update(characterMoods, patch);
     this.setState(() => ({
       characterMoods: updatedCharacterMoods
     }));
@@ -308,8 +296,9 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
   };
 
   private getSocket = async () => {
-    if (this.state.socket) {
-      return this.state.socket;
+    const { socket } = this.state;
+    if (socket) {
+      return socket;
     }
 
     /* De-duplicate multiple requests for the socket */
@@ -334,15 +323,22 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     this.setState({ isMuted: newIsMuted });
 
   private changeIsListening = (newIsListening: boolean) => {
-    if (this.state.socket) {
+    const { socket } = this.state;
+    if (socket) {
       if (newIsListening) {
-        this.state.socket.startListening();
+        socket.startListening();
       } else {
-        this.state.socket.stopListening();
+        socket.stopListening();
       }
     }
 
     this.setState({ isListening: newIsListening });
+  };
+
+  private getSpeechConfig = () => {
+    const { speechConfig } = this.props;
+    const { isMuted } = this.state;
+    return isMuted ? false : speechConfig || true;
   };
 
   private start = async ({
@@ -355,14 +351,15 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     this.clearMessages();
     this.clearInput();
 
-    if (this.props.onStart) {
-      this.props.onStart();
+    const { onStart } = this.props;
+    if (onStart) {
+      onStart();
     }
 
     const socket = await this.getSocket();
     socket.start({
       characterId,
-      speech: this.state.isMuted ? false : this.props.speechConfig || true,
+      speech: this.getSpeechConfig(),
       startNodeId
     });
 
@@ -399,14 +396,14 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     socket.reply({
       characterId,
       message: text,
-      speech: this.state.isMuted ? false : this.props.speechConfig || true
+      speech: this.getSpeechConfig()
     });
   };
 
   private tap = async () => {
     const socket = await this.getSocket();
     socket.tap({
-      speech: this.state.isMuted ? false : this.props.speechConfig || true
+      speech: this.getSpeechConfig()
     });
   };
 
@@ -420,6 +417,20 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
     const socket = await this.getSocket();
     socket.setMemory({ memoryId, saveValue });
   };
+
+  public render() {
+    const { children } = this.props;
+    return children({
+      changeInput: this.changeInput,
+      changeIsListening: this.changeIsListening,
+      changeIsMuted: this.changeIsMuted,
+      reply: this.reply,
+      setMemory: this.setMemory,
+      start: this.start,
+      tap: this.tap,
+      ...this.state
+    });
+  }
 }
 
 export default Charisma;
