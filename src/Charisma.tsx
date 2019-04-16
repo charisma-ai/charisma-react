@@ -73,7 +73,7 @@ export interface ICharismaProps {
   onSpeak?: (audio: string | number[]) => void;
   onSpeakStart?: (message: IMessage, messageInfo: MessageInfo) => void;
   onSpeakStop?: (message: IMessage, messageInfo: MessageInfo) => void;
-  onSceneCompleted?: () => void;
+  onSceneCompleted?: (data: { impacts: string[] }) => void;
   stopOnSceneComplete?: boolean;
 }
 
@@ -247,10 +247,10 @@ class Charisma extends React.Component<ICharismaProps, ICharismaState> {
       this.reply({ text });
     });
 
-    charisma.on("scene-completed", () => {
+    charisma.on("scene-completed", (data: { impacts: string[] }) => {
       const { onSceneCompleted } = this.props;
       if (onSceneCompleted) {
-        onSceneCompleted();
+        onSceneCompleted(data);
       }
     });
 
