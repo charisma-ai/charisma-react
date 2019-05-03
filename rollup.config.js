@@ -1,10 +1,9 @@
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
-import minify from "rollup-plugin-babel-minify";
 
 import pkg from "./package.json";
 
-const input = "./compiled/Charisma.js";
+const input = "./compiled/index.js";
 
 const externalLibs = ["react", "react-dom"];
 const globalLibs = {
@@ -30,9 +29,6 @@ export default [
       }),
       commonjs({
         include: /node_modules/
-      }),
-      minify({
-        comments: false
       })
     ]
   },
