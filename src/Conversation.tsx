@@ -10,7 +10,7 @@ import {
 
 import { CharismaContext } from "./Context";
 
-interface UseConversationOptions {
+export interface UseConversationOptions {
   conversationId: string;
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
@@ -18,7 +18,7 @@ interface UseConversationOptions {
   onSceneCompleted?: (event: SceneCompletedEvent) => void;
 }
 
-interface ConversationChildProps {
+export interface ConversationChildProps {
   inputValue: string;
   isTyping: boolean;
   messages: Message[];
@@ -141,7 +141,7 @@ export const useConversation = ({
   return returnedValue;
 };
 
-interface ConversationProps extends UseConversationOptions {
+export interface ConversationProps extends UseConversationOptions {
   children: (conversation: ConversationChildProps) => React.ReactNode;
 }
 
