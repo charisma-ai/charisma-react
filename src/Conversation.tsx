@@ -5,7 +5,7 @@ import {
   StartTypingEvent,
   StopTypingEvent,
   SceneCompletedEvent,
-  Message,
+  Message as CharacterMessage,
   StartEvent,
   ReplyEvent
 } from "@charisma-ai/sdk";
@@ -27,6 +27,10 @@ export enum ChatMode {
   Tap = "tap",
   Chat = "chat"
 }
+
+export type Message =
+  | CharacterMessage
+  | { type: "player"; message: { text: string } };
 
 export interface ConversationChildProps {
   inputValue: string;
@@ -171,6 +175,15 @@ export const useConversation = ({
         if (onReplyRef.current) {
           onReplyRef.current(event);
         }
+        setMessages([
+          ...messages,
+          {
+            type: "player",
+            message: {
+              text: event.text
+            }
+          }
+        ]);
         if (conversationRef.current) {
           conversationRef.current.reply(event);
         }
@@ -184,7 +197,7 @@ export const useConversation = ({
         }
       }
     };
-  }, [inputValue, isTyping, messages, conversationRef.current]);
+  }, [inputValue, isTyping, messages, mode]);
 
   return returnedValue;
 };
