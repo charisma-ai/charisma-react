@@ -4,7 +4,7 @@ import { Charisma as CharismaSDK } from "@charisma-ai/sdk";
 import { CharismaContext } from "./Context";
 
 export interface UseCharismaOptions {
-  playthroughToken: string;
+  playthroughToken?: string;
   charismaUrl?: string;
   isConnected?: boolean;
 }

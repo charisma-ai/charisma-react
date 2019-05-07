@@ -43,7 +43,7 @@ export const useConversation = ({
 }: UseConversationOptions) => {
   const charisma = useContext(CharismaContext);
 
-  if (!charisma) {
+  if (charisma === undefined) {
     throw new Error(
       `To use \`Conversation\`, you must wrap it within a \`Charisma\` instance.`
     );
@@ -110,7 +110,7 @@ export const useConversation = ({
 
   useEffect(() => {
     (async function run() {
-      if (conversationId) {
+      if (charisma && conversationId) {
         const conversation = await charisma.joinConversation(conversationId);
         conversation.on("message", event => onMessageRef.current(event));
         conversation.on("start-typing", event =>
