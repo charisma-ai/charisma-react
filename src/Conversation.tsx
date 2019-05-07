@@ -5,7 +5,7 @@ import {
   StartTypingEvent,
   StopTypingEvent,
   SceneCompletedEvent,
-  Message as CharacterMessage,
+  Message,
   StartEvent,
   ReplyEvent
 } from "@charisma-ai/sdk";
@@ -28,14 +28,14 @@ export enum ChatMode {
   Chat = "chat"
 }
 
-export type Message =
-  | CharacterMessage
+export type StoredMessage =
+  | Message
   | { type: "player"; message: { text: string } };
 
 export interface ConversationChildProps {
   inputValue: string;
   isTyping: boolean;
-  messages: Message[];
+  messages: StoredMessage[];
   mode: ChatMode;
   type: (newInputValue: string) => void;
   start: ConversationType["start"];
@@ -63,7 +63,7 @@ export const useConversation = ({
 
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<StoredMessage[]>([]);
   const [mode, setMode] = useState<ChatMode>(ChatMode.Chat);
 
   // These need to be refs, so we don't have to keep attaching and deattaching
