@@ -11,17 +11,23 @@ import {
 import { CharismaContext } from "./Context";
 
 export interface UseConversationOptions {
-  conversationId: string;
+  conversationId?: string;
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
   onSceneCompleted?: (event: SceneCompletedEvent) => void;
 }
 
+export enum ChatMode {
+  Tap = "tap",
+  Chat = "chat"
+}
+
 export interface ConversationChildProps {
   inputValue: string;
   isTyping: boolean;
   messages: Message[];
+  mode: ChatMode;
   type: (newInputValue: string) => void;
   start: ConversationType["start"];
   reply: ConversationType["reply"];
@@ -46,6 +52,7 @@ export const useConversation = ({
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [mode, setMode] = useState<ChatMode>(ChatMode.Chat);
 
   // These need to be refs, so we don't have to keep attaching and deattaching
   // the conversation `on` handlers. We can refer to the ref instead.
@@ -60,6 +67,13 @@ export const useConversation = ({
   useEffect(() => {
     onMessageRef.current = (event: MessageEvent) => {
       setMessages([...messages, event.message]);
+
+      if (event.message.tapToContinue) {
+        setMode(ChatMode.Tap);
+      } else {
+        setMode(ChatMode.Chat);
+      }
+
       if (onMessage) {
         onMessage(event);
       }
@@ -96,18 +110,23 @@ export const useConversation = ({
 
   useEffect(() => {
     (async function run() {
-      const conversation = await charisma.joinConversation(conversationId);
-      conversation.on("message", event => onMessageRef.current(event));
-      conversation.on("start-typing", event => onStartTypingRef.current(event));
-      conversation.on("stop-typing", event => onStopTypingRef.current(event));
-      conversation.on("scene-completed", event =>
-        onSceneCompletedRef.current(event)
-      );
-      conversationRef.current = conversation;
-      return () => {
-        charisma.leaveConversation(conversationId);
-        conversationRef.current = undefined;
-      };
+      if (conversationId) {
+        const conversation = await charisma.joinConversation(conversationId);
+        conversation.on("message", event => onMessageRef.current(event));
+        conversation.on("start-typing", event =>
+          onStartTypingRef.current(event)
+        );
+        conversation.on("stop-typing", event => onStopTypingRef.current(event));
+        conversation.on("scene-completed", event =>
+          onSceneCompletedRef.current(event)
+        );
+        conversationRef.current = conversation;
+        return () => {
+          charisma.leaveConversation(conversationId);
+          conversationRef.current = undefined;
+        };
+      }
+      return undefined;
     })();
   }, [charisma, conversationId]);
 
@@ -116,6 +135,7 @@ export const useConversation = ({
       inputValue,
       isTyping,
       messages,
+      mode,
       type: setInputValue
     };
     if (conversationRef.current) {
