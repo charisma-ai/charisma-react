@@ -6,11 +6,13 @@ import { CharismaContext } from "./Context";
 export interface UseCharismaOptions {
   playthroughToken: string;
   charismaUrl?: string;
+  isConnected?: boolean;
 }
 
 export const useCharisma = ({
   playthroughToken,
-  charismaUrl
+  charismaUrl,
+  isConnected = false
 }: UseCharismaOptions) => {
   const charismaRef = useRef<CharismaSDK>();
 
@@ -25,6 +27,16 @@ export const useCharisma = ({
     /* Without this, TypeScript complains that not all code paths return a value. */
     return undefined;
   }, [playthroughToken]);
+
+  useEffect(() => {
+    if (charismaRef.current) {
+      if (isConnected) {
+        charismaRef.current.connect();
+      } else {
+        charismaRef.current.cleanup();
+      }
+    }
+  }, [isConnected, charismaRef.current]);
 
   return charismaRef.current;
 };
