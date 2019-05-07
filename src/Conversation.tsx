@@ -5,7 +5,9 @@ import {
   StartTypingEvent,
   StopTypingEvent,
   SceneCompletedEvent,
-  Message
+  Message,
+  StartEvent,
+  ReplyEvent
 } from "@charisma-ai/sdk";
 
 import { CharismaContext } from "./Context";
@@ -16,6 +18,9 @@ export interface UseConversationOptions {
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
   onSceneCompleted?: (event: SceneCompletedEvent) => void;
+  onStart?: (event: StartEvent) => void;
+  onReply?: (event: ReplyEvent) => void;
+  onTap?: () => void;
 }
 
 export enum ChatMode {
@@ -39,7 +44,10 @@ export const useConversation = ({
   onMessage,
   onStartTyping,
   onStopTyping,
-  onSceneCompleted
+  onSceneCompleted,
+  onStart,
+  onReply,
+  onTap
 }: UseConversationOptions) => {
   const charisma = useContext(CharismaContext);
 
@@ -130,38 +138,50 @@ export const useConversation = ({
     })();
   }, [charisma, conversationId]);
 
+  const onStartRef = useRef(onStart);
+  const onReplyRef = useRef(onReply);
+  const onTapRef = useRef(onTap);
+  useEffect(() => {
+    onStartRef.current = onStart;
+  }, [onStart]);
+  useEffect(() => {
+    onReplyRef.current = onReply;
+  }, [onReply]);
+  useEffect(() => {
+    onTapRef.current = onTap;
+  }, [onTap]);
+
   const returnedValue = useMemo((): ConversationChildProps => {
-    const common = {
+    return {
       inputValue,
       isTyping,
       messages,
       mode,
-      type: setInputValue
-    };
-    if (conversationRef.current) {
-      return {
-        ...common,
-        start: conversationRef.current.start,
-        reply: conversationRef.current.reply,
-        tap: conversationRef.current.tap
-      };
-    }
-    return {
-      ...common,
-      start: () => {
-        throw new Error(
-          "`start` was called without joining a conversation. Please provide a valid `conversationId` as a prop for `Conversation`."
-        );
+      type: setInputValue,
+      start: event => {
+        if (onStartRef.current) {
+          onStartRef.current(event);
+        }
+        setMessages([]);
+        if (conversationRef.current) {
+          conversationRef.current.start(event);
+        }
       },
-      reply: () => {
-        throw new Error(
-          "`reply` was called without joining a conversation. Please provide a valid `conversationId` as a prop for `Conversation`."
-        );
+      reply: event => {
+        if (onReplyRef.current) {
+          onReplyRef.current(event);
+        }
+        if (conversationRef.current) {
+          conversationRef.current.reply(event);
+        }
       },
       tap: () => {
-        throw new Error(
-          "`tap` was called without joining a conversation. Please provide a valid `conversationId` as a prop for `Conversation`."
-        );
+        if (onTapRef.current) {
+          onTapRef.current();
+        }
+        if (conversationRef.current) {
+          conversationRef.current.tap();
+        }
       }
     };
   }, [inputValue, isTyping, messages, conversationRef.current]);
