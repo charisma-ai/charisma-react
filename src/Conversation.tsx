@@ -184,6 +184,7 @@ export const useConversation = ({
             }
           }
         ]);
+        setInputValue("");
         if (conversationRef.current) {
           conversationRef.current.reply(event);
         }
