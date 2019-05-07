@@ -2,7 +2,8 @@ export { Charisma, useCharisma, CharismaProps } from "./Charisma";
 export {
   Conversation,
   useConversation,
-  ConversationProps
+  ConversationProps,
+  ConversationChildProps
 } from "./Conversation";
 
 export { Message } from "@charisma-ai/sdk";

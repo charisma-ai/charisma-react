@@ -55,6 +55,8 @@ export const useConversation = ({
   const onSceneCompletedRef = useRef<(event: SceneCompletedEvent) => void>(
     () => {}
   );
+
+  // Re-write the function refs if one of their dependencies change.
   useEffect(() => {
     onMessageRef.current = (event: MessageEvent) => {
       setMessages([...messages, event.message]);
@@ -62,27 +64,33 @@ export const useConversation = ({
         onMessage(event);
       }
     };
+  }, [onMessage, messages]);
 
+  useEffect(() => {
     onStartTypingRef.current = (event: StartTypingEvent) => {
       setIsTyping(true);
       if (onStartTyping) {
         onStartTyping(event);
       }
     };
+  }, [onStartTyping]);
 
+  useEffect(() => {
     onStopTypingRef.current = (event: StopTypingEvent) => {
       setIsTyping(false);
       if (onStopTyping) {
         onStopTyping(event);
       }
     };
+  }, [onStopTyping]);
 
+  useEffect(() => {
     onSceneCompletedRef.current = (event: SceneCompletedEvent) => {
       if (onSceneCompleted) {
         onSceneCompleted(event);
       }
     };
-  }, [onMessage, onStartTyping, onStopTyping, onSceneCompleted]);
+  }, [onSceneCompleted]);
 
   const conversationRef = useRef<ConversationType>();
 
