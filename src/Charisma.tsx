@@ -48,7 +48,7 @@ export interface CharismaProps extends UseCharismaOptions {
 export const Charisma = ({ children, ...props }: CharismaProps) => {
   const charisma = useCharisma(props);
   return (
-    <CharismaContext.Provider value={charisma}>
+    <CharismaContext.Provider value={charisma || null}>
       <>{children}</>
     </CharismaContext.Provider>
   );

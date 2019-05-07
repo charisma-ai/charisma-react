@@ -66,9 +66,9 @@ export const useConversation = ({
   // Re-write the function refs if one of their dependencies change.
   useEffect(() => {
     onMessageRef.current = (event: MessageEvent) => {
-      setMessages([...messages, event.message]);
+      setMessages([...messages, event]);
 
-      if (event.message.tapToContinue) {
+      if (event.tapToContinue) {
         setMode(ChatMode.Tap);
       } else {
         setMode(ChatMode.Chat);
