@@ -7,7 +7,8 @@ import {
   SceneCompletedEvent,
   Message,
   StartEvent,
-  ReplyEvent
+  ReplyEvent,
+  SpeechConfig
 } from "@charisma-ai/sdk";
 
 import { CharismaContext } from "./Context";
@@ -21,6 +22,8 @@ export interface UseConversationOptions {
   onStart?: (event: StartEvent) => void;
   onReply?: (event: ReplyEvent) => void;
   onTap?: () => void;
+  speechConfig?: SpeechConfig;
+  stopOnSceneComplete?: boolean;
 }
 
 export enum ChatMode {
@@ -51,7 +54,9 @@ export const useConversation = ({
   onSceneCompleted,
   onStart,
   onReply,
-  onTap
+  onTap,
+  speechConfig,
+  stopOnSceneComplete
 }: UseConversationOptions) => {
   const charisma = useContext(CharismaContext);
 
@@ -121,6 +126,15 @@ export const useConversation = ({
   const conversationRef = useRef<ConversationType>();
 
   useEffect(() => {
+    if (conversationRef.current) {
+      conversationRef.current.setSpeechConfig(speechConfig);
+      if (typeof stopOnSceneComplete === "boolean") {
+        conversationRef.current.setStopOnSceneEnd(stopOnSceneComplete);
+      }
+    }
+  }, [speechConfig, stopOnSceneComplete]);
+
+  useEffect(() => {
     (async function run() {
       if (charisma && conversationId) {
         const conversation = await charisma.joinConversation(conversationId);
@@ -132,6 +146,10 @@ export const useConversation = ({
         conversation.on("scene-completed", event =>
           onSceneCompletedRef.current(event)
         );
+        conversation.setSpeechConfig(speechConfig);
+        if (typeof stopOnSceneComplete === "boolean") {
+          conversation.setStopOnSceneEnd(stopOnSceneComplete);
+        }
         conversationRef.current = conversation;
         return () => {
           charisma.leaveConversation(conversationId);
