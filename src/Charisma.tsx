@@ -42,14 +42,14 @@ export const useCharisma = ({
 };
 
 export interface CharismaProps extends UseCharismaOptions {
-  children: React.ReactNode;
+  children: React.ReactNode | ((charisma?: CharismaSDK) => React.ReactNode);
 }
 
 export const Charisma = ({ children, ...props }: CharismaProps) => {
   const charisma = useCharisma(props);
   return (
     <CharismaContext.Provider value={charisma || null}>
-      <>{children}</>
+      {typeof children === "function" ? children(charisma) : children}
     </CharismaContext.Provider>
   );
 };
