@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Charisma as CharismaSDK } from "@charisma-ai/sdk";
 
 import { CharismaContext } from "./Context";
@@ -7,21 +7,45 @@ export interface UseCharismaOptions {
   playthroughToken?: string;
   charismaUrl?: string;
   isConnected?: boolean;
+  onConnect?: () => void;
+  onReady?: () => void;
+  onError?: (error: any) => void;
 }
 
 export const useCharisma = ({
   playthroughToken,
   charismaUrl,
+  onConnect = () => {},
+  onReady = () => {},
+  onError = () => {},
   isConnected = false
 }: UseCharismaOptions) => {
-  const charismaRef = useRef<CharismaSDK>();
+  const [charisma, setCharisma] = useState<CharismaSDK>();
+
+  const onConnectRef = useRef(onConnect);
+  useEffect(() => {
+    onConnectRef.current = onConnect;
+  }, [onConnect]);
+
+  const onReadyRef = useRef(onReady);
+  useEffect(() => {
+    onReadyRef.current = onReady;
+  }, [onReady]);
+
+  const onErrorRef = useRef(onError);
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
 
   useEffect(() => {
     if (playthroughToken) {
-      const charisma = new CharismaSDK(playthroughToken, { charismaUrl });
-      charismaRef.current = charisma;
+      const newCharisma = new CharismaSDK(playthroughToken, { charismaUrl });
+      newCharisma.on("connect", onConnectRef.current);
+      newCharisma.on("ready", onReadyRef.current);
+      newCharisma.on("error", onErrorRef.current);
+      setCharisma(newCharisma);
       return () => {
-        charisma.cleanup();
+        newCharisma.cleanup();
       };
     }
     /* Without this, TypeScript complains that not all code paths return a value. */
@@ -29,16 +53,16 @@ export const useCharisma = ({
   }, [playthroughToken]);
 
   useEffect(() => {
-    if (charismaRef.current) {
+    if (charisma) {
       if (isConnected) {
-        charismaRef.current.connect();
+        charisma.connect();
       } else {
-        charismaRef.current.cleanup();
+        charisma.cleanup();
       }
     }
-  }, [isConnected, charismaRef.current]);
+  }, [isConnected, charisma]);
 
-  return charismaRef.current;
+  return charisma;
 };
 
 export interface CharismaProps extends UseCharismaOptions {

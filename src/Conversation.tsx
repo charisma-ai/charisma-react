@@ -14,7 +14,7 @@ import {
 import { CharismaContext } from "./Context";
 
 export interface UseConversationOptions {
-  conversationId?: string;
+  conversationId?: number;
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
