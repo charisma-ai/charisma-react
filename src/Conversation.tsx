@@ -8,13 +8,15 @@ import {
   Message,
   StartEvent,
   ReplyEvent,
-  SpeechConfig
+  SpeechConfig,
+  Mood
 } from "@charisma-ai/sdk";
 
 import { CharismaContext } from "./Context";
 
 export interface UseConversationOptions {
   conversationId?: number;
+  onChangeCharacterMoods?: (newCharacterMoods: CharacterMoods) => void;
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
@@ -29,6 +31,10 @@ export interface UseConversationOptions {
 export enum ChatMode {
   Tap = "tap",
   Chat = "chat"
+}
+
+export interface CharacterMoods {
+  [id: number]: Mood;
 }
 
 export type StoredMessage =
@@ -48,6 +54,7 @@ export interface ConversationChildProps {
 
 export const useConversation = ({
   conversationId,
+  onChangeCharacterMoods,
   onMessage,
   onStartTyping,
   onStopTyping,
@@ -134,11 +141,25 @@ export const useConversation = ({
     }
   }, [speechConfig, stopOnSceneComplete]);
 
+  const characterMoodsRef = useRef<CharacterMoods>({});
+
   useEffect(() => {
     (async function run() {
       if (charisma && conversationId) {
         const conversation = await charisma.joinConversation(conversationId);
-        conversation.on("message", event => onMessageRef.current(event));
+        conversation.on("message", event => {
+          onMessageRef.current(event);
+          if (event.characterMoods.length > 0) {
+            const newCharacterMoods = { ...characterMoodsRef.current };
+            event.characterMoods.forEach(({ id, mood }) => {
+              newCharacterMoods[id] = mood;
+            });
+            characterMoodsRef.current = newCharacterMoods;
+            if (onChangeCharacterMoods) {
+              onChangeCharacterMoods(newCharacterMoods);
+            }
+          }
+        });
         conversation.on("start-typing", event =>
           onStartTypingRef.current(event)
         );
