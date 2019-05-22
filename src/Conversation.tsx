@@ -87,6 +87,8 @@ export const useConversation = ({
     () => {}
   );
 
+  const characterMoodsRef = useRef<CharacterMoods>({});
+
   // Re-write the function refs if one of their dependencies change.
   useEffect(() => {
     onMessageRef.current = (event: MessageEvent) => {
@@ -98,11 +100,22 @@ export const useConversation = ({
         setMode(ChatMode.Chat);
       }
 
+      if (event.characterMoods.length > 0) {
+        const newCharacterMoods = { ...characterMoodsRef.current };
+        event.characterMoods.forEach(({ id, mood }) => {
+          newCharacterMoods[id] = mood;
+        });
+        characterMoodsRef.current = newCharacterMoods;
+        if (onChangeCharacterMoods) {
+          onChangeCharacterMoods(newCharacterMoods);
+        }
+      }
+
       if (onMessage) {
         onMessage(event);
       }
     };
-  }, [onMessage, messages]);
+  }, [onMessage, messages, onChangeCharacterMoods]);
 
   useEffect(() => {
     onStartTypingRef.current = (event: StartTypingEvent) => {
@@ -141,24 +154,12 @@ export const useConversation = ({
     }
   }, [speechConfig, stopOnSceneComplete]);
 
-  const characterMoodsRef = useRef<CharacterMoods>({});
-
   useEffect(() => {
     (async function run() {
       if (charisma && conversationId) {
         const conversation = await charisma.joinConversation(conversationId);
         conversation.on("message", event => {
           onMessageRef.current(event);
-          if (event.characterMoods.length > 0) {
-            const newCharacterMoods = { ...characterMoodsRef.current };
-            event.characterMoods.forEach(({ id, mood }) => {
-              newCharacterMoods[id] = mood;
-            });
-            characterMoodsRef.current = newCharacterMoods;
-            if (onChangeCharacterMoods) {
-              onChangeCharacterMoods(newCharacterMoods);
-            }
-          }
         });
         conversation.on("start-typing", event =>
           onStartTypingRef.current(event)
