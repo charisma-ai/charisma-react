@@ -3,8 +3,8 @@ import { Charisma, Conversation } from "../src";
 
 const CharismaTest = () => {
   return (
-    <Charisma playthroughToken="">
-      <Conversation conversationId="">
+    <Charisma playthroughToken="test">
+      <Conversation conversationId={1}>
         {({ inputValue, type }) => (
           <div>
             <input

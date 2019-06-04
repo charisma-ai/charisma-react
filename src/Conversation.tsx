@@ -204,7 +204,7 @@ export const useConversation = ({
       type: setInputValue,
       start: event => {
         if (onStartRef.current) {
-          onStartRef.current(event);
+          onStartRef.current(event || {});
         }
         setMessages([]);
         if (conversationRef.current) {
