@@ -23,10 +23,10 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@charisma-ai/sdk@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-1.0.0.tgz#30f7289943e533e36bdd28158c00d35f3e351d35"
-  integrity sha512-n7onS7QtivvMXsPjKN/xTgepUbEmzFImk5nOk2/lxS7YAM5UC12Pbq2MlltDeO/urcUXwnc52TvJSIRq1R+XSQ==
+"@charisma-ai/sdk@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-1.0.2.tgz#eaf6c71ee00f7642ec592dec577765c351c4a19c"
+  integrity sha512-4XvPnvL5fGTWJ5BXm33yxBWecFldnhsiV0PCczc29FkhJwzQhX/fOuzYU+eVs54Es0AHF+nVFnUZ7hw1DZ5jVA==
   dependencies:
     "@types/socket.io-client" "^1.4.32"
     eventemitter3 "^3.1.2"

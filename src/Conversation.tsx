@@ -4,7 +4,7 @@ import {
   MessageEvent,
   StartTypingEvent,
   StopTypingEvent,
-  SceneCompletedEvent,
+  SceneCompleteEvent,
   Message,
   StartEvent,
   ReplyEvent,
@@ -20,7 +20,7 @@ export interface UseConversationOptions {
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
-  onSceneCompleted?: (event: SceneCompletedEvent) => void;
+  onSceneComplete?: (event: SceneCompleteEvent) => void;
   onStart?: (event: StartEvent) => void;
   onReply?: (event: ReplyEvent) => void;
   onTap?: () => void;
@@ -58,7 +58,7 @@ export const useConversation = ({
   onMessage,
   onStartTyping,
   onStopTyping,
-  onSceneCompleted,
+  onSceneComplete,
   onStart,
   onReply,
   onTap,
@@ -83,7 +83,7 @@ export const useConversation = ({
   const onMessageRef = useRef<(event: MessageEvent) => void>(() => {});
   const onStartTypingRef = useRef<(event: StartTypingEvent) => void>(() => {});
   const onStopTypingRef = useRef<(event: StopTypingEvent) => void>(() => {});
-  const onSceneCompletedRef = useRef<(event: SceneCompletedEvent) => void>(
+  const onSceneCompleteRef = useRef<(event: SceneCompleteEvent) => void>(
     () => {}
   );
 
@@ -136,12 +136,12 @@ export const useConversation = ({
   }, [onStopTyping]);
 
   useEffect(() => {
-    onSceneCompletedRef.current = (event: SceneCompletedEvent) => {
-      if (onSceneCompleted) {
-        onSceneCompleted(event);
+    onSceneCompleteRef.current = (event: SceneCompleteEvent) => {
+      if (onSceneComplete) {
+        onSceneComplete(event);
       }
     };
-  }, [onSceneCompleted]);
+  }, [onSceneComplete]);
 
   const conversationRef = useRef<ConversationType>();
 
@@ -149,7 +149,7 @@ export const useConversation = ({
     if (conversationRef.current) {
       conversationRef.current.setSpeechConfig(speechConfig);
       if (typeof stopOnSceneComplete === "boolean") {
-        conversationRef.current.setStopOnSceneEnd(stopOnSceneComplete);
+        conversationRef.current.setStopOnSceneComplete(stopOnSceneComplete);
       }
     }
   }, [speechConfig, stopOnSceneComplete]);
@@ -166,11 +166,11 @@ export const useConversation = ({
         );
         conversation.on("stop-typing", event => onStopTypingRef.current(event));
         conversation.on("scene-completed", event =>
-          onSceneCompletedRef.current(event)
+          onSceneCompleteRef.current(event)
         );
         conversation.setSpeechConfig(speechConfig);
         if (typeof stopOnSceneComplete === "boolean") {
-          conversation.setStopOnSceneEnd(stopOnSceneComplete);
+          conversation.setStopOnSceneComplete(stopOnSceneComplete);
         }
         conversationRef.current = conversation;
         return () => {
