@@ -165,7 +165,7 @@ export const useConversation = ({
           onStartTypingRef.current(event)
         );
         conversation.on("stop-typing", event => onStopTypingRef.current(event));
-        conversation.on("scene-completed", event =>
+        conversation.on("scene-complete", event =>
           onSceneCompleteRef.current(event)
         );
         conversation.setSpeechConfig(speechConfig);
