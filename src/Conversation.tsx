@@ -155,8 +155,8 @@ export const useConversation = ({
   }, [speechConfig, stopOnSceneComplete]);
 
   useEffect(() => {
-    (async function run() {
-      if (charisma && conversationId) {
+    if (charisma && conversationId) {
+      (async function run() {
         const conversation = await charisma.joinConversation(conversationId);
         conversation.on("message", event => {
           onMessageRef.current(event);
@@ -173,13 +173,19 @@ export const useConversation = ({
           conversation.setStopOnSceneComplete(stopOnSceneComplete);
         }
         conversationRef.current = conversation;
-        return () => {
-          charisma.leaveConversation(conversationId);
-          conversationRef.current = undefined;
-        };
+      })();
+    }
+
+    return () => {
+      if (
+        charisma &&
+        conversationId &&
+        charisma.getConversation(conversationId)
+      ) {
+        charisma.leaveConversation(conversationId);
+        conversationRef.current = undefined;
       }
-      return undefined;
-    })();
+    };
   }, [charisma, conversationId]);
 
   const onStartRef = useRef(onStart);
