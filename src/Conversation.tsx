@@ -23,6 +23,7 @@ export interface UseConversationOptions {
   onSceneComplete?: (event: SceneCompleteEvent) => void;
   onStart?: (event: StartEvent) => void;
   onReply?: (event: ReplyEvent) => void;
+  onResume?: () => void;
   onTap?: () => void;
   speechConfig?: SpeechConfig;
   stopOnSceneComplete?: boolean;
@@ -50,6 +51,7 @@ export interface ConversationChildProps {
   start: ConversationType["start"];
   reply: ConversationType["reply"];
   tap: ConversationType["tap"];
+  resume: ConversationType["resume"];
 }
 
 export const useConversation = ({
@@ -61,6 +63,7 @@ export const useConversation = ({
   onSceneComplete,
   onStart,
   onReply,
+  onResume,
   onTap,
   speechConfig,
   stopOnSceneComplete,
@@ -191,6 +194,7 @@ export const useConversation = ({
   const onStartRef = useRef(onStart);
   const onReplyRef = useRef(onReply);
   const onTapRef = useRef(onTap);
+  const onResumeRef = useRef(onResume);
   useEffect(() => {
     onStartRef.current = onStart;
   }, [onStart]);
@@ -200,6 +204,9 @@ export const useConversation = ({
   useEffect(() => {
     onTapRef.current = onTap;
   }, [onTap]);
+  useEffect(() => {
+    onResumeRef.current = onResume;
+  }, [onResume]);
 
   const returnedValue = useMemo((): ConversationChildProps => {
     return {
@@ -241,6 +248,14 @@ export const useConversation = ({
         }
         if (conversationRef.current) {
           conversationRef.current.tap();
+        }
+      },
+      resume: () => {
+        if (onResumeRef.current) {
+          onResumeRef.current();
+        }
+        if (conversationRef.current) {
+          conversationRef.current.resume();
         }
       },
     };
