@@ -25,6 +25,8 @@ export interface UseConversationOptions {
   onReply?: (event: ReplyEvent) => void;
   onResume?: () => void;
   onTap?: () => void;
+  shouldResumeOnReady?: boolean | StartEvent;
+  shouldStartOnReady?: boolean | StartEvent;
   speechConfig?: SpeechConfig;
   stopOnSceneComplete?: boolean;
 }
@@ -65,6 +67,8 @@ export const useConversation = ({
   onReply,
   onResume,
   onTap,
+  shouldResumeOnReady,
+  shouldStartOnReady,
   speechConfig,
   stopOnSceneComplete,
 }: UseConversationOptions) => {
@@ -176,6 +180,14 @@ export const useConversation = ({
           conversation.setStopOnSceneComplete(stopOnSceneComplete);
         }
         conversationRef.current = conversation;
+
+        if (shouldResumeOnReady) {
+          conversation.resume();
+        }
+        if (shouldStartOnReady) {
+          const event = shouldStartOnReady === true ? {} : shouldStartOnReady;
+          conversation.start(event);
+        }
       })();
     }
 
