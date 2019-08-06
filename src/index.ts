@@ -7,7 +7,7 @@ export {
   ConversationChildProps,
   ChatMode,
   StoredMessage,
-  CharacterMoods
+  CharacterMoods,
 } from "./Conversation";
 export { CharismaContext, CharismaContextType } from "./Context";
 

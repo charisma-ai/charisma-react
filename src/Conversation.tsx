@@ -9,7 +9,7 @@ import {
   StartEvent,
   ReplyEvent,
   SpeechConfig,
-  Mood
+  Mood,
 } from "@charisma-ai/sdk";
 
 import { CharismaContext } from "./Context";
@@ -30,7 +30,7 @@ export interface UseConversationOptions {
 
 export enum ChatMode {
   Tap = "tap",
-  Chat = "chat"
+  Chat = "chat",
 }
 
 export interface CharacterMoods {
@@ -63,13 +63,13 @@ export const useConversation = ({
   onReply,
   onTap,
   speechConfig,
-  stopOnSceneComplete
+  stopOnSceneComplete,
 }: UseConversationOptions) => {
   const charisma = useContext(CharismaContext);
 
   if (charisma === undefined) {
     throw new Error(
-      `To use \`Conversation\`, you must wrap it within a \`Charisma\` instance.`
+      `To use \`Conversation\`, you must wrap it within a \`Charisma\` instance.`,
     );
   }
 
@@ -84,7 +84,7 @@ export const useConversation = ({
   const onStartTypingRef = useRef<(event: StartTypingEvent) => void>(() => {});
   const onStopTypingRef = useRef<(event: StopTypingEvent) => void>(() => {});
   const onSceneCompleteRef = useRef<(event: SceneCompleteEvent) => void>(
-    () => {}
+    () => {},
   );
 
   const characterMoodsRef = useRef<CharacterMoods>({});
@@ -162,11 +162,11 @@ export const useConversation = ({
           onMessageRef.current(event);
         });
         conversation.on("start-typing", event =>
-          onStartTypingRef.current(event)
+          onStartTypingRef.current(event),
         );
         conversation.on("stop-typing", event => onStopTypingRef.current(event));
         conversation.on("scene-complete", event =>
-          onSceneCompleteRef.current(event)
+          onSceneCompleteRef.current(event),
         );
         conversation.setSpeechConfig(speechConfig);
         if (typeof stopOnSceneComplete === "boolean") {
@@ -226,9 +226,9 @@ export const useConversation = ({
           {
             type: "player",
             message: {
-              text: event.text
-            }
-          }
+              text: event.text,
+            },
+          },
         ]);
         setInputValue("");
         if (conversationRef.current) {
@@ -242,7 +242,7 @@ export const useConversation = ({
         if (conversationRef.current) {
           conversationRef.current.tap();
         }
-      }
+      },
     };
   }, [inputValue, isTyping, messages, mode]);
 

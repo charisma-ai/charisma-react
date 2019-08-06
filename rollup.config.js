@@ -8,7 +8,7 @@ const input = "./compiled/index.js";
 const externalLibs = ["react", "react-dom"];
 const globalLibs = {
   react: "React",
-  "react-dom": "ReactDOM"
+  "react-dom": "ReactDOM",
 };
 
 export default [
@@ -21,16 +21,16 @@ export default [
       format: "umd",
       globals: globalLibs,
       name: "Charisma",
-      sourcemap: true
+      sourcemap: true,
     },
     plugins: [
       resolve({
-        browser: true
+        browser: true,
       }),
       commonjs({
-        include: /node_modules/
-      })
-    ]
+        include: /node_modules/,
+      }),
+    ],
   },
   {
     input,
@@ -40,15 +40,15 @@ export default [
         exports: "named",
         file: pkg.module,
         format: "es",
-        sourcemap: true
+        sourcemap: true,
       },
       {
         exports: "named",
         file: pkg.main,
         format: "cjs",
-        sourcemap: true
-      }
+        sourcemap: true,
+      },
     ],
-    plugins: [resolve()]
-  }
+    plugins: [resolve()],
+  },
 ];

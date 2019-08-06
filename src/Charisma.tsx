@@ -18,7 +18,7 @@ export const useCharisma = ({
   onConnect = () => {},
   onReady = () => {},
   onError = () => {},
-  isConnected = false
+  isConnected = false,
 }: UseCharismaOptions) => {
   const [charisma, setCharisma] = useState<CharismaSDK>();
 
