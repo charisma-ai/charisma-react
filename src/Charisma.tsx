@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Charisma as CharismaSDK } from "@charisma-ai/sdk";
 
-import { CharismaContext } from "./Context";
+import { CharismaProvider } from "./Context";
 
 export interface UseCharismaOptions {
   playthroughToken?: string;
@@ -72,8 +72,8 @@ export interface CharismaProps extends UseCharismaOptions {
 export const Charisma = ({ children, ...props }: CharismaProps) => {
   const charisma = useCharisma(props);
   return (
-    <CharismaContext.Provider value={charisma || null}>
+    <CharismaProvider value={charisma || null}>
       {typeof children === "function" ? children(charisma) : children}
-    </CharismaContext.Provider>
+    </CharismaProvider>
   );
 };

@@ -163,32 +163,28 @@ export const useConversation = ({
 
   useEffect(() => {
     if (charisma && conversationId) {
-      (async function run() {
-        const conversation = await charisma.joinConversation(conversationId);
-        conversation.on("message", event => {
-          onMessageRef.current(event);
-        });
-        conversation.on("start-typing", event =>
-          onStartTypingRef.current(event),
-        );
-        conversation.on("stop-typing", event => onStopTypingRef.current(event));
-        conversation.on("scene-complete", event =>
-          onSceneCompleteRef.current(event),
-        );
-        conversation.setSpeechConfig(speechConfig);
-        if (typeof stopOnSceneComplete === "boolean") {
-          conversation.setStopOnSceneComplete(stopOnSceneComplete);
-        }
-        conversationRef.current = conversation;
+      const conversation = charisma.joinConversation(conversationId);
+      conversation.on("message", event => {
+        onMessageRef.current(event);
+      });
+      conversation.on("start-typing", event => onStartTypingRef.current(event));
+      conversation.on("stop-typing", event => onStopTypingRef.current(event));
+      conversation.on("scene-complete", event =>
+        onSceneCompleteRef.current(event),
+      );
+      conversation.setSpeechConfig(speechConfig);
+      if (typeof stopOnSceneComplete === "boolean") {
+        conversation.setStopOnSceneComplete(stopOnSceneComplete);
+      }
+      conversationRef.current = conversation;
 
-        if (shouldResumeOnReady) {
-          conversation.resume();
-        }
-        if (shouldStartOnReady) {
-          const event = shouldStartOnReady === true ? {} : shouldStartOnReady;
-          conversation.start(event);
-        }
-      })();
+      if (shouldResumeOnReady) {
+        conversation.resume();
+      }
+      if (shouldStartOnReady) {
+        const event = shouldStartOnReady === true ? {} : shouldStartOnReady;
+        conversation.start(event);
+      }
     }
 
     return () => {

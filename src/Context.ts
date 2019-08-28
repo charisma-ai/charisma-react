@@ -7,5 +7,12 @@ import { Charisma } from "@charisma-ai/sdk";
 // Otherwise, the context is an instance of the Charisma SDK.
 
 export type CharismaContextType = Charisma | null | undefined;
-/* eslint-disable import/prefer-default-export */
+
 export const CharismaContext = createContext<CharismaContextType>(undefined);
+
+const {
+  Provider: CharismaProvider,
+  Consumer: CharismaConsumer,
+} = CharismaContext;
+
+export { CharismaProvider, CharismaConsumer };
