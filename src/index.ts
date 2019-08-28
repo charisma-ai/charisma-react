@@ -9,6 +9,13 @@ export {
   StoredMessage,
   CharacterMoods,
 } from "./Conversation";
+export {
+  SimpleConversation,
+  useSimpleConversation,
+  UseSimpleConversationOptions,
+  SimpleConversationProps,
+  SimpleConversationChildProps,
+} from "./SimpleConversation";
 export { CharismaContext, CharismaContextType } from "./Context";
 
 export { Message } from "@charisma-ai/sdk";

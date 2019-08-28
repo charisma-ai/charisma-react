@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   Conversation as ConversationType,
   MessageEvent,
@@ -12,7 +12,7 @@ import {
   Mood,
 } from "@charisma-ai/sdk";
 
-import { CharismaContext } from "./Context";
+import { useSimpleConversation } from "./SimpleConversation";
 
 export interface UseConversationOptions {
   conversationId?: number;
@@ -72,33 +72,15 @@ export const useConversation = ({
   speechConfig,
   stopOnSceneComplete,
 }: UseConversationOptions) => {
-  const charisma = useContext(CharismaContext);
-
-  if (charisma === undefined) {
-    throw new Error(
-      `To use \`Conversation\`, you must wrap it within a \`Charisma\` instance.`,
-    );
-  }
-
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<StoredMessage[]>([]);
   const [mode, setMode] = useState<ChatMode>(ChatMode.Chat);
 
-  // These need to be refs, so we don't have to keep attaching and deattaching
-  // the conversation `on` handlers. We can refer to the ref instead.
-  const onMessageRef = useRef<(event: MessageEvent) => void>(() => {});
-  const onStartTypingRef = useRef<(event: StartTypingEvent) => void>(() => {});
-  const onStopTypingRef = useRef<(event: StopTypingEvent) => void>(() => {});
-  const onSceneCompleteRef = useRef<(event: SceneCompleteEvent) => void>(
-    () => {},
-  );
-
   const characterMoodsRef = useRef<CharacterMoods>({});
 
-  // Re-write the function refs if one of their dependencies change.
-  useEffect(() => {
-    onMessageRef.current = (event: MessageEvent) => {
+  const handleMessage = useCallback(
+    (event: MessageEvent) => {
       setMessages([...messages, event]);
 
       if (event.tapToContinue) {
@@ -121,155 +103,108 @@ export const useConversation = ({
       if (onMessage) {
         onMessage(event);
       }
-    };
-  }, [onMessage, messages, onChangeCharacterMoods]);
+    },
+    [onMessage, messages, onChangeCharacterMoods],
+  );
 
-  useEffect(() => {
-    onStartTypingRef.current = (event: StartTypingEvent) => {
+  const handleStartTyping = useCallback(
+    (event: StartTypingEvent) => {
       setIsTyping(true);
       if (onStartTyping) {
         onStartTyping(event);
       }
-    };
-  }, [onStartTyping]);
+    },
+    [onStartTyping],
+  );
 
-  useEffect(() => {
-    onStopTypingRef.current = (event: StopTypingEvent) => {
+  const handleStopTyping = useCallback(
+    (event: StopTypingEvent) => {
       setIsTyping(false);
       if (onStopTyping) {
         onStopTyping(event);
       }
-    };
-  }, [onStopTyping]);
+    },
+    [onStopTyping],
+  );
+
+  const { start, reply, resume, tap, isReady } = useSimpleConversation({
+    conversationId,
+    onMessage: handleMessage,
+    onStartTyping: handleStartTyping,
+    onStopTyping: handleStopTyping,
+    onSceneComplete,
+    speechConfig,
+    stopOnSceneComplete,
+  });
 
   useEffect(() => {
-    onSceneCompleteRef.current = (event: SceneCompleteEvent) => {
-      if (onSceneComplete) {
-        onSceneComplete(event);
-      }
-    };
-  }, [onSceneComplete]);
-
-  const conversationRef = useRef<ConversationType>();
-
-  useEffect(() => {
-    if (conversationRef.current) {
-      conversationRef.current.setSpeechConfig(speechConfig);
-      if (typeof stopOnSceneComplete === "boolean") {
-        conversationRef.current.setStopOnSceneComplete(stopOnSceneComplete);
-      }
-    }
-  }, [speechConfig, stopOnSceneComplete]);
-
-  useEffect(() => {
-    if (charisma && conversationId) {
-      const conversation = charisma.joinConversation(conversationId);
-      conversation.on("message", event => {
-        onMessageRef.current(event);
-      });
-      conversation.on("start-typing", event => onStartTypingRef.current(event));
-      conversation.on("stop-typing", event => onStopTypingRef.current(event));
-      conversation.on("scene-complete", event =>
-        onSceneCompleteRef.current(event),
-      );
-      conversation.setSpeechConfig(speechConfig);
-      if (typeof stopOnSceneComplete === "boolean") {
-        conversation.setStopOnSceneComplete(stopOnSceneComplete);
-      }
-      conversationRef.current = conversation;
-
+    if (isReady) {
       if (shouldResumeOnReady) {
-        conversation.resume();
+        resume();
       }
       if (shouldStartOnReady) {
         const event = shouldStartOnReady === true ? {} : shouldStartOnReady;
-        conversation.start(event);
+        start(event);
       }
     }
+  }, [isReady]);
 
-    return () => {
-      if (
-        charisma &&
-        conversationId &&
-        charisma.getConversation(conversationId)
-      ) {
-        charisma.leaveConversation(conversationId);
-        conversationRef.current = undefined;
+  const handleStart = useCallback(
+    (event: StartEvent = {}) => {
+      setMessages([]);
+      if (onStart) {
+        onStart(event);
       }
-    };
-  }, [charisma, conversationId]);
+      start(event);
+    },
+    [onStart],
+  );
 
-  const onStartRef = useRef(onStart);
-  const onReplyRef = useRef(onReply);
-  const onTapRef = useRef(onTap);
-  const onResumeRef = useRef(onResume);
-  useEffect(() => {
-    onStartRef.current = onStart;
-  }, [onStart]);
-  useEffect(() => {
-    onReplyRef.current = onReply;
-  }, [onReply]);
-  useEffect(() => {
-    onTapRef.current = onTap;
+  const handleReply = useCallback(
+    (event: ReplyEvent) => {
+      if (onReply) {
+        onReply(event);
+      }
+      setMessages([
+        ...messages,
+        {
+          type: "player",
+          message: {
+            text: event.text,
+          },
+        },
+      ]);
+      setInputValue("");
+      reply(event);
+    },
+    [onReply],
+  );
+
+  const handleTap = useCallback(() => {
+    if (onTap) {
+      onTap();
+    }
+    tap();
   }, [onTap]);
-  useEffect(() => {
-    onResumeRef.current = onResume;
+
+  const handleResume = useCallback(() => {
+    if (onResume) {
+      onResume();
+    }
+    resume();
   }, [onResume]);
 
-  const returnedValue = useMemo((): ConversationChildProps => {
-    return {
-      inputValue,
-      isTyping,
-      messages,
-      mode,
-      type: setInputValue,
-      start: event => {
-        if (onStartRef.current) {
-          onStartRef.current(event || {});
-        }
-        setMessages([]);
-        if (conversationRef.current) {
-          conversationRef.current.start(event);
-        }
-      },
-      reply: event => {
-        if (onReplyRef.current) {
-          onReplyRef.current(event);
-        }
-        setMessages([
-          ...messages,
-          {
-            type: "player",
-            message: {
-              text: event.text,
-            },
-          },
-        ]);
-        setInputValue("");
-        if (conversationRef.current) {
-          conversationRef.current.reply(event);
-        }
-      },
-      tap: () => {
-        if (onTapRef.current) {
-          onTapRef.current();
-        }
-        if (conversationRef.current) {
-          conversationRef.current.tap();
-        }
-      },
-      resume: () => {
-        if (onResumeRef.current) {
-          onResumeRef.current();
-        }
-        if (conversationRef.current) {
-          conversationRef.current.resume();
-        }
-      },
-    };
-  }, [inputValue, isTyping, messages, mode]);
-
-  return returnedValue;
+  return {
+    inputValue,
+    isTyping,
+    messages,
+    mode,
+    type: setInputValue,
+    start: handleStart,
+    reply: handleReply,
+    tap: handleTap,
+    resume: handleResume,
+  };
 };
 
 export interface ConversationProps extends UseConversationOptions {
