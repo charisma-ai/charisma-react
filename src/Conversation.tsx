@@ -147,6 +147,7 @@ export const useConversation = ({
         start(event);
       }
     }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [isReady]);
 
   const handleStart = useCallback(
@@ -157,7 +158,7 @@ export const useConversation = ({
       }
       start(event);
     },
-    [onStart],
+    [onStart, start],
   );
 
   const handleReply = useCallback(
@@ -177,7 +178,7 @@ export const useConversation = ({
       setInputValue("");
       reply(event);
     },
-    [onReply],
+    [onReply, messages, reply],
   );
 
   const handleTap = useCallback(() => {
@@ -185,14 +186,14 @@ export const useConversation = ({
       onTap();
     }
     tap();
-  }, [onTap]);
+  }, [onTap, tap]);
 
   const handleResume = useCallback(() => {
     if (onResume) {
       onResume();
     }
     resume();
-  }, [onResume]);
+  }, [onResume, resume]);
 
   return {
     inputValue,

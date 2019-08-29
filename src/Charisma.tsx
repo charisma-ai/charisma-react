@@ -50,7 +50,7 @@ export const useCharisma = ({
     }
     /* Without this, TypeScript complains that not all code paths return a value. */
     return undefined;
-  }, [playthroughToken]);
+  }, [playthroughToken, charismaUrl]);
 
   useEffect(() => {
     if (charisma) {

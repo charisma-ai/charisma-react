@@ -4,7 +4,8 @@
     "node": true
   },
   "extends": [
-    "airbnb-base",
+    "airbnb",
+    "airbnb/hooks",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -17,7 +18,8 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }]
   },
   "settings": {
     "import/resolver": {
