@@ -12,7 +12,7 @@ import {
   Mood,
 } from "@charisma-ai/sdk";
 
-import { useSimpleConversation } from "./SimpleConversation";
+import { useQueuedConversation } from "./QueuedConversation";
 
 export interface UseConversationOptions {
   conversationId?: number;
@@ -127,7 +127,7 @@ export const useConversation = ({
     [onStopTyping],
   );
 
-  const { start, reply, resume, tap, isReady } = useSimpleConversation({
+  const { start, reply, resume, tap, isReady } = useQueuedConversation({
     conversationId,
     onMessage: handleMessage,
     onStartTyping: handleStartTyping,
