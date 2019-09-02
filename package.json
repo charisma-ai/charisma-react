@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@charisma-ai/sdk": "^1.2.0",
-    "immutability-helper": "^3.0.1"
+    "immutability-helper": "^3.0.1",
+    "p-queue": "^6.1.1"
   },
   "devDependencies": {
     "@types/react": "^16.9.2",
