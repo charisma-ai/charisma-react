@@ -16,6 +16,13 @@ export {
   SimpleConversationProps,
   SimpleConversationChildProps,
 } from "./SimpleConversation";
+export {
+  QueuedConversation,
+  useQueuedConversation,
+  UseQueuedConversationOptions,
+  QueuedConversationProps,
+  QueuedConversationChildProps,
+} from "./QueuedConversation";
 export { CharismaContext, CharismaContextType } from "./Context";
 
 export { Message } from "@charisma-ai/sdk";
