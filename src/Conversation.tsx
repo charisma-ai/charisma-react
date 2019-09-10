@@ -42,7 +42,7 @@ export interface CharacterMoods {
 
 export type StoredMessage =
   | Message
-  | { type: "player"; message: { text: string } };
+  | { type: "player"; timestamp: number; message: { text: string } };
 
 export interface ConversationChildProps {
   inputValue: string;
@@ -170,6 +170,7 @@ export const useConversation = ({
         ...messages,
         {
           type: "player",
+          timestamp: Date.now(),
           message: {
             text: event.text,
           },
