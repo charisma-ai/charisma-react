@@ -1,4 +1,5 @@
 export { Charisma, useCharisma, CharismaProps } from "./Charisma";
+
 export {
   Conversation,
   useConversation,
@@ -23,6 +24,10 @@ export {
   QueuedConversationProps,
   QueuedConversationChildProps,
 } from "./QueuedConversation";
+
 export { CharismaContext, CharismaContextType } from "./Context";
+
+export { default as useBackgroundAudio } from "./useBackgroundAudio";
+export { default as useBackgroundVideo } from "./useBackgroundVideo";
 
 export { Message } from "@charisma-ai/sdk";
