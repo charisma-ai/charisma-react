@@ -4,11 +4,12 @@ import { Microphone } from "@charisma-ai/sdk";
 import useLazyRef from "./useLazyRef";
 import useChangeableRef from "./useChangeableRef";
 
-interface UseMicrophoneOptions {
+export interface UseMicrophoneOptions {
   onRecogniseInterim?: (text: string) => void;
   onRecognise?: (text: string) => void;
   onStart?: () => void;
   onStop?: () => void;
+  onTimeout?: () => void;
 }
 
 export const useMicrophone = ({
@@ -16,6 +17,7 @@ export const useMicrophone = ({
   onRecognise,
   onStart,
   onStop,
+  onTimeout,
 }: UseMicrophoneOptions) => {
   const [isListening, setIsListening] = useState(false);
 
@@ -23,6 +25,7 @@ export const useMicrophone = ({
   const onRecogniseRef = useChangeableRef(onRecognise);
   const onStartRef = useChangeableRef(onStart);
   const onStopRef = useChangeableRef(onStop);
+  const onTimeoutRef = useChangeableRef(onTimeout);
 
   const microphoneRef = useLazyRef(() =>
     new Microphone()
@@ -46,6 +49,11 @@ export const useMicrophone = ({
         setIsListening(false);
         if (onStopRef.current) {
           onStopRef.current();
+        }
+      })
+      .on("timeout", () => {
+        if (onTimeoutRef.current) {
+          onTimeoutRef.current();
         }
       }),
   );

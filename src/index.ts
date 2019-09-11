@@ -29,6 +29,7 @@ export { CharismaContext, CharismaContextType } from "./Context";
 
 export { default as useBackgroundAudio } from "./useBackgroundAudio";
 export { default as useBackgroundVideo } from "./useBackgroundVideo";
-export { default as useMicrophone } from "./useMicrophone";
+
+export { useMicrophone, UseMicrophoneOptions } from "./useMicrophone";
 
 export { Message } from "@charisma-ai/sdk";
