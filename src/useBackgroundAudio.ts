@@ -1,10 +1,18 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { MessageEvent } from "@charisma-ai/sdk";
 
-const fetchMedia = async (backgroundUrl: string) => {
+const cache: { [url: string]: string } = {};
+
+const fetchMedia = async (backgroundUrl: string, useCache = true) => {
+  if (useCache && cache[backgroundUrl] !== undefined) {
+    return cache[backgroundUrl];
+  }
+
   const response = await fetch(backgroundUrl);
   const blob = await response.blob();
-  return URL.createObjectURL(blob);
+  const blobUrl = URL.createObjectURL(blob);
+  cache[backgroundUrl] = blobUrl;
+  return blobUrl;
 };
 
 interface UseBackgroundAudioOptions {
@@ -45,39 +53,76 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
     }
   }, [disabled]);
 
-  const onMessage = useCallback((messageEvent: MessageEvent) => {
+  const onMessage = useCallback(async (messageEvent: MessageEvent) => {
     if (messageEvent.type === "character") {
-      /* AUDIO */
+      // `background-once` is played a single time before falling back to the `background` idle
       const newBackgroundAudio = messageEvent.message.metadata["audio-once"];
       const newBackgroundAudioIdle = messageEvent.message.metadata.audio;
 
-      if (newBackgroundAudio) {
-        // Only fetch if the audio's source has changed
-        if (newBackgroundAudio !== backgroundAudioSrc.current) {
-          backgroundAudioSrc.current = newBackgroundAudio;
-          fetchMedia(newBackgroundAudio).then(audio => {
-            setBackgroundAudio(audio);
-            // Once fetched, we can turn off the idle and play this one-shot audio
-            setIsAudioIdleActive(false);
-          });
-        } else {
-          // If the source hasn't changed, we still want to play this audio once
-          setIsAudioIdleActive(false);
+      if (
+        newBackgroundAudio === undefined &&
+        newBackgroundAudioIdle === undefined
+      ) {
+        // Don't do anything if neither metadata key is specified.
+        return;
+      }
+
+      // If at least one key _is_ specified, then fetch both audios if specified and not "false"
+
+      const newBackgroundAudioBlobPromise =
+        newBackgroundAudio !== undefined && newBackgroundAudio !== "false"
+          ? fetchMedia(newBackgroundAudio)
+          : undefined;
+
+      const newBackgroundAudioIdleBlobPromise =
+        newBackgroundAudioIdle !== undefined &&
+        newBackgroundAudioIdle !== "false"
+          ? fetchMedia(newBackgroundAudioIdle)
+          : undefined;
+
+      // If we have a new value for `audio-once`...
+      if (
+        newBackgroundAudio !== undefined &&
+        newBackgroundAudio !== "false" &&
+        newBackgroundAudio !== backgroundAudioSrc.current
+      ) {
+        // Wait for it to load...
+        const newBackgroundAudioBlob = await newBackgroundAudioBlobPromise;
+        backgroundAudioSrc.current = newBackgroundAudio;
+        // Now it's fetched, we can turn off the idle and play this one-shot audio
+        setBackgroundAudio(newBackgroundAudioBlob);
+        setIsAudioIdleActive(false);
+        if (audioRef.current) {
+          audioRef.current.play();
         }
       }
 
+      // If we have a new value for `audio`...
       if (
         newBackgroundAudioIdle !== undefined &&
-        newBackgroundAudioIdle !== "false"
+        newBackgroundAudioIdle !== "false" &&
+        newBackgroundAudioIdle !== backgroundAudioIdleSrc.current
       ) {
-        // Only fetch if the audio's source has changed
-        if (newBackgroundAudioIdle !== backgroundAudioIdleSrc.current) {
-          backgroundAudioIdleSrc.current = newBackgroundAudioIdle;
-          fetchMedia(newBackgroundAudioIdle).then(audio => {
-            setBackgroundAudioIdle(audio);
-          });
+        // Wait for it to load...
+        const newBackgroundAudioIdleBlob = await newBackgroundAudioIdleBlobPromise;
+        backgroundAudioIdleSrc.current = newBackgroundAudioIdle;
+        // Now it's fetched, we can make it the pending idle, which will be switched to
+        // when the one-shot audio finishes
+        setBackgroundAudioIdle(newBackgroundAudioIdleBlob);
+        if (audioRef.current) {
+          audioRef.current.play();
+          // It's possible that fetch took a long time, so the `once` audio finished.
+          // In this case, start playing the idle.
+          if (audioRef.current.ended) {
+            setIsAudioIdleActive(true);
+          }
         }
-      } else if (newBackgroundAudioIdle === "false") {
+      } else if (
+        newBackgroundAudioIdle === undefined ||
+        newBackgroundAudioIdle === "false"
+      ) {
+        // If it's not defined, we remove the pending idle, so that if a one-shot audio _is_
+        // defined, then it won't switch to it
         backgroundAudioIdleSrc.current = undefined;
         setBackgroundAudioIdle(undefined);
       }
@@ -105,5 +150,9 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
     onMessage,
   };
 };
+
+export type BackgroundAudioElementProps = ReturnType<
+  typeof useBackgroundAudio
+>["audioProps"];
 
 export default useBackgroundAudio;

@@ -1,10 +1,18 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { MessageEvent } from "@charisma-ai/sdk";
 
-const fetchMedia = async (backgroundUrl: string) => {
+const cache: { [url: string]: string } = {};
+
+const fetchMedia = async (backgroundUrl: string, useCache = true) => {
+  if (useCache && cache[backgroundUrl] !== undefined) {
+    return cache[backgroundUrl];
+  }
+
   const response = await fetch(backgroundUrl);
   const blob = await response.blob();
-  return URL.createObjectURL(blob);
+  const blobUrl = URL.createObjectURL(blob);
+  cache[backgroundUrl] = blobUrl;
+  return blobUrl;
 };
 
 interface UseBackgroundVideoOptions {
@@ -42,46 +50,77 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
     }
   }, [isVideoIdleActive]);
 
-  const onMessage = useCallback((messageEvent: MessageEvent) => {
+  const onMessage = useCallback(async (messageEvent: MessageEvent) => {
     if (messageEvent.type === "character") {
       // `background-once` is played a single time before falling back to the `background` idle
       const newBackgroundVideo =
         messageEvent.message.metadata["background-once"];
       const newBackgroundVideoIdle = messageEvent.message.metadata.background;
 
-      if (newBackgroundVideo) {
-        // Only fetch if the video's source has changed
-        if (newBackgroundVideo !== backgroundVideoSrc.current) {
-          backgroundVideoSrc.current = newBackgroundVideo;
-          fetchMedia(newBackgroundVideo).then(video => {
-            setBackgroundVideo(video);
-            // Once fetched, we can turn off the idle and play this one-shot video
-            setIsVideoIdleActive(false);
-            if (videoRef.current) {
-              videoRef.current.play();
-            }
-          });
-        } else {
-          // If the source hasn't changed, we still want to play this video once
-          setIsVideoIdleActive(false);
+      if (
+        newBackgroundVideo === undefined &&
+        newBackgroundVideoIdle === undefined
+      ) {
+        // Don't do anything if neither metadata key is specified.
+        return;
+      }
+
+      // If at least one key _is_ specified, then fetch both videos if specified and not "false"
+
+      const newBackgroundVideoBlobPromise =
+        newBackgroundVideo !== undefined && newBackgroundVideo !== "false"
+          ? fetchMedia(newBackgroundVideo)
+          : undefined;
+
+      const newBackgroundVideoIdleBlobPromise =
+        newBackgroundVideoIdle !== undefined &&
+        newBackgroundVideoIdle !== "false"
+          ? fetchMedia(newBackgroundVideoIdle)
+          : undefined;
+
+      // If we have a new value for `background-once`...
+      if (
+        newBackgroundVideo !== undefined &&
+        newBackgroundVideo !== "false" &&
+        newBackgroundVideo !== backgroundVideoSrc.current
+      ) {
+        // Wait for it to load...
+        const newBackgroundVideoBlob = await newBackgroundVideoBlobPromise;
+        backgroundVideoSrc.current = newBackgroundVideo;
+        // Now it's fetched, we can turn off the idle and play this one-shot video
+        setBackgroundVideo(newBackgroundVideoBlob);
+        setIsVideoIdleActive(false);
+        if (videoRef.current) {
+          videoRef.current.play();
         }
       }
 
+      // If we have a new value for `background`...
       if (
         newBackgroundVideoIdle !== undefined &&
-        newBackgroundVideoIdle !== "false"
+        newBackgroundVideoIdle !== "false" &&
+        newBackgroundVideoIdle !== backgroundVideoIdleSrc.current
       ) {
-        // Only fetch if the video's source has changed
-        if (newBackgroundVideoIdle !== backgroundVideoIdleSrc.current) {
-          backgroundVideoIdleSrc.current = newBackgroundVideoIdle;
-          fetchMedia(newBackgroundVideoIdle).then(video => {
-            setBackgroundVideoIdle(video);
-            if (videoRef.current) {
-              videoRef.current.play();
-            }
-          });
+        // Wait for it to load...
+        const newBackgroundVideoIdleBlob = await newBackgroundVideoIdleBlobPromise;
+        backgroundVideoIdleSrc.current = newBackgroundVideoIdle;
+        // Now it's fetched, we can make it the pending idle, which will be switched to
+        // when the one-shot video finishes
+        setBackgroundVideoIdle(newBackgroundVideoIdleBlob);
+        if (videoRef.current) {
+          videoRef.current.play();
+          // It's possible that fetch took a long time, so the `once` video finished.
+          // In this case, start playing the idle.
+          if (videoRef.current.ended) {
+            setIsVideoIdleActive(true);
+          }
         }
-      } else if (newBackgroundVideoIdle === "false") {
+      } else if (
+        newBackgroundVideoIdle === undefined ||
+        newBackgroundVideoIdle === "false"
+      ) {
+        // If it's not defined, we remove the pending idle, so that if a one-shot video _is_
+        // defined, then it won't switch to it
         backgroundVideoIdleSrc.current = undefined;
         setBackgroundVideoIdle(undefined);
       }
@@ -102,5 +141,9 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
     onMessage,
   };
 };
+
+export type BackgroundVideoElementProps = ReturnType<
+  typeof useBackgroundVideo
+>["videoProps"];
 
 export default useBackgroundVideo;

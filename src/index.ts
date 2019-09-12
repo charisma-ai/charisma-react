@@ -27,8 +27,14 @@ export {
 
 export { CharismaContext, CharismaContextType } from "./Context";
 
-export { default as useBackgroundAudio } from "./useBackgroundAudio";
-export { default as useBackgroundVideo } from "./useBackgroundVideo";
+export {
+  default as useBackgroundAudio,
+  BackgroundAudioElementProps,
+} from "./useBackgroundAudio";
+export {
+  default as useBackgroundVideo,
+  BackgroundVideoElementProps,
+} from "./useBackgroundVideo";
 
 export { useMicrophone, UseMicrophoneOptions } from "./useMicrophone";
 
