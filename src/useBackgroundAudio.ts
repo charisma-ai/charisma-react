@@ -110,12 +110,16 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
         // when the one-shot audio finishes
         setBackgroundAudioIdle(newBackgroundAudioIdleBlob);
         if (audioRef.current) {
-          audioRef.current.play();
           // It's possible that fetch took a long time, so the `once` audio finished.
           // In this case, start playing the idle.
-          if (audioRef.current.ended) {
+          // Alternatively, if `audio-once` isn't specified, also play immediately.
+          if (
+            audioRef.current.ended ||
+            (newBackgroundAudio === undefined || newBackgroundAudio === "false")
+          ) {
             setIsAudioIdleActive(true);
           }
+          audioRef.current.play();
         }
       } else if (
         newBackgroundAudioIdle === undefined ||

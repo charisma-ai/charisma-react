@@ -108,12 +108,16 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
         // when the one-shot video finishes
         setBackgroundVideoIdle(newBackgroundVideoIdleBlob);
         if (videoRef.current) {
-          videoRef.current.play();
           // It's possible that fetch took a long time, so the `once` video finished.
           // In this case, start playing the idle.
-          if (videoRef.current.ended) {
+          // Alternatively, if `background-once` isn't specified, also play immediately.
+          if (
+            videoRef.current.ended ||
+            (newBackgroundVideo === undefined || newBackgroundVideo === "false")
+          ) {
             setIsVideoIdleActive(true);
           }
+          videoRef.current.play();
         }
       } else if (
         newBackgroundVideoIdle === undefined ||
