@@ -33,7 +33,7 @@ export const useSpeaker = ({ onStart, onStop }: UseSpeakerOptions = {}) => {
 
   const handlePlay = useCallback(
     (data: number[], interrupt = false) => {
-      speakerRef.current.play(data, interrupt);
+      return speakerRef.current.play(data, interrupt);
     },
     [speakerRef],
   );
