@@ -37,5 +37,6 @@ export {
 } from "./useBackgroundVideo";
 
 export { useMicrophone, UseMicrophoneOptions } from "./useMicrophone";
+export { useSpeaker, UseSpeakerOptions } from "./useSpeaker";
 
 export { Message } from "@charisma-ai/sdk";

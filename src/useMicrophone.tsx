@@ -18,7 +18,7 @@ export const useMicrophone = ({
   onStart,
   onStop,
   onTimeout,
-}: UseMicrophoneOptions) => {
+}: UseMicrophoneOptions = {}) => {
   const [isListening, setIsListening] = useState(false);
 
   const onRecogniseInterimRef = useChangeableRef(onRecogniseInterim);

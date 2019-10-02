@@ -20,7 +20,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "^1.4.0",
+    "@charisma-ai/sdk": "^1.6.0",
     "immutability-helper": "^3.0.1",
     "p-queue": "^6.1.1"
   },
