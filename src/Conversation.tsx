@@ -4,7 +4,7 @@ import {
   MessageEvent,
   StartTypingEvent,
   StopTypingEvent,
-  SceneCompleteEvent,
+  EpisodeCompleteEvent,
   Message,
   StartEvent,
   ReplyEvent,
@@ -20,7 +20,7 @@ export interface UseConversationOptions {
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
-  onSceneComplete?: (event: SceneCompleteEvent) => void;
+  onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
   onStart?: (event: StartEvent) => void;
   onReply?: (event: ReplyEvent) => void;
   onResume?: () => void;
@@ -28,7 +28,6 @@ export interface UseConversationOptions {
   shouldResumeOnReady?: boolean | StartEvent;
   shouldStartOnReady?: boolean | StartEvent;
   speechConfig?: SpeechConfig;
-  stopOnSceneComplete?: boolean;
 }
 
 export enum ChatMode {
@@ -62,7 +61,7 @@ export const useConversation = ({
   onMessage,
   onStartTyping,
   onStopTyping,
-  onSceneComplete,
+  onEpisodeComplete,
   onStart,
   onReply,
   onResume,
@@ -70,7 +69,6 @@ export const useConversation = ({
   shouldResumeOnReady,
   shouldStartOnReady,
   speechConfig,
-  stopOnSceneComplete,
 }: UseConversationOptions) => {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -132,9 +130,8 @@ export const useConversation = ({
     onMessage: handleMessage,
     onStartTyping: handleStartTyping,
     onStopTyping: handleStopTyping,
-    onSceneComplete,
+    onEpisodeComplete,
     speechConfig,
-    stopOnSceneComplete,
   });
 
   useEffect(() => {

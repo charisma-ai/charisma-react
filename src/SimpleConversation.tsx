@@ -4,7 +4,7 @@ import {
   MessageEvent,
   StartTypingEvent,
   StopTypingEvent,
-  SceneCompleteEvent,
+  EpisodeCompleteEvent,
   SpeechConfig,
 } from "@charisma-ai/sdk";
 
@@ -16,9 +16,8 @@ export interface UseSimpleConversationOptions {
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
-  onSceneComplete?: (event: SceneCompleteEvent) => void;
+  onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
   speechConfig?: SpeechConfig;
-  stopOnSceneComplete?: boolean;
 }
 
 export interface SimpleConversationChildProps {
@@ -34,9 +33,8 @@ export const useSimpleConversation = ({
   onMessage,
   onStartTyping,
   onStopTyping,
-  onSceneComplete,
+  onEpisodeComplete,
   speechConfig,
-  stopOnSceneComplete,
 }: UseSimpleConversationOptions) => {
   const charisma = useContext(CharismaContext);
 
@@ -51,7 +49,7 @@ export const useSimpleConversation = ({
   const onMessageRef = useChangeableRef(onMessage);
   const onStartTypingRef = useChangeableRef(onStartTyping);
   const onStopTypingRef = useChangeableRef(onStopTyping);
-  const onSceneCompleteRef = useChangeableRef(onSceneComplete);
+  const onEpisodeCompleteRef = useChangeableRef(onEpisodeComplete);
 
   const [isReady, setIsReady] = useState(false);
 
@@ -75,16 +73,13 @@ export const useSimpleConversation = ({
           onStopTypingRef.current(event);
         }
       });
-      conversation.on("scene-complete", event => {
-        if (onSceneCompleteRef.current) {
-          onSceneCompleteRef.current(event);
+      conversation.on("episode-complete", event => {
+        if (onEpisodeCompleteRef.current) {
+          onEpisodeCompleteRef.current(event);
         }
       });
 
       conversation.setSpeechConfig(speechConfig);
-      if (typeof stopOnSceneComplete === "boolean") {
-        conversation.setStopOnSceneComplete(stopOnSceneComplete);
-      }
 
       conversationRef.current = conversation;
       setIsReady(true);
@@ -109,12 +104,6 @@ export const useSimpleConversation = ({
       conversationRef.current.setSpeechConfig(speechConfig);
     }
   }, [speechConfig]);
-
-  useEffect(() => {
-    if (conversationRef.current && typeof stopOnSceneComplete === "boolean") {
-      conversationRef.current.setStopOnSceneComplete(stopOnSceneComplete);
-    }
-  }, [stopOnSceneComplete]);
 
   const returnedValue = useMemo((): SimpleConversationChildProps => {
     return {
