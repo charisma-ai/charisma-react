@@ -14,15 +14,15 @@ export type QueuedConversationChildProps = SimpleConversationChildProps;
 export const useQueuedConversation = (props: UseSimpleConversationOptions) => {
   const messageQueue = useRef(new Queue({ concurrency: 1 }));
 
+  const { onMessage } = props;
+
   const handleMessage = useCallback(
     (event: MessageEvent) => {
-      // eslint-disable-next-line prefer-destructuring
-      const onMessage = props.onMessage;
       if (onMessage) {
         messageQueue.current.add(() => onMessage(event));
       }
     },
-    [props.onMessage],
+    [onMessage],
   );
 
   const { reply, ...childProps } = useSimpleConversation({

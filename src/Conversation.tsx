@@ -17,7 +17,7 @@ import { useQueuedConversation } from "./QueuedConversation";
 export interface UseConversationOptions {
   conversationId?: number;
   onChangeCharacterMoods?: (newCharacterMoods: CharacterMoods) => void;
-  onMessage?: (event: MessageEvent) => void;
+  onMessage?: (event: MessageEvent) => Promise<void> | void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
   onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
@@ -78,7 +78,7 @@ export const useConversation = ({
   const characterMoodsRef = useRef<CharacterMoods>({});
 
   const handleMessage = useCallback(
-    (event: MessageEvent) => {
+    async (event: MessageEvent) => {
       setMessages([...messages, event]);
 
       if (event.tapToContinue) {
@@ -99,7 +99,7 @@ export const useConversation = ({
       }
 
       if (onMessage) {
-        onMessage(event);
+        await onMessage(event);
       }
     },
     [onMessage, messages, onChangeCharacterMoods],
