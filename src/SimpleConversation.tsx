@@ -17,6 +17,8 @@ export interface UseSimpleConversationOptions {
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
   onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
+  onPlaybackStart?: () => void;
+  onPlaybackStop?: () => void;
   speechConfig?: SpeechConfig;
 }
 
@@ -28,12 +30,22 @@ export interface SimpleConversationChildProps {
   resume: ConversationType["resume"];
 }
 
+const createEventHandler = <T extends {}[]>(
+  ref: React.MutableRefObject<((...args: T) => void) | undefined>,
+) => (...args: T) => {
+  if (ref.current) {
+    ref.current(...args);
+  }
+};
+
 export const useSimpleConversation = ({
   conversationId,
   onMessage,
   onStartTyping,
   onStopTyping,
   onEpisodeComplete,
+  onPlaybackStart,
+  onPlaybackStop,
   speechConfig,
 }: UseSimpleConversationOptions) => {
   const charisma = useContext(CharismaContext);
@@ -50,6 +62,8 @@ export const useSimpleConversation = ({
   const onStartTypingRef = useChangeableRef(onStartTyping);
   const onStopTypingRef = useChangeableRef(onStopTyping);
   const onEpisodeCompleteRef = useChangeableRef(onEpisodeComplete);
+  const onPlaybackStartRef = useChangeableRef(onPlaybackStart);
+  const onPlaybackStopRef = useChangeableRef(onPlaybackStop);
 
   const [isReady, setIsReady] = useState(false);
 
@@ -58,26 +72,16 @@ export const useSimpleConversation = ({
   useEffect(() => {
     if (charisma && conversationId) {
       const conversation = charisma.joinConversation(conversationId);
-      conversation.on("message", event => {
-        if (onMessageRef.current) {
-          onMessageRef.current(event);
-        }
-      });
-      conversation.on("start-typing", event => {
-        if (onStartTypingRef.current) {
-          onStartTypingRef.current(event);
-        }
-      });
-      conversation.on("stop-typing", event => {
-        if (onStopTypingRef.current) {
-          onStopTypingRef.current(event);
-        }
-      });
-      conversation.on("episode-complete", event => {
-        if (onEpisodeCompleteRef.current) {
-          onEpisodeCompleteRef.current(event);
-        }
-      });
+
+      conversation.on("message", createEventHandler(onMessageRef));
+      conversation.on("start-typing", createEventHandler(onStartTypingRef));
+      conversation.on("stop-typing", createEventHandler(onStopTypingRef));
+      conversation.on(
+        "episode-complete",
+        createEventHandler(onEpisodeCompleteRef),
+      );
+      conversation.on("playback-start", createEventHandler(onPlaybackStartRef));
+      conversation.on("playback-stop", createEventHandler(onPlaybackStopRef));
 
       conversation.setSpeechConfig(speechConfig);
 

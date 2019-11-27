@@ -25,16 +25,17 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@charisma-ai/sdk@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-1.7.0.tgz#20566c9e63e42dafe770d065b03b3085a71ccd3b"
-  integrity sha512-Z/lZ7p6xyygeEdtnyKpiRzKf/JOh9w7aIHMeOLmvqtQGPRv3g1lz4ccp2LgG5XoIED12oiJYsHhqApI9XfHaNA==
+"@charisma-ai/sdk@^1.8.0-alpha.3":
+  version "1.8.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-1.8.0-alpha.3.tgz#463e1178ed9d9c958ff8ce24ec6ed89103e15268"
+  integrity sha512-zr2zWmsWdhvQ06feSSujfqOpTWaefCn8zVj7gmJyvHSW2JuvRqbqCbuuMUkL86T4BoyZgobP7jtbWGYSBcLplw==
   dependencies:
     "@types/node-fetch" "^2.5.3"
     "@types/socket.io-client" "^1.4.32"
     eventemitter3 "^4.0.0"
     isomorphic-unfetch "^3.0.0"
     p-queue "^6.2.0"
+    query-string "^6.9.0"
     socket.io-client "^2.3.0"
 
 "@commitlint/execute-rule@^8.2.0":
@@ -2811,6 +2812,15 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+query-string@^6.9.0:
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.9.0.tgz#1c3b727c370cf00f177c99f328fda2108f8fa3dd"
+  integrity sha512-KG4bhCFYapExLsUHrFt+kQVEegF2agm4cpF/VNc6pZVthIfCc/GK8t8VyNIE3nyXG9DK3Tf2EGkxjR6/uRdYsA==
+  dependencies:
+    decode-uri-component "^0.2.0"
+    split-on-first "^1.0.0"
+    strict-uri-encode "^2.0.0"
+
 react-dom@^16.11.0:
   version "16.11.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.11.0.tgz#7e7c4a5a85a569d565c2462f5d345da2dd849af5"
@@ -3264,6 +3274,11 @@ spdx-license-ids@^3.0.0:
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.5.tgz#3694b5804567a458d3c8045842a6358632f62654"
   integrity sha512-J+FWzZoynJEXGphVIS+XEh3kFSjZX/1i9gFBaWQcB+/tmpe2qUsSBABpcxqxnAxFdiUFEgAX1bjYGQvIZmoz9Q==
 
+split-on-first@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/split-on-first/-/split-on-first-1.1.0.tgz#f610afeee3b12bce1d0c30425e76398b78249a5f"
+  integrity sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==
+
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/split-string/-/split-string-3.1.0.tgz#7cb09dda3a86585705c64b39a6466038682e8fe2"
@@ -3283,6 +3298,11 @@ static-extend@^0.1.1:
   dependencies:
     define-property "^0.2.5"
     object-copy "^0.1.0"
+
+strict-uri-encode@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-2.0.0.tgz#b9c7330c7042862f6b142dc274bbcc5866ce3546"
+  integrity sha1-ucczDHBChi9rFC3CdLvMWGbONUY=
 
 string-argv@^0.3.0:
   version "0.3.1"
