@@ -55,9 +55,18 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
 
   const onMessage = useCallback(async (messageEvent: MessageEvent) => {
     if (messageEvent.type === "character") {
+      const { metadata } = messageEvent.message;
+
+      const audioEffect = metadata["audio-effect"];
+      if (audioEffect) {
+        new Audio(audioEffect).play().catch(() => {
+          // If it failed, suppress the error and don't play the effect
+        });
+      }
+
       // `background-once` is played a single time before falling back to the `background` idle
-      const newBackgroundAudio = messageEvent.message.metadata["audio-once"];
-      const newBackgroundAudioIdle = messageEvent.message.metadata.audio;
+      const newBackgroundAudio = metadata["audio-once"];
+      const newBackgroundAudioIdle = metadata.audio;
 
       if (
         newBackgroundAudio === undefined &&
