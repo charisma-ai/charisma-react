@@ -54,7 +54,7 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
   }, [disabled]);
 
   const onMessage = useCallback(async (messageEvent: MessageEvent) => {
-    if (messageEvent.type === "character") {
+    if (messageEvent.type === "character" || messageEvent.type === "panel") {
       const { metadata } = messageEvent.message;
 
       const audioEffect = metadata["audio-effect"];

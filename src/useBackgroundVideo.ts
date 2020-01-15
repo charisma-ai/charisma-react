@@ -51,11 +51,12 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
   }, [isVideoIdleActive]);
 
   const onMessage = useCallback(async (messageEvent: MessageEvent) => {
-    if (messageEvent.type === "character") {
+    if (messageEvent.type === "character" || messageEvent.type === "panel") {
+      const { metadata } = messageEvent.message;
+
       // `background-once` is played a single time before falling back to the `background` idle
-      const newBackgroundVideo =
-        messageEvent.message.metadata["background-once"];
-      const newBackgroundVideoIdle = messageEvent.message.metadata.background;
+      const newBackgroundVideo = metadata["background-once"];
+      const newBackgroundVideoIdle = metadata.background;
 
       if (
         newBackgroundVideo === undefined &&
