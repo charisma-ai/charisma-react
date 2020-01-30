@@ -79,7 +79,7 @@ export const useConversation = ({
 
   const handleMessage = useCallback(
     async (event: MessageEvent) => {
-      setMessages([...messages, event]);
+      setMessages(oldMessages => [...oldMessages, event]);
 
       if (event.tapToContinue) {
         setMode(ChatMode.Tap);
@@ -102,7 +102,7 @@ export const useConversation = ({
         await onMessage(event);
       }
     },
-    [onMessage, messages, onChangeCharacterMoods],
+    [onMessage, onChangeCharacterMoods],
   );
 
   const handleStartTyping = useCallback(
