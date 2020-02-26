@@ -39,4 +39,6 @@ export {
 export { useMicrophone, UseMicrophoneOptions } from "./useMicrophone";
 export { useSpeaker, UseSpeakerOptions } from "./useSpeaker";
 
+export { prefetchMedia } from "./fetchMedia";
+
 export { Message } from "@charisma-ai/sdk";

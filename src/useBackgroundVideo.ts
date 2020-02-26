@@ -1,19 +1,7 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { MessageEvent } from "@charisma-ai/sdk";
 
-const cache: { [url: string]: string } = {};
-
-const fetchMedia = async (backgroundUrl: string, useCache = true) => {
-  if (useCache && cache[backgroundUrl] !== undefined) {
-    return cache[backgroundUrl];
-  }
-
-  const response = await fetch(backgroundUrl);
-  const blob = await response.blob();
-  const blobUrl = URL.createObjectURL(blob);
-  cache[backgroundUrl] = blobUrl;
-  return blobUrl;
-};
+import { fetchMedia } from "./fetchMedia";
 
 interface UseBackgroundVideoOptions {
   disabled?: boolean;
