@@ -9,8 +9,6 @@ interface UseBackgroundVideoOptions {
 
 const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
   const [backgroundVideo, setBackgroundVideo] = useState<string>();
-  const backgroundVideoSrc = useRef<string>();
-
   const [backgroundVideoIdle, setBackgroundVideoIdle] = useState<string>();
   const backgroundVideoIdleSrc = useRef<string>();
 
@@ -69,19 +67,16 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
           ? fetchMedia(newBackgroundVideoIdle)
           : undefined;
 
-      // If we have a new value for `background-once`...
-      if (
-        newBackgroundVideo !== undefined &&
-        newBackgroundVideo !== "false" &&
-        newBackgroundVideo !== backgroundVideoSrc.current
-      ) {
+      // If we have a value for `background-once`...
+      if (newBackgroundVideo !== undefined && newBackgroundVideo !== "false") {
         // Wait for it to load...
         const newBackgroundVideoBlob = await newBackgroundVideoBlobPromise;
-        backgroundVideoSrc.current = newBackgroundVideo;
         // Now it's fetched, we can turn off the idle and play this one-shot video
         setBackgroundVideo(newBackgroundVideoBlob);
         setIsVideoIdleActive(false);
         if (videoRef.current) {
+          // Replay `once` videos from the start on subsequent equal nodes
+          videoRef.current.currentTime = 0;
           videoRef.current.play();
         }
       }

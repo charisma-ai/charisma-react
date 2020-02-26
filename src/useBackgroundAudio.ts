@@ -9,8 +9,6 @@ interface UseBackgroundAudioOptions {
 
 const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
   const [backgroundAudio, setBackgroundAudio] = useState<string>();
-  const backgroundAudioSrc = useRef<string>();
-
   const [backgroundAudioIdle, setBackgroundAudioIdle] = useState<string>();
   const backgroundAudioIdleSrc = useRef<string>();
 
@@ -81,19 +79,16 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
           ? fetchMedia(newBackgroundAudioIdle)
           : undefined;
 
-      // If we have a new value for `audio-once`...
-      if (
-        newBackgroundAudio !== undefined &&
-        newBackgroundAudio !== "false" &&
-        newBackgroundAudio !== backgroundAudioSrc.current
-      ) {
+      // If we have a value for `audio-once`...
+      if (newBackgroundAudio !== undefined && newBackgroundAudio !== "false") {
         // Wait for it to load...
         const newBackgroundAudioBlob = await newBackgroundAudioBlobPromise;
-        backgroundAudioSrc.current = newBackgroundAudio;
         // Now it's fetched, we can turn off the idle and play this one-shot audio
         setBackgroundAudio(newBackgroundAudioBlob);
         setIsAudioIdleActive(false);
         if (audioRef.current) {
+          // Replay `once` videos from the start on subsequent equal nodes
+          audioRef.current.currentTime = 0;
           audioRef.current.play();
         }
       }
