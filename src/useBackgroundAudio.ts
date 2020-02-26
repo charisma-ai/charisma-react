@@ -25,7 +25,9 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
       audioRef.current.pause();
       if (activeAudio !== undefined) {
         audioRef.current.load();
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(() => {
+          // Don't worry about this throwing.
+        });
       }
     }
   }, [activeAudio]);
@@ -36,7 +38,9 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
       if (disabled) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(() => {
+          // Don't worry about this throwing.
+        });
       }
     }
   }, [disabled]);
@@ -112,7 +116,8 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
           // Alternatively, if `audio-once` isn't specified, also play immediately.
           if (
             audioRef.current.ended ||
-            (newBackgroundAudio === undefined || newBackgroundAudio === "false")
+            newBackgroundAudio === undefined ||
+            newBackgroundAudio === "false"
           ) {
             setIsAudioIdleActive(true);
           }

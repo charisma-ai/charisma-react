@@ -18,6 +18,7 @@ export interface UseCharismaOptions {
 }
 
 // Good idea to preserve equality across renders.
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const noOp = () => {};
 
 export const useCharisma = ({

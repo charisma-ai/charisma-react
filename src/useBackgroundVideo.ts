@@ -26,7 +26,9 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
       if (disabled) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play().catch(() => {});
+        videoRef.current.play().catch(() => {
+          // Don't worry about this throwing.
+        });
       }
     }
   }, [disabled]);
@@ -102,7 +104,8 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
           // Alternatively, if `background-once` isn't specified, also play immediately.
           if (
             videoRef.current.ended ||
-            (newBackgroundVideo === undefined || newBackgroundVideo === "false")
+            newBackgroundVideo === undefined ||
+            newBackgroundVideo === "false"
           ) {
             setIsVideoIdleActive(true);
           }

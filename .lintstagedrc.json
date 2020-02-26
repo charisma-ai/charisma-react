@@ -1,4 +1,4 @@
 {
-  "src/**/*.{ts,tsx}": ["eslint --fix", "git add"],
-  "*.md": ["prettier --single-quote --trailing-comma all --write", "git add"]
+  "src/**/*.{ts,tsx}": "eslint --fix",
+  "*.md": "prettier --single-quote --trailing-comma all --write"
 }

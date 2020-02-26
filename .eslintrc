@@ -9,23 +9,19 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/typescript",
     "plugin:prettier/recommended",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "prettier/react"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react-hooks"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
+    "import/extensions": ["error", "never"],
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }]
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".ts", ".tsx"]
-      }
-    }
   }
 }
