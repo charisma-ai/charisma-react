@@ -112,12 +112,12 @@ export const useSimpleConversation = ({
   const returnedValue = useMemo((): SimpleConversationChildProps => {
     return {
       isReady,
-      start: event => {
+      start: (event) => {
         if (conversationRef.current) {
           conversationRef.current.start(event);
         }
       },
-      reply: event => {
+      reply: (event) => {
         if (conversationRef.current) {
           conversationRef.current.reply(event);
         }

@@ -79,7 +79,7 @@ export const useConversation = ({
 
   const handleMessage = useCallback(
     async (event: MessageEvent) => {
-      setMessages(oldMessages => [...oldMessages, event]);
+      setMessages((oldMessages) => [...oldMessages, event]);
 
       if (event.tapToContinue) {
         setMode(ChatMode.Tap);

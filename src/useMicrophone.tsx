@@ -29,12 +29,12 @@ export const useMicrophone = ({
 
   const microphoneRef = useLazyRef(() =>
     new Microphone()
-      .on("recognise-interim", text => {
+      .on("recognise-interim", (text) => {
         if (onRecogniseInterimRef.current) {
           onRecogniseInterimRef.current(text);
         }
       })
-      .on("recognise", text => {
+      .on("recognise", (text) => {
         if (onRecogniseRef.current) {
           onRecogniseRef.current(text);
         }
