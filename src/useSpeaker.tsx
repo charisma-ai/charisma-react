@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Speaker } from "@charisma-ai/sdk";
 
 import useLazyRef from "./useLazyRef";
@@ -31,6 +31,29 @@ export const useSpeaker = ({ onStart, onStop }: UseSpeakerOptions = {}) => {
       }),
   );
 
+  const [isAvailable, setIsAvailable] = useState(() => {
+    try {
+      const audioContext = speakerRef.current.getAudioContext();
+      if (audioContext.state === "running") {
+        return true;
+      }
+    } catch {
+      // it's possible this throws if `audioContext` couldn't be created
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    try {
+      const audioContext = speakerRef.current.getAudioContext();
+      audioContext.onstatechange = () => {
+        setIsAvailable(audioContext.state === "running");
+      };
+    } catch {
+      // it's possible this throws if `audioContext` couldn't be created
+    }
+  }, [speakerRef]);
+
   const handlePlay = useCallback(
     (data: number[], interrupt = false) => {
       return speakerRef.current.play(data, interrupt);
@@ -38,9 +61,20 @@ export const useSpeaker = ({ onStart, onStop }: UseSpeakerOptions = {}) => {
     [speakerRef],
   );
 
+  const makeAvailable = useCallback(() => {
+    try {
+      const audioContext = speakerRef.current.getAudioContext();
+      audioContext.resume();
+    } catch {
+      // it's possible this throws if `audioContext` couldn't be created
+    }
+  }, [speakerRef]);
+
   return {
+    isAvailable,
     isSpeaking,
     play: handlePlay,
+    makeAvailable,
   };
 };
 
