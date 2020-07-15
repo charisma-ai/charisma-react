@@ -132,8 +132,8 @@ export interface UseConversationOptions {
   onReply?: (event: ReplyEvent) => void;
   onResume?: () => void;
   onTap?: () => void;
-  initialState: ConversationState;
-  onStateChange: (newState: ConversationState) => void;
+  initialState?: ConversationState;
+  onStateChange?: (newState: ConversationState) => void;
   shouldResumeOnConnect?: boolean | StartEvent;
   shouldStartOnConnect?: boolean | StartEvent;
   speechConfig?: SpeechConfig;
