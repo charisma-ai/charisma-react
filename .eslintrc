@@ -21,7 +21,11 @@
   "plugins": ["@typescript-eslint", "react-hooks"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-floating-promises": "warn",
     "import/extensions": ["error", "never"],
-    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }]
+    "react/default-props-match-prop-types": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "react/require-default-props": "off"
   }
 }
