@@ -13,8 +13,10 @@ export {
   UseConversationOptions,
   ConversationProps,
   ConversationChildProps,
+  ConversationState,
   ChatMode,
   StoredMessage,
+  PlayerMessage,
   CharacterMoods,
 } from "./Conversation";
 export {

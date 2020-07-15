@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useReducer } from "react";
 import {
   Conversation as ConversationType,
   MessageEvent,
@@ -15,22 +15,6 @@ import {
 import { useQueuedConversation } from "./QueuedConversation";
 import { usePlaythroughContext } from "./PlaythroughContext";
 
-export interface UseConversationOptions {
-  conversationId?: number;
-  onChangeCharacterMoods?: (newCharacterMoods: CharacterMoods) => void;
-  onMessage?: (event: MessageEvent) => Promise<void> | void;
-  onStartTyping?: (event: StartTypingEvent) => void;
-  onStopTyping?: (event: StopTypingEvent) => void;
-  onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
-  onStart?: (event: StartEvent) => void;
-  onReply?: (event: ReplyEvent) => void;
-  onResume?: () => void;
-  onTap?: () => void;
-  shouldResumeOnConnect?: boolean | StartEvent;
-  shouldStartOnConnect?: boolean | StartEvent;
-  speechConfig?: SpeechConfig;
-}
-
 export enum ChatMode {
   Tap = "tap",
   Chat = "chat",
@@ -40,9 +24,15 @@ export interface CharacterMoods {
   [id: number]: Mood;
 }
 
-export type StoredMessage =
-  | Message
-  | { type: "player"; timestamp: number; message: { text: string } };
+export type PlayerMessage = {
+  type: "player";
+  timestamp: number;
+  message: {
+    text: string;
+  };
+};
+
+export type StoredMessage = Message | PlayerMessage;
 
 export interface ConversationChildProps {
   inputValue: string;
@@ -56,6 +46,99 @@ export interface ConversationChildProps {
   resume: ConversationType["resume"];
 }
 
+export interface ConversationState {
+  inputValue: string;
+  isTyping: boolean;
+  messages: StoredMessage[];
+  mode: ChatMode;
+}
+
+type ConversationAction =
+  | {
+      type: "MESSAGE_CHARACTER";
+      payload: Message;
+    }
+  | {
+      type: "MESSAGE_PLAYER";
+      payload: PlayerMessage;
+    }
+  | {
+      type: "START_TYPING";
+    }
+  | {
+      type: "STOP_TYPING";
+    }
+  | {
+      type: "TYPE";
+      payload: string;
+    }
+  | {
+      type: "RESET";
+    };
+
+const reducer = (prevState: ConversationState, action: ConversationAction) => {
+  switch (action.type) {
+    case "MESSAGE_CHARACTER": {
+      return {
+        ...prevState,
+        messages: [...prevState.messages, action.payload],
+        mode: action.payload.tapToContinue ? ChatMode.Tap : ChatMode.Chat,
+      };
+    }
+    case "MESSAGE_PLAYER": {
+      return {
+        ...prevState,
+        messages: [...prevState.messages, action.payload],
+        inputValue: "",
+      };
+    }
+    case "START_TYPING": {
+      return {
+        ...prevState,
+        isTyping: true,
+      };
+    }
+    case "STOP_TYPING": {
+      return {
+        ...prevState,
+        isTyping: false,
+      };
+    }
+    case "TYPE": {
+      return {
+        ...prevState,
+        inputValue: action.payload,
+      };
+    }
+    case "RESET": {
+      return {
+        ...prevState,
+        messages: [],
+      };
+    }
+    default:
+      return prevState;
+  }
+};
+
+export interface UseConversationOptions {
+  conversationId?: number;
+  onChangeCharacterMoods?: (newCharacterMoods: CharacterMoods) => void;
+  onMessage?: (event: MessageEvent) => Promise<void> | void;
+  onStartTyping?: (event: StartTypingEvent) => void;
+  onStopTyping?: (event: StopTypingEvent) => void;
+  onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
+  onStart?: (event: StartEvent) => void;
+  onReply?: (event: ReplyEvent) => void;
+  onResume?: () => void;
+  onTap?: () => void;
+  initialState: ConversationState;
+  onStateChange: (newState: ConversationState) => void;
+  shouldResumeOnConnect?: boolean | StartEvent;
+  shouldStartOnConnect?: boolean | StartEvent;
+  speechConfig?: SpeechConfig;
+}
+
 export const useConversation = ({
   conversationId,
   onChangeCharacterMoods,
@@ -67,26 +150,33 @@ export const useConversation = ({
   onReply,
   onResume,
   onTap,
+  initialState,
+  onStateChange,
   shouldResumeOnConnect,
   shouldStartOnConnect,
   speechConfig,
 }: UseConversationOptions) => {
-  const [inputValue, setInputValue] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState<StoredMessage[]>([]);
-  const [mode, setMode] = useState<ChatMode>(ChatMode.Chat);
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialState || {
+      inputValue: "",
+      isTyping: false,
+      messages: [],
+      mode: ChatMode.Chat,
+    },
+  );
+  const { inputValue, isTyping, messages, mode } = state;
+  useEffect(() => {
+    if (onStateChange) {
+      onStateChange(state);
+    }
+  }, [onStateChange, state]);
 
   const characterMoodsRef = useRef<CharacterMoods>({});
 
   const handleMessage = useCallback(
     async (event: MessageEvent) => {
-      setMessages((oldMessages) => [...oldMessages, event]);
-
-      if (event.tapToContinue) {
-        setMode(ChatMode.Tap);
-      } else {
-        setMode(ChatMode.Chat);
-      }
+      dispatch({ type: "MESSAGE_CHARACTER", payload: event });
 
       if (event.characterMoods.length > 0) {
         const newCharacterMoods = { ...characterMoodsRef.current };
@@ -108,7 +198,7 @@ export const useConversation = ({
 
   const handleStartTyping = useCallback(
     (event: StartTypingEvent) => {
-      setIsTyping(true);
+      dispatch({ type: "START_TYPING" });
       if (onStartTyping) {
         onStartTyping(event);
       }
@@ -118,7 +208,7 @@ export const useConversation = ({
 
   const handleStopTyping = useCallback(
     (event: StopTypingEvent) => {
-      setIsTyping(false);
+      dispatch({ type: "STOP_TYPING" });
       if (onStopTyping) {
         onStopTyping(event);
       }
@@ -157,7 +247,7 @@ export const useConversation = ({
 
   const handleStart = useCallback(
     (event: StartEvent = {}) => {
-      setMessages([]);
+      dispatch({ type: "RESET" });
       if (onStart) {
         onStart(event);
       }
@@ -171,20 +261,19 @@ export const useConversation = ({
       if (onReply) {
         onReply(event);
       }
-      setMessages([
-        ...messages,
-        {
+      dispatch({
+        type: "MESSAGE_PLAYER",
+        payload: {
           type: "player",
           timestamp: Date.now(),
           message: {
             text: event.text,
           },
         },
-      ]);
-      setInputValue("");
+      });
       reply(event);
     },
-    [onReply, messages, reply],
+    [onReply, reply],
   );
 
   const handleTap = useCallback(() => {
@@ -201,12 +290,17 @@ export const useConversation = ({
     resume();
   }, [onResume, resume]);
 
+  const handleType = useCallback(
+    (text: string) => dispatch({ type: "TYPE", payload: text }),
+    [],
+  );
+
   return {
     inputValue,
     isTyping,
     messages,
     mode,
-    type: setInputValue,
+    type: handleType,
     start: handleStart,
     reply: handleReply,
     tap: handleTap,
