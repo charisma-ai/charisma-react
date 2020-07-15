@@ -30,7 +30,7 @@ export interface SimpleConversationChildProps {
   resume: ConversationType["resume"];
 }
 
-const createEventHandler = <T extends {}[]>(
+const createEventHandler = <T extends Record<string, any>[]>(
   ref: React.MutableRefObject<((...args: T) => void) | undefined>,
 ) => (...args: T) => {
   if (ref.current) {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Microphone } from "@charisma-ai/sdk";
+import { Microphone, SpeechRecognitionOptions } from "@charisma-ai/sdk";
 
 import useLazyRef from "./useLazyRef";
 import useChangeableRef from "./useChangeableRef";
@@ -58,24 +58,20 @@ export const useMicrophone = ({
       }),
   );
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-
   const handleStartListening = useCallback(
-    (timeout?: number) => {
+    (options?: SpeechRecognitionOptions) => {
       if (!isListening) {
-        setIsListening(true);
-        microphoneRef.current.startListening(timeout);
+        microphoneRef.current.startListening(options);
       }
     },
-    [isListening],
+    [isListening, microphoneRef],
   );
 
   const handleStopListening = useCallback(() => {
     if (isListening) {
-      setIsListening(false);
       microphoneRef.current.stopListening();
     }
-  }, [isListening]);
+  }, [isListening, microphoneRef]);
 
   const handleResetTimeout = useCallback(
     (timeout: number) => {
@@ -83,10 +79,11 @@ export const useMicrophone = ({
         microphoneRef.current.resetTimeout(timeout);
       }
     },
-    [isListening],
+    [isListening, microphoneRef],
   );
 
   return {
+    isSupported: microphoneRef.current.isSupported,
     isListening,
     startListening: handleStartListening,
     stopListening: handleStopListening,
