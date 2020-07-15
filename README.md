@@ -9,32 +9,32 @@ yarn add @charisma-ai/react
 ### Usage
 
 ```jsx
-import { Charisma, Conversation } from "@charisma-ai/react";
-import { Charisma as CharismaSDK } from "@charisma-ai/sdk";
+import { Playthrough, Conversation } from "@charisma-ai/react";
+import { createPlaythroughToken, createConversation } from "@charisma-ai/sdk";
 
 const MyChat = () => {
   // If you need to get a playthrough token or conversation id, you may consider
   // doing this as a `useEffect` hook, otherwise skip this:
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
-  const [conversationId, setConversationId] = useState<string>();
+  const [conversationId, setConversationId] = useState<number>();
   useEffect(() => {
     async function run() {
-      const newToken = await CharismaSDK.createPlaythroughToken({
+      const newToken = await createPlaythroughToken({
         storyId,
         version,
         userToken,
       });
       setPlaythroughToken(newToken);
 
-      const newConversationId = await CharismaSDK.createConversation(newToken);
+      const newConversationId = await createConversation(newToken);
       setConversationId(newConversationId);
     }
     run();
   }, [storyId, version, userToken]);
 
   return (
-    <Charisma playthroughToken={playthroughToken}>
+    <Playthrough playthroughToken={playthroughToken}>
       <Conversation conversationId={conversationId}>
         {({ messages, inputValue, start, reply, type }) => (
           <>
@@ -54,14 +54,20 @@ const MyChat = () => {
           </>
         )}
       </Conversation>
-    </Charisma>
+    </Playthrough>
   );
 }
 ```
 
 For a full list of prop types, [see the TypeScript definition file](dist/index.d.ts).
 
-### Breaking Changes
+### Breaking Changes
+
+#### v2
+
+The v2 release of `@charisma-ai/react` renames `Charisma` to `Playthrough` and improves connection handling.
+
+#### v1
 
 The v1 release of `@charisma-ai/react` has a bunch of breaking changes.
 

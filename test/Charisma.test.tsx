@@ -1,10 +1,10 @@
 /* eslint-disable */
 import React from "react";
-import { Charisma, Conversation } from "../src";
+import { Playthrough, Conversation } from "../src";
 
 const CharismaTest = () => {
   return (
-    <Charisma playthroughToken="test">
+    <Playthrough playthroughToken="test">
       <Conversation conversationId={1}>
         {({ inputValue, type }) => (
           <div>
@@ -15,6 +15,6 @@ const CharismaTest = () => {
           </div>
         )}
       </Conversation>
-    </Charisma>
+    </Playthrough>
   );
 };
