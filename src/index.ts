@@ -1,4 +1,11 @@
-export { Charisma, useCharisma, CharismaProps } from "./Charisma";
+export { Playthrough, usePlaythrough, PlaythroughProps } from "./Playthrough";
+export {
+  PlaythroughConsumer,
+  PlaythroughContext,
+  PlaythroughContextType,
+  PlaythroughProvider,
+  usePlaythroughContext,
+} from "./PlaythroughContext";
 
 export {
   Conversation,
@@ -24,8 +31,6 @@ export {
   QueuedConversationProps,
   QueuedConversationChildProps,
 } from "./QueuedConversation";
-
-export { CharismaContext, CharismaContextType } from "./Context";
 
 export {
   default as useBackgroundAudio,

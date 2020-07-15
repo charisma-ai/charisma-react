@@ -13,6 +13,7 @@ import {
 } from "@charisma-ai/sdk";
 
 import { useQueuedConversation } from "./QueuedConversation";
+import { usePlaythroughContext } from "./PlaythroughContext";
 
 export interface UseConversationOptions {
   conversationId?: number;
@@ -25,8 +26,8 @@ export interface UseConversationOptions {
   onReply?: (event: ReplyEvent) => void;
   onResume?: () => void;
   onTap?: () => void;
-  shouldResumeOnReady?: boolean | StartEvent;
-  shouldStartOnReady?: boolean | StartEvent;
+  shouldResumeOnConnect?: boolean | StartEvent;
+  shouldStartOnConnect?: boolean | StartEvent;
   speechConfig?: SpeechConfig;
 }
 
@@ -66,8 +67,8 @@ export const useConversation = ({
   onReply,
   onResume,
   onTap,
-  shouldResumeOnReady,
-  shouldStartOnReady,
+  shouldResumeOnConnect,
+  shouldStartOnConnect,
   speechConfig,
 }: UseConversationOptions) => {
   const [inputValue, setInputValue] = useState("");
@@ -125,7 +126,7 @@ export const useConversation = ({
     [onStopTyping],
   );
 
-  const { start, reply, resume, tap, isReady } = useQueuedConversation({
+  const { start, reply, resume, tap } = useQueuedConversation({
     conversationId,
     onMessage: handleMessage,
     onStartTyping: handleStartTyping,
@@ -134,18 +135,25 @@ export const useConversation = ({
     speechConfig,
   });
 
+  const playthrough = usePlaythroughContext();
+  const hasHandledMount = useRef(false);
+
   useEffect(() => {
-    if (isReady) {
-      if (shouldResumeOnReady) {
+    if (
+      playthrough?.connectionStatus === "connected" &&
+      !hasHandledMount.current
+    ) {
+      hasHandledMount.current = true;
+      if (shouldResumeOnConnect) {
         resume();
       }
-      if (shouldStartOnReady) {
-        const event = shouldStartOnReady === true ? {} : shouldStartOnReady;
+      if (shouldStartOnConnect) {
+        const event = shouldStartOnConnect === true ? {} : shouldStartOnConnect;
         start(event);
       }
     }
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [isReady]);
+  }, [playthrough?.connectionStatus]);
 
   const handleStart = useCallback(
     (event: StartEvent = {}) => {

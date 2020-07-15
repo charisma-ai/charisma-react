@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useMemo, useState } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import {
   Conversation as ConversationType,
   MessageEvent,
@@ -8,7 +8,7 @@ import {
   SpeechConfig,
 } from "@charisma-ai/sdk";
 
-import { CharismaContext } from "./Context";
+import { usePlaythroughContext } from "./PlaythroughContext";
 import useChangeableRef from "./useChangeableRef";
 
 export interface UseSimpleConversationOptions {
@@ -23,7 +23,6 @@ export interface UseSimpleConversationOptions {
 }
 
 export interface SimpleConversationChildProps {
-  isReady: boolean;
   start: ConversationType["start"];
   reply: ConversationType["reply"];
   tap: ConversationType["tap"];
@@ -48,11 +47,11 @@ export const useSimpleConversation = ({
   onPlaybackStop,
   speechConfig,
 }: UseSimpleConversationOptions) => {
-  const charisma = useContext(CharismaContext);
+  const playthroughContext = usePlaythroughContext();
 
-  if (charisma === undefined) {
+  if (playthroughContext === undefined) {
     throw new Error(
-      `To use \`SimpleConversation\`, you must wrap it within a \`Charisma\` instance.`,
+      `To use \`SimpleConversation\`, you must wrap it within a \`Playthrough\` instance.`,
     );
   }
 
@@ -64,14 +63,15 @@ export const useSimpleConversation = ({
   const onEpisodeCompleteRef = useChangeableRef(onEpisodeComplete);
   const onPlaybackStartRef = useChangeableRef(onPlaybackStart);
   const onPlaybackStopRef = useChangeableRef(onPlaybackStop);
-
-  const [isReady, setIsReady] = useState(false);
+  const speechConfigRef = useChangeableRef(speechConfig);
 
   const conversationRef = useRef<ConversationType>();
 
+  const { playthrough } = playthroughContext;
+
   useEffect(() => {
-    if (charisma && conversationId) {
-      const conversation = charisma.joinConversation(conversationId);
+    if (playthrough && conversationId) {
+      const conversation = playthrough.joinConversation(conversationId);
 
       conversation.on("message", createEventHandler(onMessageRef));
       conversation.on("start-typing", createEventHandler(onStartTypingRef));
@@ -83,25 +83,32 @@ export const useSimpleConversation = ({
       conversation.on("playback-start", createEventHandler(onPlaybackStartRef));
       conversation.on("playback-stop", createEventHandler(onPlaybackStopRef));
 
-      conversation.setSpeechConfig(speechConfig);
+      conversation.setSpeechConfig(speechConfigRef.current);
 
       conversationRef.current = conversation;
-      setIsReady(true);
     }
 
     return () => {
       if (
-        charisma &&
+        playthrough &&
         conversationId &&
-        charisma.getConversation(conversationId)
+        playthrough.getConversation(conversationId)
       ) {
-        charisma.leaveConversation(conversationId);
+        playthrough.leaveConversation(conversationId);
         conversationRef.current = undefined;
-        setIsReady(false);
       }
     };
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [charisma, conversationId]);
+  }, [
+    playthrough,
+    conversationId,
+    onMessageRef,
+    onStartTypingRef,
+    onStopTypingRef,
+    onEpisodeCompleteRef,
+    onPlaybackStartRef,
+    onPlaybackStopRef,
+    speechConfigRef,
+  ]);
 
   useEffect(() => {
     if (conversationRef.current) {
@@ -111,7 +118,6 @@ export const useSimpleConversation = ({
 
   const returnedValue = useMemo((): SimpleConversationChildProps => {
     return {
-      isReady,
       start: (event) => {
         if (conversationRef.current) {
           conversationRef.current.start(event);
@@ -133,7 +139,7 @@ export const useSimpleConversation = ({
         }
       },
     };
-  }, [isReady]);
+  }, []);
 
   return returnedValue;
 };
