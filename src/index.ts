@@ -42,7 +42,6 @@ export {
   default as useBackgroundVideo,
   BackgroundVideoElementProps,
 } from "./useBackgroundVideo";
-export { default as useBackgroundVideoChangeable } from "./useBackgroundVideoChangeable";
 
 export { useMicrophone, UseMicrophoneOptions } from "./useMicrophone";
 export { useSpeaker, UseSpeakerOptions } from "./useSpeaker";
