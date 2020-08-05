@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useCallback, useReducer } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  useReducer,
+  useState,
+} from "react";
 import {
   Conversation as ConversationType,
   MessageEvent,
@@ -36,6 +42,7 @@ export type StoredMessage = Message | PlayerMessage;
 
 export interface ConversationChildProps {
   inputValue: string;
+  isRestarting: boolean;
   isTyping: boolean;
   messages: StoredMessage[];
   mode: ChatMode;
@@ -44,6 +51,7 @@ export interface ConversationChildProps {
   reply: ConversationType["reply"];
   tap: ConversationType["tap"];
   resume: ConversationType["resume"];
+  restart: (eventId: string) => Promise<void>;
 }
 
 export interface ConversationState {
@@ -74,6 +82,10 @@ type ConversationAction =
     }
   | {
       type: "RESET";
+    }
+  | {
+      type: "RESTART";
+      payload: string;
     };
 
 const reducer = (prevState: ConversationState, action: ConversationAction) => {
@@ -116,6 +128,22 @@ const reducer = (prevState: ConversationState, action: ConversationAction) => {
         messages: [],
       };
     }
+    case "RESTART": {
+      const index = prevState.messages.findIndex((message) =>
+        message.type === "character" ||
+        message.type === "media" ||
+        message.type === "panel"
+          ? message.eventId === action.payload
+          : false,
+      );
+      if (index === -1) {
+        return prevState;
+      }
+      return {
+        ...prevState,
+        messages: prevState.messages.slice(0, index),
+      };
+    }
     default:
       return prevState;
   }
@@ -155,7 +183,7 @@ export const useConversation = ({
   shouldResumeOnConnect,
   shouldStartOnConnect,
   speechConfig,
-}: UseConversationOptions) => {
+}: UseConversationOptions): ConversationChildProps => {
   const [state, dispatch] = useReducer(
     reducer,
     initialState || {
@@ -225,12 +253,12 @@ export const useConversation = ({
     speechConfig,
   });
 
-  const playthrough = usePlaythroughContext();
+  const playthroughContext = usePlaythroughContext();
   const hasHandledMount = useRef(false);
 
   useEffect(() => {
     if (
-      playthrough?.connectionStatus === "connected" &&
+      playthroughContext?.connectionStatus === "connected" &&
       !hasHandledMount.current
     ) {
       hasHandledMount.current = true;
@@ -243,7 +271,7 @@ export const useConversation = ({
       }
     }
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [playthrough?.connectionStatus]);
+  }, [playthroughContext?.connectionStatus]);
 
   const handleStart = useCallback(
     (event: StartEvent = {}) => {
@@ -295,8 +323,25 @@ export const useConversation = ({
     [],
   );
 
+  const [isRestarting, setIsRestarting] = useState(false);
+  const handleRestart = useCallback(
+    async (eventId: string) => {
+      if (playthroughContext && playthroughContext.playthrough) {
+        setIsRestarting(true);
+        try {
+          await playthroughContext.playthrough.restartFromEventId(eventId);
+          dispatch({ type: "RESTART", payload: eventId });
+        } finally {
+          setIsRestarting(false);
+        }
+      }
+    },
+    [playthroughContext],
+  );
+
   return {
     inputValue,
+    isRestarting,
     isTyping,
     messages,
     mode,
@@ -305,6 +350,7 @@ export const useConversation = ({
     reply: handleReply,
     tap: handleTap,
     resume: handleResume,
+    restart: handleRestart,
   };
 };
 

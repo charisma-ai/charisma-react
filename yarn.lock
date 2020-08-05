@@ -867,10 +867,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@charisma-ai/sdk@^2.0.0-alpha.3":
-  version "2.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-2.0.0-alpha.3.tgz#09ccde8d74a48d633b577442af3002097227114f"
-  integrity sha512-MIsf1HzyJcFRq0iClO1MO8zgw1E0+qVUO4iJ9CgC6QHg33XNCqhLeFVC06UsVRWEiV6Eelfi0RRuhIEpimW1Jg==
+"@charisma-ai/sdk@^2.0.0-alpha.5":
+  version "2.0.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-2.0.0-alpha.5.tgz#87d5b5bd461ac8b37616cdda05139cedfcf62cfb"
+  integrity sha512-IrzADz5UNCGflYntF8hYmiDahr3KROIhVXvPPomlFI6WxWwlhJwymMnRs91BImlgnKnM1Scv8oKmaMNfEllY4A==
   dependencies:
     "@types/node-fetch" "^2.5.7"
     "@types/socket.io-client" "^1.4.33"
