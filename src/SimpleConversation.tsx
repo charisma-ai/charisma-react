@@ -12,7 +12,7 @@ import { usePlaythroughContext } from "./PlaythroughContext";
 import useChangeableRef from "./useChangeableRef";
 
 export interface UseSimpleConversationOptions {
-  conversationId?: number;
+  conversationId?: string;
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
