@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Playthrough as PlaythroughClass,
   ConnectionStatus,
-  setBaseUrl,
+  setGlobalBaseUrl,
 } from "@charisma-ai/sdk";
 
 import { PlaythroughProvider } from "./PlaythroughContext";
@@ -40,7 +40,7 @@ export const usePlaythrough = ({
 
   useEffect(() => {
     if (charismaUrl) {
-      setBaseUrl(charismaUrl);
+      setGlobalBaseUrl(charismaUrl);
     }
   }, [charismaUrl]);
 

@@ -4,7 +4,7 @@
     "declarationDir": "dist",
     "esModuleInterop": true,
     "jsx": "react",
-    "lib": ["es2018", "dom"],
+    "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -15,7 +15,7 @@
     "removeComments": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2018"
+    "target": "esnext"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useReducer,
   useState,
+  ReactNode,
 } from "react";
 import {
   Conversation as ConversationType,
@@ -355,7 +356,7 @@ export const useConversation = ({
 };
 
 export interface ConversationProps extends UseConversationOptions {
-  children: (conversation: ConversationChildProps) => React.ReactNode;
+  children: (conversation: ConversationChildProps) => ReactNode;
 }
 
 export const Conversation = ({ children, ...props }: ConversationProps) => {
