@@ -56,7 +56,7 @@ export const usePlaythrough = ({
         .on("problem", (...args) => onProblemRef.current(...args));
       setPlaythrough(newPlaythrough);
       return () => {
-        newPlaythrough.cleanup();
+        newPlaythrough.disconnect();
       };
     }
     // Without this, TypeScript complains that not all code paths return a value.

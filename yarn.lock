@@ -926,10 +926,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@charisma-ai/sdk@^2.0.0-alpha.11":
-  version "2.0.0-alpha.11"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-2.0.0-alpha.11.tgz#d862f4da461b6963e65615b8c88649ce2017514c"
-  integrity sha512-DHHujvwlB7Y61onkDNQuxF2G1KvqYjGqpmuwT03MU/ugrZsOVDaayfEI9mQ0INNPy5fsMeUnpIsopW8VBVuDdA==
+"@charisma-ai/sdk@^2.0.0-alpha.13":
+  version "2.0.0-alpha.13"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-2.0.0-alpha.13.tgz#59d510d1b85d6cb702d3a1e080cef9e83ab74b87"
+  integrity sha512-PytYRF2mv2gvEwOFeIo8nLA9PvtCgnw45saiAnGAm90+suA4CyA8fXIECJnDoYPDH973yGSdX8vHTO1y1NC5ww==
   dependencies:
     "@types/node-fetch" "^2.5.8"
     colyseus.js "^0.14.1"

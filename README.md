@@ -25,9 +25,9 @@ const MyChat = () => {
         version,
         userToken,
       });
-      setPlaythroughToken(newToken);
-
       const newConversationId = await createConversation(newToken);
+
+      setPlaythroughToken(newToken);
       setConversationId(newConversationId);
     }
     run();

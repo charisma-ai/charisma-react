@@ -151,7 +151,7 @@ const reducer = (prevState: ConversationState, action: ConversationAction) => {
 };
 
 export interface UseConversationOptions {
-  conversationId?: string;
+  conversationId?: number;
   onChangeCharacterMoods?: (newCharacterMoods: CharacterMoods) => void;
   onMessage?: (event: MessageEvent) => Promise<void> | void;
   onStartTyping?: (event: StartTypingEvent) => void;
