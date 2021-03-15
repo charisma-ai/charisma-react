@@ -1,0 +1,8 @@
+# Changelog
+
+### v2.0.0
+
+- `@charisma-ai/sdk@2.0.0` is now used, which [has its own set of breaking changes](https://github.com/charisma-ai/charisma-sdk-js). Under the hood, colyseus.js is now used instead of socket.io.
+- The `Charisma` component has been renamed to be `Playthrough` to be more descriptive and consistent with the SDK.
+- The internal state of the `Conversation` component and `useConversation` hook has been refactored, and can now be set to an initial state by passing in the `initialState` prop. You can now subscribe to changes in the state by providing an `onStateChange` callback prop.
+- Connection events have been removed and replaced by the single `onConnectionStatus` callback prop, which passes in the new connection state as its only argument.

@@ -60,17 +60,3 @@ const MyChat = () => {
 ```
 
 For a full list of prop types, [see the TypeScript definition file](dist/index.d.ts).
-
-### Breaking Changes
-
-#### v2
-
-The v2 release of `@charisma-ai/react` renames `Charisma` to `Playthrough` and improves connection handling.
-
-#### v1
-
-The v1 release of `@charisma-ai/react` has a bunch of breaking changes.
-
-Most notably, multiple conversations can now exist in a single playthrough, hence the addition of the `Conversation` component which references a particular `conversationId`.
-
-`Conversation`s work similarly to how the `Charisma` component used to work, except it does not use speech-to-text (microphone) or text-to-speech (speaker) out the box. These need to be configured using the relevant low-level APIs in `charisma-ai/sdk`: `Microphone` and `Speaker`.
