@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.1.0
+
+- `@charisma-ai/sdk@2.2.0` is now used, which exposes a [track-based API for the speaker](https://github.com/charisma-ai/charisma-sdk-js#speaker). This can help prevent characters speak over each other, but allow different characters to speak in parallel.
+
 ### v2.0.0
 
 - `@charisma-ai/sdk@2.0.0` is now used, which [has its own set of breaking changes](https://github.com/charisma-ai/charisma-sdk-js). Under the hood, colyseus.js is now used instead of socket.io.

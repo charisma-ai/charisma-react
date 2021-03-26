@@ -55,9 +55,8 @@ export const useSpeaker = ({ onStart, onStop }: UseSpeakerOptions = {}) => {
   }, [speakerRef]);
 
   const handlePlay = useCallback(
-    (data: AudioBuffer, interrupt = false) => {
-      // FIXME: For some reason, the `ArrayBuffer` types are different here (from different TypeScript libs?)
-      return speakerRef.current.play(data as any, interrupt);
+    (...args: Parameters<Speaker["play"]>) => {
+      return speakerRef.current.play(...args);
     },
     [speakerRef],
   );
