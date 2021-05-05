@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.2.0
+
+- `microphone.stopListening()` now accepts an `options` parameter with a single option `waitForLastResult`. If set to `true`, then the `recognise` will be called a final time with the result of the audio captured so far. If `false`, the operation will be aborted, so no additional `recognise` event will occur.
+
 ### v2.1.0
 
 - `@charisma-ai/sdk@2.2.0` is now used, which exposes a [track-based API for the speaker](https://github.com/charisma-ai/charisma-sdk-js#speaker). This can help prevent characters speak over each other, but allow different characters to speak in parallel.
