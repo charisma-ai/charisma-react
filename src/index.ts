@@ -17,7 +17,6 @@ export {
   ChatMode,
   StoredMessage,
   PlayerMessage,
-  CharacterMoods,
 } from "./Conversation";
 export {
   SimpleConversation,
