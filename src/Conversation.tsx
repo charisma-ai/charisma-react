@@ -16,6 +16,7 @@ import {
   StartEvent,
   ReplyEvent,
   SpeechConfig,
+  ActionEvent,
 } from "@charisma-ai/sdk";
 
 import { useQueuedConversation } from "./QueuedConversation";
@@ -46,6 +47,7 @@ export interface ConversationChildProps {
   start: ConversationType["start"];
   reply: ConversationType["reply"];
   tap: ConversationType["tap"];
+  action: ConversationType["action"];
   resume: ConversationType["resume"];
   restart: (eventId: string) => Promise<void>;
 }
@@ -155,6 +157,7 @@ export interface UseConversationOptions {
   onReply?: (event: ReplyEvent) => void;
   onResume?: () => void;
   onTap?: () => void;
+  onAction?: (event: ActionEvent) => void;
   initialState?: ConversationState;
   onStateChange?: (newState: ConversationState) => void;
   shouldResumeOnConnect?: boolean | StartEvent;
@@ -172,6 +175,7 @@ export const useConversation = ({
   onReply,
   onResume,
   onTap,
+  onAction,
   initialState,
   onStateChange,
   shouldResumeOnConnect,
@@ -225,7 +229,7 @@ export const useConversation = ({
     [onStopTyping],
   );
 
-  const { start, reply, resume, tap } = useQueuedConversation({
+  const { start, reply, resume, tap, action } = useQueuedConversation({
     conversationId,
     onMessage: handleMessage,
     onStartTyping: handleStartTyping,
@@ -292,6 +296,16 @@ export const useConversation = ({
     tap();
   }, [onTap, tap]);
 
+  const handleAction = useCallback(
+    (event: ActionEvent) => {
+      if (onAction) {
+        onAction(event);
+      }
+      action(event);
+    },
+    [onAction, action],
+  );
+
   const handleResume = useCallback(() => {
     if (onResume) {
       onResume();
@@ -330,6 +344,7 @@ export const useConversation = ({
     start: handleStart,
     reply: handleReply,
     tap: handleTap,
+    action: handleAction,
     resume: handleResume,
     restart: handleRestart,
   };

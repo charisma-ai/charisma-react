@@ -1,5 +1,9 @@
 # Changelog
 
+### vNext
+
+- Support for action node/event.
+
 ### v3.0.0
 
 There is a new emotion engine in Charisma! As a result...
