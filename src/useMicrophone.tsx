@@ -1,7 +1,9 @@
 import { useState, useCallback } from "react";
-import { Microphone, SpeechRecognitionOptions } from "@charisma-ai/sdk";
-
-import type { SpeechRecognitionStopOptions } from "@charisma-ai/sdk/dist/Microphone";
+import {
+  Microphone,
+  SpeechRecognitionOptions,
+  SpeechRecognitionStopOptions,
+} from "@charisma-ai/sdk";
 
 import useLazyRef from "./useLazyRef";
 import useChangeableRef from "./useChangeableRef";
