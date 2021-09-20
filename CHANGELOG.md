@@ -1,5 +1,9 @@
 # Changelog
 
+### v3.2.0
+
+- Support for experimental pause/play functionality and starting from a specific graph by ID or reference ID.
+
 ### v3.1.0
 
 - Support for action node/event.
