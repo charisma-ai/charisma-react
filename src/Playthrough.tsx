@@ -30,9 +30,8 @@ export const usePlaythrough = ({
 }: UsePlaythroughOptions) => {
   const [playthrough, setPlaythrough] = useState<PlaythroughClass>();
 
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    "disconnected",
-  );
+  const [connectionStatus, setConnectionStatus] =
+    useState<ConnectionStatus>("disconnected");
 
   const onConnectionStatusRef = useChangeableRef(onConnectionStatus);
   const onErrorRef = useChangeableRef(onError);

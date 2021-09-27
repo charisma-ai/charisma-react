@@ -6,6 +6,11 @@ import {
   StopTypingEvent,
   EpisodeCompleteEvent,
   SpeechConfig,
+  ConfirmActionEvent,
+  ConfirmReplyEvent,
+  ConfirmResumeEvent,
+  ConfirmStartEvent,
+  ConfirmTapEvent,
 } from "@charisma-ai/sdk";
 
 import { usePlaythroughContext } from "./PlaythroughContext";
@@ -17,6 +22,11 @@ export interface UseSimpleConversationOptions {
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
   onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
+  onAction?: (event: ConfirmActionEvent) => void;
+  onReply?: (event: ConfirmReplyEvent) => void;
+  onResume?: (event: ConfirmResumeEvent) => void;
+  onStart?: (event: ConfirmStartEvent) => void;
+  onTap?: (event: ConfirmTapEvent) => void;
   onPlaybackStart?: () => void;
   onPlaybackStop?: () => void;
   speechConfig?: SpeechConfig;
@@ -30,13 +40,15 @@ export interface SimpleConversationChildProps {
   resume: ConversationType["resume"];
 }
 
-const createEventHandler = <T extends Record<string, any>[]>(
-  ref: React.MutableRefObject<((...args: T) => void) | undefined>,
-) => (...args: T) => {
-  if (ref.current) {
-    ref.current(...args);
-  }
-};
+const createEventHandler =
+  <T extends Record<string, any>[]>(
+    ref: React.MutableRefObject<((...args: T) => void) | undefined>,
+  ) =>
+  (...args: T) => {
+    if (ref.current) {
+      ref.current(...args);
+    }
+  };
 
 export const useSimpleConversation = ({
   conversationId,
@@ -44,6 +56,11 @@ export const useSimpleConversation = ({
   onStartTyping,
   onStopTyping,
   onEpisodeComplete,
+  onAction,
+  onReply,
+  onResume,
+  onStart,
+  onTap,
   onPlaybackStart,
   onPlaybackStop,
   speechConfig,
@@ -62,8 +79,16 @@ export const useSimpleConversation = ({
   const onStartTypingRef = useChangeableRef(onStartTyping);
   const onStopTypingRef = useChangeableRef(onStopTyping);
   const onEpisodeCompleteRef = useChangeableRef(onEpisodeComplete);
+
+  const onActionRef = useChangeableRef(onAction);
+  const onReplyRef = useChangeableRef(onReply);
+  const onResumeRef = useChangeableRef(onResume);
+  const onStartRef = useChangeableRef(onStart);
+  const onTapRef = useChangeableRef(onTap);
+
   const onPlaybackStartRef = useChangeableRef(onPlaybackStart);
   const onPlaybackStopRef = useChangeableRef(onPlaybackStop);
+
   const speechConfigRef = useChangeableRef(speechConfig);
 
   const conversationRef = useRef<ConversationType>();
@@ -81,6 +106,13 @@ export const useSimpleConversation = ({
         "episode-complete",
         createEventHandler(onEpisodeCompleteRef),
       );
+
+      conversation.on("action", createEventHandler(onActionRef));
+      conversation.on("reply", createEventHandler(onReplyRef));
+      conversation.on("resume", createEventHandler(onResumeRef));
+      conversation.on("start", createEventHandler(onStartRef));
+      conversation.on("tap", createEventHandler(onTapRef));
+
       conversation.on("playback-start", createEventHandler(onPlaybackStartRef));
       conversation.on("playback-stop", createEventHandler(onPlaybackStopRef));
 
@@ -109,6 +141,11 @@ export const useSimpleConversation = ({
     onPlaybackStartRef,
     onPlaybackStopRef,
     speechConfigRef,
+    onActionRef,
+    onReplyRef,
+    onResumeRef,
+    onStartRef,
+    onTapRef,
   ]);
 
   useEffect(() => {

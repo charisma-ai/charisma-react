@@ -88,7 +88,8 @@ const useBackgroundVideo = ({ disabled }: UseBackgroundVideoOptions = {}) => {
         newBackgroundVideoIdle !== backgroundVideoIdleSrc.current
       ) {
         // Wait for it to load...
-        const newBackgroundVideoIdleBlob = await newBackgroundVideoIdleBlobPromise;
+        const newBackgroundVideoIdleBlob =
+          await newBackgroundVideoIdleBlobPromise;
         backgroundVideoIdleSrc.current = newBackgroundVideoIdle;
         // Now it's fetched, we can make it the pending idle, which will be switched to
         // when the one-shot video finishes

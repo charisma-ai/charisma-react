@@ -1,5 +1,9 @@
 # Changelog
 
+### vNext
+
+- Support for handling events that are sent from other players, such as other players' messages. These handlers will _not_ be fired for messages sent from the local connected client, only for remote clients.
+
 ### v3.2.0
 
 - Support for experimental pause/play functionality and starting from a specific graph by ID or reference ID.

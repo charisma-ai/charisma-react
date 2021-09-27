@@ -100,7 +100,8 @@ const useBackgroundAudio = ({ disabled }: UseBackgroundAudioOptions = {}) => {
         newBackgroundAudioIdle !== backgroundAudioIdleSrc.current
       ) {
         // Wait for it to load...
-        const newBackgroundAudioIdleBlob = await newBackgroundAudioIdleBlobPromise;
+        const newBackgroundAudioIdleBlob =
+          await newBackgroundAudioIdleBlobPromise;
         backgroundAudioIdleSrc.current = newBackgroundAudioIdle;
         // Now it's fetched, we can make it the pending idle, which will be switched to
         // when the one-shot audio finishes
