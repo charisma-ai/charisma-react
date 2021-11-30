@@ -27,6 +27,13 @@
     "no-shadow": "off",
     "no-use-before-define": "off",
     "react/default-props-match-prop-types": "off",
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
