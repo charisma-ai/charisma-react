@@ -1,6 +1,10 @@
 # Changelog
 
-### 3.3.0
+### vNext
+
+- Support for handling intermediate events from the client.
+
+### v3.3.0
 
 - Support for handling events that are sent from other players, such as other players' messages. These handlers will _not_ be fired for messages sent from the local connected client, only for remote clients.
 

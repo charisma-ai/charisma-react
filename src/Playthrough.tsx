@@ -14,7 +14,7 @@ export interface UsePlaythroughOptions {
   autoconnect?: boolean;
   onConnectionStatus?: (connectionStatus: ConnectionStatus) => void;
   onError?: (error: any) => void;
-  onProblem?: (problem: { type: string; error: string }) => void;
+  onProblem?: (problem: { code: string; error: string }) => void;
 }
 
 // Preserve equality across renders by defining this function outside the component.

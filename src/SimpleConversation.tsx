@@ -35,6 +35,7 @@ export interface UseSimpleConversationOptions {
 export interface SimpleConversationChildProps {
   start: ConversationType["start"];
   reply: ConversationType["reply"];
+  replyIntermediate: ConversationType["replyIntermediate"];
   tap: ConversationType["tap"];
   action: ConversationType["action"];
   resume: ConversationType["resume"];
@@ -164,6 +165,11 @@ export const useSimpleConversation = ({
       reply: (event) => {
         if (conversationRef.current) {
           conversationRef.current.reply(event);
+        }
+      },
+      replyIntermediate: (event) => {
+        if (conversationRef.current) {
+          conversationRef.current.replyIntermediate(event);
         }
       },
       tap: () => {

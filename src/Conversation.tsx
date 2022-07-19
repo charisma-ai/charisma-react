@@ -163,6 +163,7 @@ export interface UseConversationOptions {
   shouldResumeOnConnect?: boolean | StartEvent;
   shouldStartOnConnect?: boolean | StartEvent;
   speechConfig?: SpeechConfig;
+  sendIntermediateEvents?: boolean;
 }
 
 export const useConversation = ({
@@ -181,6 +182,7 @@ export const useConversation = ({
   shouldResumeOnConnect,
   shouldStartOnConnect,
   speechConfig,
+  sendIntermediateEvents,
 }: UseConversationOptions): ConversationChildProps => {
   const [state, dispatch] = useReducer(
     reducer,
@@ -229,14 +231,15 @@ export const useConversation = ({
     [onStopTyping],
   );
 
-  const { start, reply, resume, tap, action } = useQueuedConversation({
-    conversationId,
-    onMessage: handleMessage,
-    onStartTyping: handleStartTyping,
-    onStopTyping: handleStopTyping,
-    onEpisodeComplete,
-    speechConfig,
-  });
+  const { start, reply, replyIntermediate, resume, tap, action } =
+    useQueuedConversation({
+      conversationId,
+      onMessage: handleMessage,
+      onStartTyping: handleStartTyping,
+      onStopTyping: handleStopTyping,
+      onEpisodeComplete,
+      speechConfig,
+    });
 
   const playthroughContext = usePlaythroughContext();
   const hasHandledMount = useRef(false);
@@ -314,8 +317,13 @@ export const useConversation = ({
   }, [onResume, resume]);
 
   const handleType = useCallback(
-    (text: string) => dispatch({ type: "TYPE", payload: text }),
-    [],
+    (text: string) => {
+      if (sendIntermediateEvents) {
+        replyIntermediate({ text, inputType: "keyboard" });
+      }
+      dispatch({ type: "TYPE", payload: text });
+    },
+    [replyIntermediate, sendIntermediateEvents],
   );
 
   const [isRestarting, setIsRestarting] = useState(false);
