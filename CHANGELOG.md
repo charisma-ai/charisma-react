@@ -1,6 +1,10 @@
 # Changelog
 
-### vNext
+### v3.4.1
+
+- Conversations now have an `onProblem` prop to listen for issues scoped to a conversation.
+
+### v3.4.0
 
 - Support for handling intermediate events from the client.
 

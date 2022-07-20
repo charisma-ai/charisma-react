@@ -17,6 +17,7 @@ import {
   ReplyEvent,
   SpeechConfig,
   ActionEvent,
+  ProblemEvent,
 } from "@charisma-ai/sdk";
 
 import { useQueuedConversation } from "./QueuedConversation";
@@ -153,6 +154,7 @@ export interface UseConversationOptions {
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
   onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
+  onProblem?: (event: ProblemEvent) => void;
   onStart?: (event: StartEvent) => void;
   onReply?: (event: ReplyEvent) => void;
   onResume?: () => void;
@@ -172,6 +174,7 @@ export const useConversation = ({
   onStartTyping,
   onStopTyping,
   onEpisodeComplete,
+  onProblem,
   onStart,
   onReply,
   onResume,
@@ -238,6 +241,7 @@ export const useConversation = ({
       onStartTyping: handleStartTyping,
       onStopTyping: handleStopTyping,
       onEpisodeComplete,
+      onProblem,
       speechConfig,
     });
 

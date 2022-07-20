@@ -11,6 +11,7 @@ import {
   ConfirmResumeEvent,
   ConfirmStartEvent,
   ConfirmTapEvent,
+  ProblemEvent,
 } from "@charisma-ai/sdk";
 
 import { usePlaythroughContext } from "./PlaythroughContext";
@@ -22,6 +23,7 @@ export interface UseSimpleConversationOptions {
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
   onEpisodeComplete?: (event: EpisodeCompleteEvent) => void;
+  onProblem?: (event: ProblemEvent) => void;
   onAction?: (event: ConfirmActionEvent) => void;
   onReply?: (event: ConfirmReplyEvent) => void;
   onResume?: (event: ConfirmResumeEvent) => void;
@@ -57,6 +59,7 @@ export const useSimpleConversation = ({
   onStartTyping,
   onStopTyping,
   onEpisodeComplete,
+  onProblem,
   onAction,
   onReply,
   onResume,
@@ -80,6 +83,7 @@ export const useSimpleConversation = ({
   const onStartTypingRef = useChangeableRef(onStartTyping);
   const onStopTypingRef = useChangeableRef(onStopTyping);
   const onEpisodeCompleteRef = useChangeableRef(onEpisodeComplete);
+  const onProblemRef = useChangeableRef(onProblem);
 
   const onActionRef = useChangeableRef(onAction);
   const onReplyRef = useChangeableRef(onReply);
@@ -107,6 +111,7 @@ export const useSimpleConversation = ({
         "episode-complete",
         createEventHandler(onEpisodeCompleteRef),
       );
+      conversation.on("problem", createEventHandler(onProblemRef));
 
       conversation.on("action", createEventHandler(onActionRef));
       conversation.on("reply", createEventHandler(onReplyRef));
