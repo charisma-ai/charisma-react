@@ -982,10 +982,10 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
-"@charisma-ai/sdk@^3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-3.6.1.tgz#4cb6bdc997f5d7d46773d87210e1865982fca9df"
-  integrity sha512-0PXjPyyXtR+YIPUi83/dmfxnUuXSSY4MHZi7fCh5/5eC/u8sUtlcGs4yLSfiQjwBY/8xJp4dLU1g2k8l0Fp9BQ==
+"@charisma-ai/sdk@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@charisma-ai/sdk/-/sdk-3.8.0.tgz#1112479e4c39d5660feddc56efde57cbeec7ee8f"
+  integrity sha512-IiR6gScI8quYBF61Im2GAg+6YkkTwKpSbfzd6F/jwhIJP/SMJv1OxO758KHMQDrmKnastn7sQJIxIj87Ad9BxQ==
   dependencies:
     "@types/node-fetch" "^2.6.2"
     colyseus.js "^0.14.13"

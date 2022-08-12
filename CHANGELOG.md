@@ -1,5 +1,9 @@
 # Changelog
 
+### v3.4.2
+
+- Upgrade `@charisma-ai/sdk` dependency.
+
 ### v3.4.1
 
 - Conversations now have an `onProblem` prop to listen for issues scoped to a conversation.
