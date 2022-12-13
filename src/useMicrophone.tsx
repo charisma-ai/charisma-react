@@ -5,12 +5,15 @@ import {
   SpeechRecognitionStopOptions,
 } from "@charisma-ai/sdk";
 
+import type { SpeechRecognitionEvent } from "@charisma-ai/sdk/dist/src/speech-types";
+
 import useLazyRef from "./useLazyRef";
 import useChangeableRef from "./useChangeableRef";
 
 export interface UseMicrophoneOptions {
   onRecogniseInterim?: (text: string) => void;
   onRecognise?: (text: string) => void;
+  onResult?: (event: SpeechRecognitionEvent) => void;
   onStart?: () => void;
   onStop?: () => void;
   onTimeout?: () => void;
@@ -19,6 +22,7 @@ export interface UseMicrophoneOptions {
 export const useMicrophone = ({
   onRecogniseInterim,
   onRecognise,
+  onResult,
   onStart,
   onStop,
   onTimeout,
@@ -27,6 +31,7 @@ export const useMicrophone = ({
 
   const onRecogniseInterimRef = useChangeableRef(onRecogniseInterim);
   const onRecogniseRef = useChangeableRef(onRecognise);
+  const onResultRef = useChangeableRef(onResult);
   const onStartRef = useChangeableRef(onStart);
   const onStopRef = useChangeableRef(onStop);
   const onTimeoutRef = useChangeableRef(onTimeout);
@@ -41,6 +46,11 @@ export const useMicrophone = ({
       .on("recognise", (text) => {
         if (onRecogniseRef.current) {
           onRecogniseRef.current(text);
+        }
+      })
+      .on("result", (event) => {
+        if (onResultRef.current) {
+          onResultRef.current(event);
         }
       })
       .on("start", () => {

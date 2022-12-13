@@ -1,5 +1,9 @@
 # Changelog
 
+### v3.5.0
+
+- `Microphone` now has an `onResult` prop to listen for raw microphone events from the `SpeechRecognition` class.
+
 ### v3.4.2
 
 - Upgrade `@charisma-ai/sdk` dependency.
