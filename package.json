@@ -1,6 +1,6 @@
 {
   "name": "@charisma-ai/react",
-  "version": "3.4.2",
+  "version": "3.5.0",
   "description": "Charisma.ai chat component for React",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -17,11 +17,11 @@
   "scripts": {
     "build:non-umd": "microbundle --format modern,es,cjs --compress false --jsx React.createElement --jsxFragment React.Fragment",
     "build:umd": "microbundle --format umd --name CharismaReact --external react --jsx React.createElement --jsxFragment React.Fragment --alias httpie=./node_modules/httpie/xhr/index.js",
-    "build": "yarn run build:non-umd && yarn run build:umd",
+    "build": "pnpm run build:non-umd && pnpm run build:umd",
     "cm": "git-cz",
     "lint": "eslint --fix --ext js,ts,tsx .",
     "prebuild": "rimraf dist",
-    "prepublish": "yarn run build",
+    "prepublish": "pnpm run build",
     "semantic-release": "semantic-release",
     "prepare": "husky install"
   },
