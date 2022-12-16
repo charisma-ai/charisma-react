@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@charisma-ai/sdk': ^3.9.0
+  '@charisma-ai/sdk': 4.0.0-alpha.2
   '@types/react': ^17.0.37
   '@typescript-eslint/eslint-plugin': ^5.46.1
   '@typescript-eslint/parser': ^5.46.1
@@ -29,7 +29,7 @@ specifiers:
   typescript: ^4.9.4
 
 dependencies:
-  '@charisma-ai/sdk': 3.9.0
+  '@charisma-ai/sdk': 4.0.0-alpha.2
   immutability-helper: 3.1.1
   p-queue: 6.6.2
 
@@ -1337,8 +1337,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@charisma-ai/sdk/3.9.0:
-    resolution: {integrity: sha512-gM6fL0qU6o3TP+Komof1MgoYs8Xg6lUDLf+pUYcbiYzLPD5Y6sh1LXH5NMeEUOkzydkXsyzfduR8TrgQ1S4+Zw==}
+  /@charisma-ai/sdk/4.0.0-alpha.2:
+    resolution: {integrity: sha512-ln8Fz/xJx4mKjq5zmzILkDxmy/0jpkrOXluEkbjOCCoer1oFQ3GuPNpkIsnzvXJRphfzgCz9GzrmlXpXHj5V6g==}
     dependencies:
       '@types/node-fetch': 2.6.2
       colyseus.js: 0.14.13

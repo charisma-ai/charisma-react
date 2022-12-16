@@ -1,5 +1,9 @@
 # Changelog
 
+### vNext
+
+- **BREAKING:** `playthroughId`s and `conversationId`s have been changed from `number` to `string` type everywhere in this SDK, and renamed to `playthroughUuid` and `conversationUuid`.
+
 ### v3.5.0
 
 - `Microphone` now has an `onResult` prop to listen for raw microphone events from the `SpeechRecognition` class.

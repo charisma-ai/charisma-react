@@ -5,7 +5,7 @@ import { Playthrough, Conversation } from "../src";
 const CharismaTest = () => {
   return (
     <Playthrough playthroughToken="test">
-      <Conversation conversationId={1}>
+      <Conversation conversationUuid="00000000-0000-0000-0000-000000000000">
         {({ inputValue, type }) => (
           <div>
             <input

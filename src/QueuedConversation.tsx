@@ -8,10 +8,15 @@ import {
   SimpleConversationChildProps,
 } from "./SimpleConversation";
 
-export type UseQueuedConversationOptions = UseSimpleConversationOptions;
+export type UseQueuedConversationOptions = Omit<
+  UseSimpleConversationOptions,
+  "onMessage"
+> & {
+  onMessage?: (event: MessageEvent) => Promise<void> | void;
+};
 export type QueuedConversationChildProps = SimpleConversationChildProps;
 
-export const useQueuedConversation = (props: UseSimpleConversationOptions) => {
+export const useQueuedConversation = (props: UseQueuedConversationOptions) => {
   const messageQueue = useRef(new Queue({ concurrency: 1 }));
 
   const { onMessage } = props;

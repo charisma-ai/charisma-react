@@ -18,7 +18,7 @@ import { usePlaythroughContext } from "./PlaythroughContext";
 import useChangeableRef from "./useChangeableRef";
 
 export interface UseSimpleConversationOptions {
-  conversationId?: number;
+  conversationUuid?: string;
   onMessage?: (event: MessageEvent) => void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
@@ -54,7 +54,7 @@ const createEventHandler =
   };
 
 export const useSimpleConversation = ({
-  conversationId,
+  conversationUuid,
   onMessage,
   onStartTyping,
   onStopTyping,
@@ -101,8 +101,8 @@ export const useSimpleConversation = ({
   const { playthrough } = playthroughContext;
 
   useEffect(() => {
-    if (playthrough && conversationId) {
-      const conversation = playthrough.joinConversation(conversationId);
+    if (playthrough && conversationUuid) {
+      const conversation = playthrough.joinConversation(conversationUuid);
 
       conversation.on("message", createEventHandler(onMessageRef));
       conversation.on("start-typing", createEventHandler(onStartTypingRef));
@@ -130,22 +130,23 @@ export const useSimpleConversation = ({
     return () => {
       if (
         playthrough &&
-        conversationId &&
-        playthrough.getConversation(conversationId)
+        conversationUuid &&
+        playthrough.getConversation(conversationUuid)
       ) {
-        playthrough.leaveConversation(conversationId);
+        playthrough.leaveConversation(conversationUuid);
         conversationRef.current = undefined;
       }
     };
   }, [
     playthrough,
-    conversationId,
+    conversationUuid,
     onMessageRef,
     onStartTypingRef,
     onStopTypingRef,
     onEpisodeCompleteRef,
     onPlaybackStartRef,
     onPlaybackStopRef,
+    onProblemRef,
     speechConfigRef,
     onActionRef,
     onReplyRef,

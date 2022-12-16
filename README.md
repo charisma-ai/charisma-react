@@ -17,25 +17,25 @@ const MyChat = () => {
   // doing this as a `useEffect` hook, otherwise skip this:
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
-  const [conversationId, setConversationId] = useState<number>();
+  const [conversationUuid, setConversationUuid] = useState<string>();
   useEffect(() => {
     async function run() {
-      const newToken = await createPlaythroughToken({
+      const tokenResult = await createPlaythroughToken({
         storyId,
         version,
         userToken,
       });
-      const newConversationId = await createConversation(newToken);
+      const conversationResult = await createConversation(newToken);
 
-      setPlaythroughToken(newToken);
-      setConversationId(newConversationId);
+      setPlaythroughToken(tokenResult.token);
+      setConversationUuid(conversationResult.conversationUuid);
     }
     run();
   }, [storyId, version, userToken]);
 
   return (
     <Playthrough playthroughToken={playthroughToken}>
-      <Conversation conversationId={conversationId}>
+      <Conversation conversationUuid={conversationUuid}>
         {({ messages, inputValue, start, reply, type }) => (
           <>
             <button onClick={() => start()}>Start</button>

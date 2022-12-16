@@ -149,7 +149,7 @@ const reducer = (prevState: ConversationState, action: ConversationAction) => {
 };
 
 export interface UseConversationOptions {
-  conversationId?: number;
+  conversationUuid?: string;
   onMessage?: (event: MessageEvent) => Promise<void> | void;
   onStartTyping?: (event: StartTypingEvent) => void;
   onStopTyping?: (event: StopTypingEvent) => void;
@@ -169,7 +169,7 @@ export interface UseConversationOptions {
 }
 
 export const useConversation = ({
-  conversationId,
+  conversationUuid,
   onMessage,
   onStartTyping,
   onStopTyping,
@@ -236,7 +236,7 @@ export const useConversation = ({
 
   const { start, reply, replyIntermediate, resume, tap, action } =
     useQueuedConversation({
-      conversationId,
+      conversationUuid,
       onMessage: handleMessage,
       onStartTyping: handleStartTyping,
       onStopTyping: handleStopTyping,
