@@ -1,12 +1,12 @@
 export {
   Playthrough,
   usePlaythrough,
-  PlaythroughProps,
+  type PlaythroughProps,
 } from "./Playthrough.js";
 export {
   PlaythroughConsumer,
   PlaythroughContext,
-  PlaythroughContextType,
+  type PlaythroughContextType,
   PlaythroughProvider,
   usePlaythroughContext,
 } from "./PlaythroughContext.js";
@@ -14,41 +14,41 @@ export {
 export {
   Conversation,
   useConversation,
-  UseConversationOptions,
-  ConversationProps,
-  ConversationChildProps,
-  ConversationState,
+  type UseConversationOptions,
+  type ConversationProps,
+  type ConversationChildProps,
+  type ConversationState,
   ChatMode,
-  StoredMessage,
-  PlayerMessage,
+  type StoredMessage,
+  type PlayerMessage,
 } from "./Conversation.js";
 export {
   SimpleConversation,
   useSimpleConversation,
-  UseSimpleConversationOptions,
-  SimpleConversationProps,
-  SimpleConversationChildProps,
+  type UseSimpleConversationOptions,
+  type SimpleConversationProps,
+  type SimpleConversationChildProps,
 } from "./SimpleConversation.js";
 export {
   QueuedConversation,
   useQueuedConversation,
-  UseQueuedConversationOptions,
-  QueuedConversationProps,
-  QueuedConversationChildProps,
+  type UseQueuedConversationOptions,
+  type QueuedConversationProps,
+  type QueuedConversationChildProps,
 } from "./QueuedConversation.js";
 
 export {
   default as useBackgroundAudio,
-  BackgroundAudioElementProps,
+  type BackgroundAudioElementProps,
 } from "./useBackgroundAudio.js";
 export {
   default as useBackgroundVideo,
-  BackgroundVideoElementProps,
+  type BackgroundVideoElementProps,
 } from "./useBackgroundVideo.js";
 
-export { useMicrophone, UseMicrophoneOptions } from "./useMicrophone.js";
-export { useSpeaker, UseSpeakerOptions } from "./useSpeaker.js";
+export { useMicrophone, type UseMicrophoneOptions } from "./useMicrophone.js";
+export { useSpeaker, type UseSpeakerOptions } from "./useSpeaker.js";
 
 export { prefetchMedia } from "./fetchMedia.js";
 
-export { Message } from "@charisma-ai/sdk";
+export { type Message } from "@charisma-ai/sdk";

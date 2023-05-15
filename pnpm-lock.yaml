@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@charisma-ai/sdk':
-    specifier: ^4.0.0-alpha.5
-    version: 4.0.0-alpha.5
+    specifier: ^4.0.0-alpha.7
+    version: 4.0.0-alpha.7
   immutability-helper:
     specifier: ^3.1.1
     version: 3.1.1
@@ -122,8 +122,8 @@ packages:
       regenerator-runtime: 0.13.11
     dev: true
 
-  /@charisma-ai/sdk@4.0.0-alpha.5:
-    resolution: {integrity: sha512-shlHOguS4qXRmYi7fSvfem1UfFnam8IhDO5/ToDGCBdHIcJX6UCaHquPUGBIAMvUkVsOoWJ0iWFeYDQ24giYuQ==}
+  /@charisma-ai/sdk@4.0.0-alpha.7:
+    resolution: {integrity: sha512-eGq1Ldjo676AYhLlMTNR9l03cCYCZ/QBd6zH2VgUtEw1fFj3RcopnpDCV8v4KUcoW8XK3YXgeU/0dGatDfb+kA==}
     dependencies:
       colyseus.js: 0.14.13
       eventemitter3: 5.0.1
