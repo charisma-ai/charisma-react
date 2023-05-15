@@ -24,6 +24,7 @@
     "@typescript-eslint/no-shadow": "error",
     "@typescript-eslint/no-use-before-define": "error",
     "import/extensions": ["error", "never"],
+    "import/no-unresolved": "off",
     "no-shadow": "off",
     "no-use-before-define": "off",
     "react/default-props-match-prop-types": "off",

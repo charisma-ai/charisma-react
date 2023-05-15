@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { MessageEvent } from "@charisma-ai/sdk";
 
-import { fetchMedia } from "./fetchMedia";
+import { fetchMedia } from "./fetchMedia.js";
 
 interface UseBackgroundVideoOptions {
   disabled?: boolean;

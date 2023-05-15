@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { Speaker } from "@charisma-ai/sdk";
 
-import useLazyRef from "./useLazyRef";
-import useChangeableRef from "./useChangeableRef";
+import useLazyRef from "./useLazyRef.js";
+import useChangeableRef from "./useChangeableRef.js";
 
 export interface UseSpeakerOptions {
   onStart?: () => void;

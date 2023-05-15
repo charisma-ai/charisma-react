@@ -2,7 +2,9 @@
 
 ### vNext
 
+- **BREAKING:** This packages now exports ES Module only.
 - **BREAKING:** `playthroughId`s and `conversationId`s have been changed from `number` to `string` type everywhere in this SDK, and renamed to `playthroughUuid` and `conversationUuid`.
+- **BREAKING:** Upgraded to `@charisma-ai/sdk@4` which has its own set of breaking changes. Please consule its own [CHANGELOG](https://github.com/charisma-ai/charisma-react/blob/main/CHANGELOG.md).
 
 ### v3.5.0
 

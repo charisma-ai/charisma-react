@@ -7,8 +7,8 @@ import {
 
 import type { SpeechRecognitionEvent } from "@charisma-ai/sdk/dist/src/speech-types";
 
-import useLazyRef from "./useLazyRef";
-import useChangeableRef from "./useChangeableRef";
+import useLazyRef from "./useLazyRef.js";
+import useChangeableRef from "./useChangeableRef.js";
 
 export interface UseMicrophoneOptions {
   onRecogniseInterim?: (text: string) => void;

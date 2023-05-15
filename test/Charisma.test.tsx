@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import { Playthrough, Conversation } from "../src";
+import { Playthrough, Conversation } from "../src/index.js";
 
 const CharismaTest = () => {
   return (

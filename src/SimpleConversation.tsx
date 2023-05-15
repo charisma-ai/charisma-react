@@ -14,8 +14,8 @@ import {
   ProblemEvent,
 } from "@charisma-ai/sdk";
 
-import { usePlaythroughContext } from "./PlaythroughContext";
-import useChangeableRef from "./useChangeableRef";
+import { usePlaythroughContext } from "./PlaythroughContext.js";
+import useChangeableRef from "./useChangeableRef.js";
 
 export interface UseSimpleConversationOptions {
   conversationUuid?: string;

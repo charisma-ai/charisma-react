@@ -20,8 +20,8 @@ import {
   ProblemEvent,
 } from "@charisma-ai/sdk";
 
-import { useQueuedConversation } from "./QueuedConversation";
-import { usePlaythroughContext } from "./PlaythroughContext";
+import { useQueuedConversation } from "./QueuedConversation.js";
+import { usePlaythroughContext } from "./PlaythroughContext.js";
 
 export enum ChatMode {
   Tap = "tap",

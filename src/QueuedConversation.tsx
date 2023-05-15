@@ -6,7 +6,7 @@ import {
   useSimpleConversation,
   UseSimpleConversationOptions,
   SimpleConversationChildProps,
-} from "./SimpleConversation";
+} from "./SimpleConversation.js";
 
 export type UseQueuedConversationOptions = Omit<
   UseSimpleConversationOptions,

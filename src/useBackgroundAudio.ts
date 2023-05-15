@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { MessageEvent } from "@charisma-ai/sdk";
 
-import { fetchMedia } from "./fetchMedia";
+import { fetchMedia } from "./fetchMedia.js";
 
 interface UseBackgroundAudioOptions {
   disabled?: boolean;

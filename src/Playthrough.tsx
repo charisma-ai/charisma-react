@@ -5,8 +5,8 @@ import {
   setGlobalBaseUrl,
 } from "@charisma-ai/sdk";
 
-import { PlaythroughProvider } from "./PlaythroughContext";
-import useChangeableRef from "./useChangeableRef";
+import { PlaythroughProvider } from "./PlaythroughContext.js";
+import useChangeableRef from "./useChangeableRef.js";
 
 export interface UsePlaythroughOptions {
   playthroughToken?: string;

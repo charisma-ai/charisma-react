@@ -3,7 +3,7 @@
 [Charisma.ai](https://charisma.ai) chat component for React.
 
 ```
-yarn add @charisma-ai/react
+pnpm i @charisma-ai/react
 ```
 
 ### Usage
