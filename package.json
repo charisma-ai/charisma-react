@@ -17,13 +17,14 @@
     "build": "tsc && swc src -d dist",
     "cm": "git-cz",
     "lint": "eslint --fix --ext js,ts,tsx .",
+    "playground": "cd test/test-app && pnpm start",
     "prebuild": "rimraf dist",
     "prepublish": "pnpm run build",
     "semantic-release": "semantic-release",
     "prepare": "husky install"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "^4.0.0-alpha.7",
+    "@charisma-ai/sdk": "4.0.0-alpha.12",
     "immutability-helper": "^3.1.1",
     "p-queue": "^7.3.4"
   },
