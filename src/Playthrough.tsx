@@ -3,6 +3,7 @@ import {
   Playthrough as PlaythroughClass,
   ConnectionStatus,
   setGlobalBaseUrl,
+  SpeechRecognitionResponse,
 } from "@charisma-ai/sdk";
 
 import { PlaythroughProvider } from "./PlaythroughContext.js";
@@ -15,6 +16,7 @@ export interface UsePlaythroughOptions {
   onConnectionStatus?: (connectionStatus: ConnectionStatus) => void;
   onError?: (error: any) => void;
   onProblem?: (problem: { code: string; error: string }) => void;
+  onSpeechRecognitionResponse?: (response: SpeechRecognitionResponse) => void;
 }
 
 // Preserve equality across renders by defining this function outside the component.
@@ -27,6 +29,7 @@ export const usePlaythrough = ({
   onConnectionStatus = noOp,
   onError = noOp,
   onProblem = noOp,
+  onSpeechRecognitionResponse = noOp,
 }: UsePlaythroughOptions) => {
   const [playthrough, setPlaythrough] = useState<PlaythroughClass>();
 
@@ -36,6 +39,9 @@ export const usePlaythrough = ({
   const onConnectionStatusRef = useChangeableRef(onConnectionStatus);
   const onErrorRef = useChangeableRef(onError);
   const onProblemRef = useChangeableRef(onProblem);
+  const onSpeechRecognitionResponseRef = useChangeableRef(
+    onSpeechRecognitionResponse,
+  );
 
   useEffect(() => {
     if (charismaUrl) {
@@ -52,7 +58,12 @@ export const usePlaythrough = ({
           onConnectionStatusRef.current(newConnectionStatus);
         })
         .on("error", (...args) => onErrorRef.current(...args))
-        .on("problem", (...args) => onProblemRef.current(...args));
+        .on("problem", (...args) => onProblemRef.current(...args))
+        .on(
+          "speech-recognition-result",
+          (response: SpeechRecognitionResponse) =>
+            onSpeechRecognitionResponseRef.current(response),
+        );
       setPlaythrough(newPlaythrough);
       return () => {
         newPlaythrough.disconnect();
@@ -66,6 +77,7 @@ export const usePlaythrough = ({
     onConnectionStatusRef,
     onErrorRef,
     onProblemRef,
+    onSpeechRecognitionResponseRef,
   ]);
 
   useEffect(() => {

@@ -1,4 +1,11 @@
-import { Conversation, usePlaythroughContext } from "@charisma-ai/react";
+import {
+  SpeechRecognitionResponse,
+  useConversation,
+  usePlaythroughContext,
+} from "@charisma-ai/react";
+import RecordingSwitch from "./RecordingSwitch";
+import MessagesView from "./MessagesView";
+import { useEffect } from "react";
 
 type ConversationViewProps = {
   conversationUuid: string | undefined;
@@ -9,51 +16,55 @@ const ConversationView = ({
   conversationUuid,
   startGraphReferenceId,
 }: ConversationViewProps) => {
-  const playthrough = usePlaythroughContext();
-  const connectionStatus = playthrough?.connectionStatus;
+  const playthroughContext = usePlaythroughContext();
+  const playthrough = playthroughContext?.playthrough;
+
+  const { messages, start, inputValue, reply, type } = useConversation({
+    conversationUuid,
+  });
+
+  const hanlder = (speechRecognitionResponse: SpeechRecognitionResponse) => {
+    console.log(speechRecognitionResponse);
+    if (speechRecognitionResponse.isFinal) {
+      reply({ text: speechRecognitionResponse.text });
+      type("");
+    } else {
+      type(speechRecognitionResponse.text);
+    }
+  };
+
+  useEffect(() => {
+    playthrough?.on("speech-recognition-result", hanlder);
+    return () => {
+      playthrough?.off("speech-recognition-result", hanlder);
+    };
+  }, [playthrough]);
+
   if (!conversationUuid) {
     return <div>Getting Conversation...</div>;
   }
-  if (connectionStatus !== "connected") {
+  if (playthroughContext?.connectionStatus !== "connected") {
     return <div>Connecting...</div>;
   }
+
   return (
-    <Conversation conversationUuid={conversationUuid}>
-      {({ messages, inputValue, start, reply, type }) => (
-        <>
-          <button onClick={() => start({ startGraphReferenceId })}>
-            Start
-          </button>
-          {messages.map((message) => {
-            if (message.type === "player") {
-              const text = `YOU: ${message.message.text}`;
-              return <div key={text}>{text}</div>;
-            }
-            if (message.type === "character") {
-              const text = `${message.message.character?.name || "???"}: ${
-                message.message.text
-              }`;
-              return <div key={text}>{text}</div>;
-            }
-            return (
-              <div>
-                A message was sent that did not have type "player" or
-                "character".
-              </div>
-            );
-          })}
-          <input
-            onChange={({ currentTarget: { value } }) => type(value)}
-            value={inputValue}
-            onKeyPress={({ key }) => {
-              if (key === "Enter") {
-                reply({ text: inputValue });
-              }
-            }}
-          />
-        </>
-      )}
-    </Conversation>
+    <>
+      <button onClick={() => start({ startGraphReferenceId })}>Start</button>
+      <br />
+      <br />
+      <MessagesView messages={messages} />
+      <br />
+      <input
+        onChange={({ currentTarget: { value } }) => type(value)}
+        value={inputValue}
+        onKeyDown={({ key }) => {
+          if (key === "Enter") {
+            reply({ text: inputValue });
+          }
+        }}
+      />{" "}
+      <RecordingSwitch />
+    </>
   );
 };
 

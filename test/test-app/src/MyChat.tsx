@@ -13,12 +13,12 @@ type MyChatProps = {
 };
 
 const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
-  const storyId = conversationParameters.storyId;
-  const version = conversationParameters.version;
-  const startGraphReferenceId = conversationParameters.startGraphReferenceId;
+  const { storyId, version, startGraphReferenceId, charismaUrl } =
+    conversationParameters;
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
   const [conversationUuid, setConversationUuid] = useState<string>();
+
   useEffect(() => {
     async function run() {
       const tokenResult = await createPlaythroughToken({
@@ -35,7 +35,11 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
   }, [storyId, version, apiKey]);
 
   return (
-    <Playthrough playthroughToken={playthroughToken} autoconnect>
+    <Playthrough
+      playthroughToken={playthroughToken}
+      autoconnect
+      charismaUrl={charismaUrl}
+    >
       <ConversationView
         conversationUuid={conversationUuid}
         startGraphReferenceId={startGraphReferenceId}

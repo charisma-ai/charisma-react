@@ -30,9 +30,7 @@ const PlaySetup = ({
                   style={{ width: "60px" }}
                   onChange={({ currentTarget: { value } }) => {
                     setConversationParameters({
-                      version: conversationParameters.version,
-                      startGraphReferenceId:
-                        conversationParameters.startGraphReferenceId,
+                      ...conversationParameters,
                       storyId: parseInt(value),
                     });
                   }}
@@ -53,10 +51,8 @@ const PlaySetup = ({
                   style={{ width: "30px" }}
                   onChange={({ currentTarget: { value } }) => {
                     setConversationParameters({
+                      ...conversationParameters,
                       version: parseInt(value),
-                      startGraphReferenceId:
-                        conversationParameters.startGraphReferenceId,
-                      storyId: conversationParameters.storyId,
                     });
                   }}
                   disabled={disabled}
@@ -75,9 +71,28 @@ const PlaySetup = ({
                   style={{ width: "260px" }}
                   onChange={({ currentTarget: { value } }) => {
                     setConversationParameters({
-                      version: conversationParameters.version,
+                      ...conversationParameters,
                       startGraphReferenceId: value,
-                      storyId: conversationParameters.storyId,
+                    });
+                  }}
+                  disabled={disabled}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>charismaUrl</label>
+              </td>
+              <td>
+                <input
+                  type="string"
+                  id="charismaUrl"
+                  value={conversationParameters.charismaUrl}
+                  style={{ width: "260px" }}
+                  onChange={({ currentTarget: { value } }) => {
+                    setConversationParameters({
+                      ...conversationParameters,
+                      charismaUrl: value,
                     });
                   }}
                   disabled={disabled}

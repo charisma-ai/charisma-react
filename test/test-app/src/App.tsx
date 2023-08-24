@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PlaySetup from "./PlaySetup";
 import { LOCAL_STORAGE_KEY, PlayParameters } from "./PlayParameters";
-import PlayView from "./PlayView";
+import MyChat from "./MyChat";
 
 //
 // Add your key here!
@@ -12,8 +12,9 @@ const apiKey = undefined;
 
 const emptyParameters: PlayParameters = {
   storyId: 0,
-  version: 0,
+  version: -1,
   startGraphReferenceId: "",
+  charismaUrl: "https://play.charisma.ai",
 };
 
 const emptyParametersString = JSON.stringify(emptyParameters);
@@ -40,15 +41,24 @@ function App() {
         disabled={confirmed}
       />
       <br />
-      {!apiKey ? "Please set your API key" : null}
-      {sufficientParameters && !confirmed && apiKey ? (
-        <button onClick={() => setConfirmed(true)}>Confirm</button>
-      ) : null}
-      <PlayView
-        conversationParameters={conversationParameters}
-        confirmed={confirmed}
-        apiKey={apiKey}
-      />
+      <div
+        style={{
+          border: "2px groove rgb(192, 192, 192)",
+          padding: "12px",
+          margin: "2px",
+        }}
+      >
+        {!apiKey ? "Please set your API key" : null}
+        {sufficientParameters && !confirmed && apiKey ? (
+          <button onClick={() => setConfirmed(true)}>Confirm</button>
+        ) : null}
+        {confirmed ? (
+          <MyChat
+            conversationParameters={conversationParameters}
+            apiKey={apiKey}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

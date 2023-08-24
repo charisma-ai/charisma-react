@@ -18,6 +18,7 @@
     "cm": "git-cz",
     "lint": "eslint --fix --ext js,ts,tsx .",
     "playground": "cd test/test-app && pnpm start",
+    "playground:bump": "pnpm run build && cd test/test-app && rm -rf node_modules && pnpm i && cd ../..",
     "prebuild": "rimraf dist",
     "prepublish": "pnpm run build",
     "semantic-release": "semantic-release",
