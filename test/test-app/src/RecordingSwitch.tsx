@@ -27,11 +27,7 @@ const RecordingSwitch = () => {
     }
   };
   return (
-    <button
-      onClick={recordingSwitch}
-      disabled={!playthrough}
-      style={{ borderColor: recording ? "red" : "" }}
-    >
+    <button onClick={recordingSwitch} disabled={!playthrough}>
       🎤
     </button>
   );

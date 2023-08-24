@@ -7,16 +7,16 @@ type MessageViewProps = {
 const MessagesView = ({ messages }: MessageViewProps) => {
   return (
     <>
-      {messages.map((message) => {
+      {messages.map((message, index) => {
         if (message.type === "player") {
           const text = `YOU: ${message.message.text}`;
-          return <div key={text}>{text}</div>;
+          return <div key={index}>{text}</div>;
         }
         if (message.type === "character") {
           const text = `${message.message.character?.name || "???"}: ${
             message.message.text
           }`;
-          return <div key={text}>{text}</div>;
+          return <div key={index}>{text}</div>;
         }
         return (
           <div>

@@ -1,11 +1,14 @@
 import {
   SpeechRecognitionResponse,
+  SpeechRecognitionStarted,
+  SpeechRecognitionStopped,
   useConversation,
   usePlaythroughContext,
 } from "@charisma-ai/react";
 import RecordingSwitch from "./RecordingSwitch";
 import MessagesView from "./MessagesView";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import RecordingIndicator from "./RecordingIndicator";
 
 type ConversationViewProps = {
   conversationUuid: string | undefined;
@@ -16,6 +19,7 @@ const ConversationView = ({
   conversationUuid,
   startGraphReferenceId,
 }: ConversationViewProps) => {
+  const [service, setService] = useState<string>("");
   const playthroughContext = usePlaythroughContext();
   const playthrough = playthroughContext?.playthrough;
 
@@ -23,8 +27,9 @@ const ConversationView = ({
     conversationUuid,
   });
 
-  const hanlder = (speechRecognitionResponse: SpeechRecognitionResponse) => {
-    console.log(speechRecognitionResponse);
+  const hanldeSpeechRecognitionResponse = (
+    speechRecognitionResponse: SpeechRecognitionResponse,
+  ) => {
     if (speechRecognitionResponse.isFinal) {
       reply({ text: speechRecognitionResponse.text });
       type("");
@@ -33,10 +38,44 @@ const ConversationView = ({
     }
   };
 
+  const handleSpeechRecognitionStarted = (
+    speechRecognitionStarted: SpeechRecognitionStarted,
+  ) => {
+    setService(speechRecognitionStarted.service);
+  };
+
+  const handleSpeechRecognitionStopped = (
+    speechRecognitionStopped: SpeechRecognitionStopped,
+  ) => {
+    setService("");
+  };
+
   useEffect(() => {
-    playthrough?.on("speech-recognition-result", hanlder);
+    playthrough?.on(
+      "speech-recognition-result",
+      hanldeSpeechRecognitionResponse,
+    );
+    playthrough?.on(
+      "speech-recognition-started",
+      handleSpeechRecognitionStarted,
+    );
+    playthrough?.on(
+      "speech-recognition-stopped",
+      handleSpeechRecognitionStopped,
+    );
     return () => {
-      playthrough?.off("speech-recognition-result", hanlder);
+      playthrough?.off(
+        "speech-recognition-result",
+        hanldeSpeechRecognitionResponse,
+      );
+      playthrough?.off(
+        "speech-recognition-started",
+        handleSpeechRecognitionStarted,
+      );
+      playthrough?.off(
+        "speech-recognition-stopped",
+        handleSpeechRecognitionStopped,
+      );
     };
   }, [playthrough]);
 
@@ -64,6 +103,7 @@ const ConversationView = ({
         }}
       />{" "}
       <RecordingSwitch />
+      <RecordingIndicator service={service} />
     </>
   );
 };

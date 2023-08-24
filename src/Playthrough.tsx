@@ -4,6 +4,8 @@ import {
   ConnectionStatus,
   setGlobalBaseUrl,
   SpeechRecognitionResponse,
+  SpeechRecognitionStarted,
+  SpeechRecognitionStopped,
 } from "@charisma-ai/sdk";
 
 import { PlaythroughProvider } from "./PlaythroughContext.js";
@@ -17,6 +19,8 @@ export interface UsePlaythroughOptions {
   onError?: (error: any) => void;
   onProblem?: (problem: { code: string; error: string }) => void;
   onSpeechRecognitionResponse?: (response: SpeechRecognitionResponse) => void;
+  onSpeechRecognitionStarted?: (data: SpeechRecognitionStarted) => void;
+  onSpeechRecognitionStopped?: (data: SpeechRecognitionStopped) => void;
 }
 
 // Preserve equality across renders by defining this function outside the component.
@@ -30,6 +34,8 @@ export const usePlaythrough = ({
   onError = noOp,
   onProblem = noOp,
   onSpeechRecognitionResponse = noOp,
+  onSpeechRecognitionStarted = noOp,
+  onSpeechRecognitionStopped = noOp,
 }: UsePlaythroughOptions) => {
   const [playthrough, setPlaythrough] = useState<PlaythroughClass>();
 
@@ -41,6 +47,12 @@ export const usePlaythrough = ({
   const onProblemRef = useChangeableRef(onProblem);
   const onSpeechRecognitionResponseRef = useChangeableRef(
     onSpeechRecognitionResponse,
+  );
+  const onSpeechRecognitionStartedRef = useChangeableRef(
+    onSpeechRecognitionStarted,
+  );
+  const onSpeechRecognitionStoppedRef = useChangeableRef(
+    onSpeechRecognitionStopped,
   );
 
   useEffect(() => {
@@ -63,6 +75,12 @@ export const usePlaythrough = ({
           "speech-recognition-result",
           (response: SpeechRecognitionResponse) =>
             onSpeechRecognitionResponseRef.current(response),
+        )
+        .on("speech-recognition-started", (data: SpeechRecognitionStarted) =>
+          onSpeechRecognitionStartedRef.current(data),
+        )
+        .on("speech-recognition-stopped", (data: SpeechRecognitionStopped) =>
+          onSpeechRecognitionStoppedRef.current(data),
         );
       setPlaythrough(newPlaythrough);
       return () => {
@@ -78,6 +96,8 @@ export const usePlaythrough = ({
     onErrorRef,
     onProblemRef,
     onSpeechRecognitionResponseRef,
+    onSpeechRecognitionStartedRef,
+    onSpeechRecognitionStoppedRef,
   ]);
 
   useEffect(() => {
