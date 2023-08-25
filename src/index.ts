@@ -51,4 +51,4 @@ export { useSpeaker, type UseSpeakerOptions } from "./useSpeaker.js";
 
 export { prefetchMedia } from "./fetchMedia.js";
 
-export { type Message } from "@charisma-ai/sdk";
+export * from "@charisma-ai/sdk";

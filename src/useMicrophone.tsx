@@ -5,7 +5,7 @@ import {
   SpeechRecognitionStopOptions,
 } from "@charisma-ai/sdk";
 
-import type { SpeechRecognitionEvent } from "@charisma-ai/sdk/dist/src/speech-types";
+import type { SpeechRecognitionEvent } from "@charisma-ai/sdk/dist/speech-types";
 
 import useLazyRef from "./useLazyRef.js";
 import useChangeableRef from "./useChangeableRef.js";
