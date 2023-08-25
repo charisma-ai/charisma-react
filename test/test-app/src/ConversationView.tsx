@@ -27,7 +27,7 @@ const ConversationView = ({
     conversationUuid,
   });
 
-  const hanldeSpeechRecognitionResponse = (
+  const handleSpeechRecognitionResponse = (
     speechRecognitionResponse: SpeechRecognitionResponse,
   ) => {
     if (speechRecognitionResponse.isFinal) {
@@ -53,7 +53,7 @@ const ConversationView = ({
   useEffect(() => {
     playthrough?.on(
       "speech-recognition-result",
-      hanldeSpeechRecognitionResponse,
+      handleSpeechRecognitionResponse,
     );
     playthrough?.on(
       "speech-recognition-started",
@@ -66,7 +66,7 @@ const ConversationView = ({
     return () => {
       playthrough?.off(
         "speech-recognition-result",
-        hanldeSpeechRecognitionResponse,
+        handleSpeechRecognitionResponse,
       );
       playthrough?.off(
         "speech-recognition-started",

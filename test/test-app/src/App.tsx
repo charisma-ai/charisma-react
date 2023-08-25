@@ -27,8 +27,7 @@ function App() {
     ) as PlayParameters,
   );
 
-  const sufficientParameters =
-    conversationParameters.storyId && conversationParameters.version;
+  const sufficientParameters = conversationParameters.storyId;
 
   return (
     <div className="App" style={{ width: "500px" }}>
