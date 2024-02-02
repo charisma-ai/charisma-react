@@ -2,6 +2,10 @@
 
 ### vNext
 
+### 4.0.1
+
+- Expose `Conversation` type as `ConversationType`.
+
 ### 4.0.0
 
 - **BREAKING:** This packages now exports ES Module only.
