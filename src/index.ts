@@ -18,6 +18,7 @@ export {
   type ConversationProps,
   type ConversationChildProps,
   type ConversationState,
+  type Conversation as ConversationType,
   ChatMode,
   type StoredMessage,
   type PlayerMessage,
