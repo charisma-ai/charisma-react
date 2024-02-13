@@ -2,6 +2,8 @@
 
 ### vNext
 
+- Update @charisma-ai/sdk to 4.0.4-alpha
+
 ### 4.0.1
 
 - Expose `Conversation` type as `ConversationType`.
