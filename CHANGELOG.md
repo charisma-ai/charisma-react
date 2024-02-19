@@ -2,7 +2,7 @@
 
 ### vNext
 
-- Update @charisma-ai/sdk to 4.0.4-alpha
+- Update @charisma-ai/sdk to 4.0.5-alpha
 
 ### 4.0.1
 
