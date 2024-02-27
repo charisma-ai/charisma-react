@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@charisma-ai/sdk':
-    specifier: 4.0.5-alpha.2
-    version: 4.0.5-alpha.2
+    specifier: 4.0.5
+    version: 4.0.5
   immutability-helper:
     specifier: ^3.1.1
     version: 3.1.1
@@ -119,8 +119,8 @@ packages:
       js-tokens: 4.0.0
     dev: true
 
-  /@charisma-ai/sdk@4.0.5-alpha.2:
-    resolution: {integrity: sha512-uLnRuXRO4gSyhVlozsWDqQPaLTOKeYbH0CovKuxrfW+l8jzCOSuMN+PPzUq6S34ww6JhgIH5aYZnF6qzUv0f5Q==, tarball: https://registry.npmjs.org/@charisma-ai/sdk/-/sdk-4.0.5-alpha.2.tgz}
+  /@charisma-ai/sdk@4.0.5:
+    resolution: {integrity: sha512-mvT8ZTz6NLjbHAIQgzOzyPsCBiS9I5V8S1aEDMXNsvBUbcxFD8Mwpqg2hy2BVi2qXvkbll+So003u6xUdjOdYg==, tarball: https://registry.npmjs.org/@charisma-ai/sdk/-/sdk-4.0.5.tgz}
     dependencies:
       colyseus.js: 0.14.13
       eventemitter3: 5.0.1
