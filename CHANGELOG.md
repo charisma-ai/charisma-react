@@ -1,8 +1,8 @@
 # Changelog
 
-### vNext
+### 4.0.3
 
-- Update @charisma-ai/sdk to 4.0.5-alpha
+- Update @charisma-ai/sdk to 4.0.5
 
 ### 4.0.1
 
