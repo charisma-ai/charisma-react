@@ -14,7 +14,7 @@ Then, on your `My Stories` page, click to `Create a new game story`.
 
 In your story add a subplot, and a few character nodes, and player nodes.
 
-From the story editor left navigation bar, click `...` next to your subplot name, and select `Edit details`. Take note of the reference ID which is a uuid.
+If using a Pro story, you will need the startGraphReferenceId which is a uuid. From the story editor left navigation bar, click `...` next to your subplot name, select `Edit details, and copy the reference id. If you are using a Web comic story, the story will start at the first scene automatically, and you can set `startGraphReferenceId={undefined}` in the jsx of [test/test-app/src/MyChat.tsx, line 45](https://github.com/charisma-ai/charisma-react/blob/main/test/test-app/src/MyChat.tsx#L45).
 
 On the story overview page scroll down to `Play API Access` and generate and/or copy the API key. This will enable access to start playthroughs of your story.
 
