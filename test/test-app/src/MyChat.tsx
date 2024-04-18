@@ -6,20 +6,18 @@ import {
   createConversation,
   createPlaythroughToken,
   usePlaythrough,
+  useBackgroundVideo,
+  useBackgroundAudio,
 } from "@charisma-ai/react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { PlayParameters } from "./PlayParameters";
 import ConversationView from "./ConversationView";
-import InputControls from "./InputControls";
+import SingleConversationPlaythrough from "./SingleConversationPlaythrough";
 
 type MyChatProps = {
   conversationParameters: PlayParameters;
   apiKey: string;
 };
-
-type ConversationType = ReturnType<
-  Exclude<PlaythroughContextType["playthrough"], undefined>["joinConversation"]
->;
 
 const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
   const { storyId, version, startGraphReferenceId, charismaUrl } =
@@ -27,17 +25,13 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
   const [conversationUuid, setConversationUuid] = useState<string>();
-  const [activeInputType, setActiveInputType] = useState<{
-    type: "tap" | "text-input";
-  } | null>(null);
-  const [playerChoseMicrophone, setPlayerChoseMicrophone] = useState(false);
+
+  const { videoProps, onMessage: onMessageVideo } = useBackgroundVideo();
+  const { audioProps, onMessage: onMessageAudio } = useBackgroundAudio();
+
   const [speechIsRecording, setSpeechIsRecording] = useState(false);
   const [speechRecognitionResponse, setSpeechRecognitionResponse] =
     useState<SpeechRecognitionResponse | null>(null);
-  const conversationRef = useRef<ConversationType>();
-  const [areCharacterVoicesOn, setAreCharacterVoicesOn] = useState(false);
-  const [shouldShowControls, setShouldShowControls] = useState(false);
-  const [recording, setRecording] = useState(false);
 
   useEffect(() => {
     async function run() {
@@ -80,13 +74,35 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
     //     startGraphReferenceId={startGraphReferenceId}
     //   />
     // </Playthrough>
-    <PlaythroughProvider value={playthrough}>
-      <ConversationView
-        conversationUuid={conversationUuid}
-        startGraphReferenceId={startGraphReferenceId}
-        playthrough={playthrough}
-      />
-    </PlaythroughProvider>
+    // <PlaythroughProvider value={playthrough}>
+
+    //   <ConversationView
+    //     conversationUuid={conversationUuid}
+    //     startGraphReferenceId={startGraphReferenceId}
+    //     playthrough={playthrough}
+    //     speechRecognitionResponse={speechRecognitionResponse}
+    //   />
+    // </PlaythroughProvider>
+    <SingleConversationPlaythrough
+      playthroughToken={playthroughToken}
+      conversationUuid={conversationUuid}
+      conversationOptions={{
+        onMessage: (event) => {
+          onMessageVideo(event);
+          onMessageAudio(event);
+        },
+      }}
+    >
+      {(props) => (
+        <ConversationView
+          {...props}
+          conversationUuid={conversationUuid}
+          startGraphReferenceId={startGraphReferenceId}
+          playthrough={playthrough}
+          speechRecognitionResponse={speechRecognitionResponse}
+        />
+      )}
+    </SingleConversationPlaythrough>
   );
 };
 

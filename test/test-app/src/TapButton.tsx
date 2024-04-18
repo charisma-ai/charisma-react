@@ -1,5 +1,3 @@
-import classNames from "classnames";
-
 type TapButtonProps = {
   isVisible: boolean;
   onClick: () => void;
@@ -7,11 +5,7 @@ type TapButtonProps = {
 
 const TapButton = ({ isVisible, onClick }: TapButtonProps) => {
   return (
-    <div
-      className={classNames("controls", {
-        visible: isVisible,
-      })}
-    >
+    <div className="controls">
       <div className="button-container">
         <button
           onClick={() => {

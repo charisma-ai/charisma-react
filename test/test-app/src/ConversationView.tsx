@@ -1,23 +1,31 @@
 import {
-  SpeechRecognitionResponse,
-  SpeechRecognitionStarted,
-  SpeechRecognitionStopped,
   useConversation,
   usePlaythroughContext,
   PlaythroughContextType,
   ProblemEvent,
   MessageEvent,
 } from "@charisma-ai/react";
-import RecordingSwitch from "./RecordingSwitch";
 import MessagesView from "./MessagesView";
-import { useEffect, useState, useRef } from "react";
-import RecordingIndicator from "./RecordingIndicator";
+import { useEffect, useState, useRef, useCallback } from "react";
 import InputControls from "./InputControls";
 
+type ConversationType = {
+  inputValue: any;
+  mode: any;
+  reply: any;
+  start: any;
+  tap: any;
+  type: any;
+  messages: any;
+};
 type ConversationViewProps = {
   conversationUuid: string | undefined;
   startGraphReferenceId: string | undefined;
   playthrough: any;
+  speechRecognitionResponse: any;
+  speaker: any;
+  microphone: any;
+  conversation: ConversationType;
 };
 
 interface OnlineDemoWindow extends Window {
@@ -26,7 +34,7 @@ interface OnlineDemoWindow extends Window {
   webkitAudioContext?: () => AudioContext;
 }
 
-type ConversationType = ReturnType<
+type ConversationRefType = ReturnType<
   Exclude<PlaythroughContextType["playthrough"], undefined>["joinConversation"]
 >;
 
@@ -35,27 +43,41 @@ declare const window: OnlineDemoWindow;
 const ConversationView = ({
   conversationUuid,
   startGraphReferenceId,
+  conversation: { inputValue, messages, mode, reply, start, tap, type },
+  microphone,
+  speaker,
   playthrough,
+  speechRecognitionResponse,
 }: ConversationViewProps) => {
-  const [service, setService] = useState<string>("");
-  const playthroughContext = usePlaythroughContext();
-  // const playthrough = playthroughContext?.playthrough;
+  // const playthroughContext = usePlaythroughContext();
 
   const [activeInputType, setActiveInputType] = useState<{
     type: "tap" | "text-input";
   } | null>(null);
   const [playerChoseMicrophone, setPlayerChoseMicrophone] = useState(false);
   const [speechIsRecording, setSpeechIsRecording] = useState(false);
-  const [speechRecognitionResponse, setSpeechRecognitionResponse] =
-    useState<SpeechRecognitionResponse | null>(null);
-  const conversationRef = useRef<ConversationType>();
-  const [areCharacterVoicesOn, setAreCharacterVoicesOn] = useState(false);
-  const [shouldShowControls, setShouldShowControls] = useState(false);
-  const [recording, setRecording] = useState(false);
+  const [isSpeakerActive, setIsSpeakerActive] = useState(false);
 
-  const { messages, start, inputValue, reply, type } = useConversation({
-    conversationUuid,
-  });
+  const conversationRef = useRef<ConversationRefType>();
+
+  const [areCharacterVoicesOn, setAreCharacterVoicesOn] = useState(true);
+  const [shouldShowControls, setShouldShowControls] = useState(false);
+
+  // const { isSpeaking, makeAvailable } = speaker;
+
+  // const handleChangeIsSpeakerActive = useCallback(
+  //   (isActive: boolean) => {
+  //     if (isActive) {
+  //       makeAvailable();
+  //     }
+  //     setIsSpeakerActive(isActive);
+  //   },
+  //   [makeAvailable],
+  // );
+
+  // const { messages, start } = useConversation({
+  //   conversationUuid,
+  // });
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -86,7 +108,6 @@ const ConversationView = ({
 
         if (event.type !== "media") {
           if (event.tapToContinue) {
-            console.log("in TAP");
             setActiveInputType({
               type: "tap",
             });
@@ -143,12 +164,12 @@ const ConversationView = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playthrough.playthrough, conversationUuid]);
 
-  if (!conversationUuid) {
-    return <div>Getting Conversation...</div>;
-  }
-  if (playthroughContext?.connectionStatus !== "connected") {
-    return <div>Connecting...</div>;
-  }
+  // if (!conversationUuid) {
+  //   return <div>Getting Conversation...</div>;
+  // }
+  // if (playthroughContext?.connectionStatus !== "connected") {
+  //   return <div>Connecting...</div>;
+  // }
 
   const playthroughStartSpeechRecognition = () => {
     playthrough.playthrough?.startSpeechRecognition({
@@ -163,6 +184,7 @@ const ConversationView = ({
   const playthroughStopSpeechRecognition = () =>
     playthrough.playthrough?.stopSpeechRecognition();
 
+  console.log({ areCharacterVoicesOn });
   return (
     <>
       <button
@@ -174,10 +196,13 @@ const ConversationView = ({
         Start
       </button>
       <button
-        // icon={areCharacterVoicesOn ? "volume-up" : "volume-off"}
-        style={{ position: "absolute", top: 16, left: 16 }}
-        // minimal
-        // outlined
+        onClick={() => {
+          setPlayerChoseMicrophone(!playerChoseMicrophone);
+        }}
+      >
+        use microphone
+      </button>
+      <button
         onClick={() => {
           if (areCharacterVoicesOn) {
             conversationRef.current?.setSpeechConfig(undefined);
@@ -216,30 +241,7 @@ const ConversationView = ({
           inputType={activeInputType?.type}
           shouldShowControls={shouldShowControls}
         />
-        <button
-          onClick={() => {
-            setPlayerChoseMicrophone(!playerChoseMicrophone);
-            // setSpeechIsRecording(!speechIsRecording);
-            // speechIsRecording
-            //   ? playthroughStartSpeechRecognition()
-            //   : playthroughStopSpeechRecognition();
-          }}
-        >
-          🎤
-        </button>
       </div>
-
-      {/* <input
-        onChange={({ currentTarget: { value } }) => type(value)}
-        value={inputValue}
-        onKeyDown={({ key }) => {
-          if (key === "Enter") {
-            reply({ text: inputValue });
-          }
-        }}
-      />{" "}
-      <RecordingSwitch />
-      <RecordingIndicator service={service} /> */}
     </>
   );
 };

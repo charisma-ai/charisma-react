@@ -96,7 +96,6 @@ const RecognisedSpeechPlayerInput = ({
     return () => clearInterval(timer);
   }, [countdown]);
 
-  console.log("from mic");
   return (
     <>
       <div
@@ -117,7 +116,6 @@ const RecognisedSpeechPlayerInput = ({
             height: 50,
             fontSize: 20,
             position: "relative",
-            color: "yellow",
           }}
           disabled
         />

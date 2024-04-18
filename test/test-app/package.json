@@ -11,9 +11,13 @@
     "@types/node": "^16.18.40",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
+    "cookie": "^0.6.0",
+    "easy-peasy": "^6.0.4",
+    "hoist-non-react-statics": "^3.3.2",
     "msw": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.1.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5"
   },
@@ -40,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.6.0",
+    "@types/hoist-non-react-statics": "^3.3.5"
   }
 }

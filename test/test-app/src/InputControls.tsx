@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { SpeechRecognitionResponse } from "@charisma-ai/react";
 import TapButton from "./TapButton";
@@ -39,6 +38,12 @@ const InputControls = ({
     );
 
   useEffect(() => {
+    offerMicrophone
+      ? setCurrentlySelectedTextInputType("speech")
+      : setCurrentlySelectedTextInputType("typing");
+  }, [offerMicrophone]);
+
+  useEffect(() => {
     if (speechRecognitionRequested) {
       playthroughStartSpeechRecognition();
     } else {
@@ -46,8 +51,6 @@ const InputControls = ({
     }
   }, [speechRecognitionRequested]);
 
-  console.log({ speechIsRecording });
-  console.log({ offerMicrophone });
   return (
     <>
       {shouldShowControls && (
