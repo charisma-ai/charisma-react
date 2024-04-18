@@ -6,12 +6,12 @@ import MyChat from "./MyChat";
 //
 // Add your key here!
 //
-const apiKey = undefined;
+const apiKey = "1e0abfa8-5f39-498a-95c4-df3acac5e4c5";
 //
 //
 
 const emptyParameters: PlayParameters = {
-  storyId: 0,
+  storyId: 28169,
   version: -1,
   startGraphReferenceId: "",
   charismaUrl: "https://play.charisma.ai",
