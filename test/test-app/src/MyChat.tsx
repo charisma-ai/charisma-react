@@ -1,7 +1,4 @@
 import {
-  Playthrough,
-  PlaythroughContextType,
-  PlaythroughProvider,
   SpeechRecognitionResponse,
   createConversation,
   createPlaythroughToken,
@@ -26,8 +23,8 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
   const [playthroughToken, setPlaythroughToken] = useState<string>();
   const [conversationUuid, setConversationUuid] = useState<string>();
 
-  const { videoProps, onMessage: onMessageVideo } = useBackgroundVideo();
-  const { audioProps, onMessage: onMessageAudio } = useBackgroundAudio();
+  const { onMessage: onMessageVideo } = useBackgroundVideo();
+  const { onMessage: onMessageAudio } = useBackgroundAudio();
 
   const [speechIsRecording, setSpeechIsRecording] = useState(false);
   const [speechRecognitionResponse, setSpeechRecognitionResponse] =
@@ -64,25 +61,6 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
   });
 
   return (
-    // <Playthrough
-    //   playthroughToken={playthroughToken}
-    //   autoconnect
-    //   charismaUrl={charismaUrl}
-    // >
-    //   <ConversationView
-    //     conversationUuid={conversationUuid}
-    //     startGraphReferenceId={startGraphReferenceId}
-    //   />
-    // </Playthrough>
-    // <PlaythroughProvider value={playthrough}>
-
-    //   <ConversationView
-    //     conversationUuid={conversationUuid}
-    //     startGraphReferenceId={startGraphReferenceId}
-    //     playthrough={playthrough}
-    //     speechRecognitionResponse={speechRecognitionResponse}
-    //   />
-    // </PlaythroughProvider>
     <SingleConversationPlaythrough
       playthroughToken={playthroughToken}
       conversationUuid={conversationUuid}

@@ -23,7 +23,7 @@ export const useConversationWithMicrophoneAndSpeaker = ({
   microphoneOptions = {},
 }: UseConversationWithMicrophoneAndSpeakerOptions) => {
   const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
-  const [isSpeakerActive, setIsSpeakerActive] = useState(true);
+  const [isSpeakerActive, setIsSpeakerActive] = useState(false);
 
   const typeRef = useRef<(text: string) => void>();
   const replyRef = useRef<(event: ReplyEvent) => void>();

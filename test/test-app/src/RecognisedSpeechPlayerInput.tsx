@@ -7,7 +7,6 @@ type RecognisedSpeechPlayerInputProps = {
   microphoneIsOn: boolean;
   sendStartMicrophoneRequest: () => void;
   sendStopMicrophoneRequest: () => void;
-  switchToTyping?: () => void;
   sendText?: (text: string) => void;
 };
 
@@ -16,7 +15,6 @@ const RecognisedSpeechPlayerInput = ({
   microphoneIsOn,
   sendStartMicrophoneRequest,
   sendStopMicrophoneRequest,
-  switchToTyping,
   sendText,
 }: RecognisedSpeechPlayerInputProps) => {
   const [shiftPressed, setShiftPressed] = useState(false);
@@ -36,9 +34,6 @@ const RecognisedSpeechPlayerInput = ({
       setCountdown(0);
       setShiftPressed(true);
       sendStartMicrophoneRequest();
-    }
-    if (event.key === "Control") {
-      switchToTyping?.();
     }
   };
   const handleKeyUp = (event: KeyboardEvent) => {
@@ -99,23 +94,18 @@ const RecognisedSpeechPlayerInput = ({
   return (
     <>
       <div
-        // style={{
-        //   position: "relative",
-        //   top: 0,
-        //   left: 0,
-        //   fontSize: "20px",
-        //   transition: "all 0.2s ease-in-out",
-        // }}
-        className="player-input-area"
+        style={{
+          position: "relative",
+        }}
       >
         <input
-          // id="speech-to-text-result-display-box"
           value={fullText}
           style={{
-            backdropFilter: "blur(10px)",
-            height: 50,
-            fontSize: 20,
+            backdropFilter: "blur(1px)",
+            height: 35,
+            fontSize: 15,
             position: "relative",
+            minWidth: "400px",
           }}
           disabled
         />
@@ -123,45 +113,7 @@ const RecognisedSpeechPlayerInput = ({
           microphoneIsOn={microphoneIsOn}
           shiftPressed={shiftPressed}
         />
-        {/* {!!countdown && (
-          <div className="progress-bar-container" data-testid="progress-bar">
-            <ProgressBar
-              intent="success"
-              value={countdown}
-              animate={false}
-              stripes={false}
-            />
-          </div>
-        )} */}
       </div>
-      {/* <style jsx>{`
-        .player-input-area {
-          position: relative;
-          top: 0;
-          left: 0;
-          font-size: 20px;
-          transition: all 0.2s ease-in-out;
-        }
-
-        .progress-bar-container {
-          width: 100%;
-          bottom: -12px;
-          position: absolute;
-          margin: 0 auto;
-          left: 0;
-          right: 0;
-          min-width: 260px;
-        }
-
-        @media (max-width: 500px) {
-          .player-input-area {
-            min-width: 90%;
-          }
-          .speech-to-text-controls {
-            min-width: 95%;
-          }
-        }
-      `}</style> */}
     </>
   );
 };

@@ -87,7 +87,6 @@ const SingleConversationPlaythrough = ({
     [onProblem],
   );
 
-  console.log({ conversationUuid });
   const state = useStoreState((storeState) =>
     conversationUuid ? storeState.chat.chatStates[conversationUuid] : undefined,
   );
