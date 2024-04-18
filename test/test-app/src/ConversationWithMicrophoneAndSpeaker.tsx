@@ -23,7 +23,7 @@ export const useConversationWithMicrophoneAndSpeaker = ({
   microphoneOptions = {},
 }: UseConversationWithMicrophoneAndSpeakerOptions) => {
   const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
-  const [isSpeakerActive, setIsSpeakerActive] = useState(false);
+  const [isSpeakerActive, setIsSpeakerActive] = useState(true);
 
   const typeRef = useRef<(text: string) => void>();
   const replyRef = useRef<(event: ReplyEvent) => void>();
@@ -58,7 +58,6 @@ export const useConversationWithMicrophoneAndSpeaker = ({
   const { microphoneTimeout } = microphoneOptions;
 
   const handleMessage = (event: MessageEvent) => {
-    console.log({ isSpeakerActive, event });
     if (conversationOptions.onMessage) {
       conversationOptions.onMessage(event);
     }
@@ -80,7 +79,7 @@ export const useConversationWithMicrophoneAndSpeaker = ({
         trackId: event.message.character?.id.toString(),
         interrupt: "track",
       });
-      console.log("SPEAKER", { event });
+
       if (conversationOptions.onStopSpeaking) {
         conversationOptions.onStopSpeaking(event);
       }
