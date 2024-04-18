@@ -3,25 +3,24 @@ import {
   PlaythroughContextType,
   ProblemEvent,
   MessageEvent,
+  SpeechRecognitionResponse,
+  StartEvent,
+  StoredMessage,
 } from "@charisma-ai/react";
 import MessagesView from "./MessagesView";
 import { useEffect, useState, useRef } from "react";
 import InputControls from "./InputControls";
 
 type ConversationType = {
-  inputValue: any;
-  mode: any;
-  reply: any;
-  start: any;
-  tap: any;
-  type: any;
-  messages: any;
+  start: (event?: StartEvent | undefined) => void;
+  messages: StoredMessage[];
 };
+
 type ConversationViewProps = {
   conversationUuid: string | undefined;
   startGraphReferenceId: string | undefined;
   playthrough: any;
-  speechRecognitionResponse: any;
+  speechRecognitionResponse: SpeechRecognitionResponse | null;
   speaker: any;
   microphone: any;
   conversation: ConversationType;
@@ -64,7 +63,6 @@ const ConversationView = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  console.log({ areCharacterVoicesOn });
   useEffect(() => {
     window.AudioContext = (function AudioContextWrapper() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -168,7 +166,7 @@ const ConversationView = ({
     <>
       <button
         onClick={() => {
-          start({ startGraphReferenceId: undefined });
+          start({ startGraphReferenceId });
         }}
       >
         Start
