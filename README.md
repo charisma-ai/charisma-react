@@ -26,7 +26,7 @@ Finally the story ID can be found in the url, eg. `https://charisma.ai/stories/1
 
 From the root of this project, run `pnpm install` and `pnpm build` to install dependencies in `node_modules`, and create the `dist` directory with the compiled package respectively.
 
-Install dependencies here with `pnpm run playground:bump` from the root of this project. You can now start the playground app which has a form to input your story parameters. You can launch the playground app from the root of this project using `pnpm run playground`.
+Install dependencies here with `pnpm run playground:setup` from the root of this project. You can now start the playground app which has a form to input your story parameters. You can launch the playground app from the root of this project using `pnpm run playground`.
 
 Once the page loads, enter your conversation parameters, and the `Confirm` button will appear. Click it. This opens the chat, where you can click start, and would expect to see the first character nodes from your story start to appear on the page.
 
