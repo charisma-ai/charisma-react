@@ -1,23 +1,33 @@
 import {
-  Playthrough,
+  SpeechRecognitionResponse,
   createConversation,
   createPlaythroughToken,
+  usePlaythrough,
+  useBackgroundVideo,
+  useBackgroundAudio,
 } from "@charisma-ai/react";
 import { useEffect, useState } from "react";
 import { PlayParameters } from "./PlayParameters";
 import ConversationView from "./ConversationView";
+import SingleConversationPlaythrough from "./SingleConversationPlaythrough";
 
 type MyChatProps = {
   conversationParameters: PlayParameters;
-  apiKey: string;
 };
 
-const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
-  const { storyId, version, startGraphReferenceId, charismaUrl } =
+const MyChat = ({ conversationParameters }: MyChatProps) => {
+  const { storyId, apiKey, version, startGraphReferenceId, charismaUrl } =
     conversationParameters;
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
   const [conversationUuid, setConversationUuid] = useState<string>();
+
+  const { onMessage: onMessageVideo } = useBackgroundVideo();
+  const { onMessage: onMessageAudio } = useBackgroundAudio();
+
+  const [speechIsRecording, setSpeechIsRecording] = useState(false);
+  const [speechRecognitionResponse, setSpeechRecognitionResponse] =
+    useState<SpeechRecognitionResponse | null>(null);
 
   useEffect(() => {
     async function run() {
@@ -34,17 +44,43 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
     run();
   }, [storyId, version, apiKey]);
 
+  const playthrough = usePlaythrough({
+    playthroughToken,
+    autoconnect: true,
+    charismaUrl,
+    onSpeechRecognitionResponse: (event: SpeechRecognitionResponse) =>
+      setSpeechRecognitionResponse(event),
+    onSpeechRecognitionStarted: () => setSpeechIsRecording(true),
+    onSpeechRecognitionStopped() {
+      setSpeechIsRecording(false);
+      setSpeechRecognitionResponse(null);
+    },
+    onError: console.error,
+    onProblem: console.warn,
+  });
+
   return (
-    <Playthrough
+    <SingleConversationPlaythrough
       playthroughToken={playthroughToken}
-      autoconnect
-      charismaUrl={charismaUrl}
+      conversationUuid={conversationUuid}
+      conversationOptions={{
+        onMessage: (event) => {
+          onMessageVideo(event);
+          onMessageAudio(event);
+        },
+      }}
     >
-      <ConversationView
-        conversationUuid={conversationUuid}
-        startGraphReferenceId={startGraphReferenceId}
-      />
-    </Playthrough>
+      {(props) => (
+        <ConversationView
+          {...props}
+          conversationUuid={conversationUuid}
+          startGraphReferenceId={startGraphReferenceId}
+          playthrough={playthrough}
+          speechRecognitionResponse={speechRecognitionResponse}
+          speechIsRecording={speechIsRecording}
+        />
+      )}
+    </SingleConversationPlaythrough>
   );
 };
 
