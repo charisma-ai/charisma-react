@@ -3,7 +3,6 @@ import * as React from "react";
 import {
   ProblemEvent,
   MessageEvent,
-  EpisodeCompleteEvent,
   SpeechConfig,
   SpeechEncoding,
   Playthrough,
@@ -21,7 +20,6 @@ import { ConversationUuidProvider } from "./ConversationUuidContext";
 export interface SingleConversationPlaythroughChildProps
   extends ConversationWithMicrophoneAndSpeakerChildProps {
   disabled: boolean;
-  isAtEpisodeEnd: boolean;
   problemAlertOpen: boolean;
   setProblemAlertOpen: (problemAlertOpen: boolean) => void;
 }
@@ -44,27 +42,12 @@ const SingleConversationPlaythrough = ({
 
   const { conversationOptions } = props;
 
-  const onEpisodeComplete = conversationOptions?.onEpisodeComplete;
-  const [isAtEpisodeEnd, setIsAtEpisodeEnd] = useState(false);
-  const handleEpisodeComplete = useCallback(
-    (event: EpisodeCompleteEvent) => {
-      if (onEpisodeComplete) {
-        onEpisodeComplete(event);
-      }
-
-      setIsAtEpisodeEnd(true);
-    },
-    [onEpisodeComplete],
-  );
-
   const onMessage = conversationOptions?.onMessage;
   const handleMessage = useCallback(
     (event: MessageEvent) => {
       if (onMessage) {
         onMessage(event);
       }
-
-      setIsAtEpisodeEnd(false);
 
       if (event.endStory) {
         setDisabled(true);
@@ -145,7 +128,6 @@ const SingleConversationPlaythrough = ({
             initialState: state,
             onMessage: handleMessage,
             onProblem: handleProblem,
-            onEpisodeComplete: handleEpisodeComplete,
             onStateChange: handleStateChange,
             conversationUuid,
             speechConfig,
@@ -162,7 +144,6 @@ const SingleConversationPlaythrough = ({
                   childProps.conversation.start(event);
                 },
               },
-              isAtEpisodeEnd,
               disabled,
               problemAlertOpen,
               setProblemAlertOpen,
