@@ -27,17 +27,9 @@ type ConversationViewProps = {
   conversation: ConversationType;
 };
 
-interface OnlineDemoWindow extends Window {
-  // hack to make it constructor-like
-  AudioContext?: () => AudioContext;
-  webkitAudioContext?: () => AudioContext;
-}
-
 type ConversationRefType = ReturnType<
   Exclude<PlaythroughContextType["playthrough"], undefined>["joinConversation"]
 >;
-
-declare const window: OnlineDemoWindow;
 
 const ConversationView = ({
   conversationUuid,
@@ -63,18 +55,6 @@ const ConversationView = ({
   const [shouldShowControls, setShouldShowControls] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    window.AudioContext = (function AudioContextWrapper() {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const AudioContextClass: any =
-        window.AudioContext || window.webkitAudioContext;
-
-      return function AudioContext() {
-        return new AudioContextClass();
-      };
-    })();
-  }, []);
 
   useEffect(() => {
     if (playthroughContext?.playthrough && conversationUuid) {

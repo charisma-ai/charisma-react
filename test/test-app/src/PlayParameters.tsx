@@ -1,6 +1,7 @@
 export type PlayParameters = {
   storyId: number;
-  version: number;
+  apiKey: string;
+  version: number | undefined;
   startGraphReferenceId: string;
   charismaUrl: string;
 };
