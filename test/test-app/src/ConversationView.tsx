@@ -21,6 +21,7 @@ type ConversationViewProps = {
   startGraphReferenceId: string | undefined;
   playthrough: any;
   speechRecognitionResponse: SpeechRecognitionResponse | null;
+  speechIsRecording: boolean;
   speaker: any;
   microphone: any;
   conversation: ConversationType;
@@ -45,6 +46,7 @@ const ConversationView = ({
   speaker,
   playthrough,
   speechRecognitionResponse,
+  speechIsRecording,
 }: ConversationViewProps) => {
   const playthroughContext = usePlaythroughContext();
 
@@ -54,7 +56,6 @@ const ConversationView = ({
     type: "tap" | "text-input";
   } | null>(null);
   const [playerChoseMicrophone, setPlayerChoseMicrophone] = useState(false);
-  const [speechIsRecording, setSpeechIsRecording] = useState(false);
 
   const conversationRef = useRef<ConversationRefType>();
 

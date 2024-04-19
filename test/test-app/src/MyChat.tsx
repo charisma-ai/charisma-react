@@ -78,6 +78,7 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
           startGraphReferenceId={startGraphReferenceId}
           playthrough={playthrough}
           speechRecognitionResponse={speechRecognitionResponse}
+          speechIsRecording={speechIsRecording}
         />
       )}
     </SingleConversationPlaythrough>
