@@ -2,7 +2,6 @@ import { useState } from "react";
 import PlaySetup from "./PlaySetup";
 import { LOCAL_STORAGE_KEY, PlayParameters } from "./PlayParameters";
 import MyChat from "./MyChat";
-import withEasyPeasy from "./withEasyPeasy";
 
 //
 // Add your key here!
@@ -63,4 +62,4 @@ function App() {
   );
 }
 
-export default withEasyPeasy(App);
+export default App;

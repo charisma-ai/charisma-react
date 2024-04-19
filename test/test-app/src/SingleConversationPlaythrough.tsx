@@ -6,10 +6,7 @@ import {
   SpeechConfig,
   SpeechEncoding,
   Playthrough,
-  ConversationState,
 } from "@charisma-ai/react";
-
-import { useStoreActions, useStoreState } from "./lib/store";
 
 import Conversation, {
   ConversationWithMicrophoneAndSpeakerProps,
@@ -70,35 +67,6 @@ const SingleConversationPlaythrough = ({
     [onProblem],
   );
 
-  const state = useStoreState((storeState) =>
-    conversationUuid ? storeState.chat.chatStates[conversationUuid] : undefined,
-  );
-  const stateRef = React.useRef(state);
-  stateRef.current = state;
-  const setState = useStoreActions((actions) => actions.chat.setChatState);
-
-  const handleStateChange = useCallback(
-    (newState: ConversationState) => {
-      // Without the &&
-      // (stateRef.current?.isTyping !== state?.isTyping ||
-      // stateRef.current?.messages !== state?.messages ||
-      // stateRef.current?.inputValue !== state?.inputValue ||
-      // stateRef.current?.mode !== state?.mode)
-      // the TextInput crashes the app when typing fast while messages are coming in
-      // Any comparison on the right side would stop the crash.
-      if (
-        conversationUuid &&
-        (stateRef.current?.isTyping !== state?.isTyping ||
-          stateRef.current?.messages !== state?.messages ||
-          stateRef.current?.inputValue !== state?.inputValue ||
-          stateRef.current?.mode !== state?.mode)
-      ) {
-        setState({ conversationUuid, state: newState });
-      }
-    },
-    [conversationUuid, setState],
-  );
-
   const speechConfig = React.useMemo<SpeechConfig>(() => {
     let isSafari = false;
     if (typeof window !== "undefined") {
@@ -125,10 +93,8 @@ const SingleConversationPlaythrough = ({
         <Conversation
           conversationOptions={{
             ...conversationOptions,
-            initialState: state,
             onMessage: handleMessage,
             onProblem: handleProblem,
-            onStateChange: handleStateChange,
             conversationUuid,
             speechConfig,
           }}
