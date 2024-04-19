@@ -40,13 +40,34 @@ const PlaySetup = ({
             </tr>
             <tr>
               <td>
+                <label>apiKey</label>
+              </td>
+              <td width={"300px"}>
+                <input
+                  type="string"
+                  id="apiKey"
+                  required
+                  value={conversationParameters.apiKey}
+                  style={{ width: "260px" }}
+                  onChange={({ currentTarget: { value } }) => {
+                    setConversationParameters({
+                      ...conversationParameters,
+                      apiKey: value,
+                    });
+                  }}
+                  disabled={disabled}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <label>version</label>
               </td>
               <td>
                 <input
                   type="number"
                   id="version"
-                  value={conversationParameters.version}
+                  value={conversationParameters.apiKey}
                   required
                   style={{ width: "30px" }}
                   onChange={({ currentTarget: { value } }) => {

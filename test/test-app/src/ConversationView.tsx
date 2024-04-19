@@ -21,22 +21,15 @@ type ConversationViewProps = {
   startGraphReferenceId: string | undefined;
   playthrough: any;
   speechRecognitionResponse: SpeechRecognitionResponse | null;
+  speechIsRecording: boolean;
   speaker: any;
   microphone: any;
   conversation: ConversationType;
 };
 
-interface OnlineDemoWindow extends Window {
-  // hack to make it constructor-like
-  AudioContext?: () => AudioContext;
-  webkitAudioContext?: () => AudioContext;
-}
-
 type ConversationRefType = ReturnType<
   Exclude<PlaythroughContextType["playthrough"], undefined>["joinConversation"]
 >;
-
-declare const window: OnlineDemoWindow;
 
 const ConversationView = ({
   conversationUuid,
@@ -45,6 +38,7 @@ const ConversationView = ({
   speaker,
   playthrough,
   speechRecognitionResponse,
+  speechIsRecording,
 }: ConversationViewProps) => {
   const playthroughContext = usePlaythroughContext();
 
@@ -54,7 +48,6 @@ const ConversationView = ({
     type: "tap" | "text-input";
   } | null>(null);
   const [playerChoseMicrophone, setPlayerChoseMicrophone] = useState(false);
-  const [speechIsRecording, setSpeechIsRecording] = useState(false);
 
   const conversationRef = useRef<ConversationRefType>();
 
@@ -62,18 +55,6 @@ const ConversationView = ({
   const [shouldShowControls, setShouldShowControls] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    window.AudioContext = (function AudioContextWrapper() {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const AudioContextClass: any =
-        window.AudioContext || window.webkitAudioContext;
-
-      return function AudioContext() {
-        return new AudioContextClass();
-      };
-    })();
-  }, []);
 
   useEffect(() => {
     if (playthroughContext?.playthrough && conversationUuid) {

@@ -13,11 +13,10 @@ import SingleConversationPlaythrough from "./SingleConversationPlaythrough";
 
 type MyChatProps = {
   conversationParameters: PlayParameters;
-  apiKey: string;
 };
 
-const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
-  const { storyId, version, startGraphReferenceId, charismaUrl } =
+const MyChat = ({ conversationParameters }: MyChatProps) => {
+  const { storyId, apiKey, version, startGraphReferenceId, charismaUrl } =
     conversationParameters;
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
@@ -78,6 +77,7 @@ const MyChat = ({ conversationParameters, apiKey }: MyChatProps) => {
           startGraphReferenceId={startGraphReferenceId}
           playthrough={playthrough}
           speechRecognitionResponse={speechRecognitionResponse}
+          speechIsRecording={speechIsRecording}
         />
       )}
     </SingleConversationPlaythrough>
