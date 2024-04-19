@@ -30,6 +30,8 @@ Install dependencies here with `pnpm run playground:setup` from the root of this
 
 Once the page loads, enter your conversation parameters, and the `Confirm` button will appear. Click it. This opens the chat, where you can click start, and would expect to see the first character nodes from your story start to appear on the page.
 
+In this test app player input will not be offered by default. It will be offered when a metadata tag "set-player-speak" equal to true is provided on the character node immediately prior to the player input. We've found this helps indicate to a user when they are expected to contribute to the conversation. To set this up, in the graph go the character node before a player node and click the Metadata Manager symbol, second from the left. Add "set-player-speak" with value "true". This will trigger the input to appear in the test app. You can change the code to remove this depending on the desired behaviour for your experience.
+
 ## Types
 
 For a full list of prop types, [see the TypeScript definition file](dist/index.d.ts).
