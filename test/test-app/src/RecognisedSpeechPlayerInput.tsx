@@ -17,7 +17,7 @@ const RecognisedSpeechPlayerInput = ({
   sendStopMicrophoneRequest,
   sendText,
 }: RecognisedSpeechPlayerInputProps) => {
-  const [shiftPressed, setShiftPressed] = useState(false);
+  const [active, setActive] = useState(false);
   const [confirmedText, setConfirmedText] = useState("");
   const [volatileText, setVolatileText] = useState("");
   const [countdown, setCountdown] = useState(0);
@@ -27,22 +27,33 @@ const RecognisedSpeechPlayerInput = ({
     fullText = [confirmedText, volatileText].join(" ").trim();
   }
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "Shift") {
-      setConfirmedText("");
-      setVolatileText("");
-      setCountdown(0);
-      setShiftPressed(true);
-      sendStartMicrophoneRequest();
+  const handleRequestActive = () => {
+    setConfirmedText("");
+    setVolatileText("");
+    setCountdown(0);
+    setActive(true);
+    sendStartMicrophoneRequest();
+  };
+
+  const handleRequestStop = () => {
+    setActive(false);
+    sendStopMicrophoneRequest();
+    if (!sendText) {
+    }
+    if (sendText && fullText) {
+      setCountdown(1);
     }
   };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Shift") {
+      handleRequestActive();
+    }
+  };
+
   const handleKeyUp = (event: KeyboardEvent) => {
     if (event.key === "Shift") {
-      setShiftPressed(false);
-      sendStopMicrophoneRequest();
-      if (sendText) {
-        setCountdown(1);
-      }
+      handleRequestStop();
     }
   };
 
@@ -111,9 +122,19 @@ const RecognisedSpeechPlayerInput = ({
         />
         <ReactiveMicrophoneIcon
           microphoneIsOn={microphoneIsOn}
-          shiftPressed={shiftPressed}
+          shiftPressed={active}
         />
       </div>
+      {!!countdown && ".".repeat(Math.floor(countdown * 50))}
+      {!!countdown && <br />}
+      <button
+        onClick={() => {
+          microphoneIsOn ? handleRequestStop() : handleRequestActive();
+        }}
+      >
+        mic button
+      </button>{" "}
+      or
     </>
   );
 };
