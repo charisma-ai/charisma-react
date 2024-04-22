@@ -67,7 +67,7 @@ const PlaySetup = ({
                 <input
                   type="number"
                   id="version"
-                  value={conversationParameters.apiKey}
+                  value={conversationParameters.version}
                   required
                   style={{ width: "30px" }}
                   onChange={({ currentTarget: { value } }) => {
