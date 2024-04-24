@@ -38,8 +38,6 @@ const RecognisedSpeechPlayerInput = ({
   const handleRequestStop = () => {
     setActive(false);
     sendStopMicrophoneRequest();
-    if (!sendText) {
-    }
     if (sendText && fullText) {
       setCountdown(1);
     }
@@ -125,8 +123,12 @@ const RecognisedSpeechPlayerInput = ({
           shiftPressed={active}
         />
       </div>
-      {!!countdown && ".".repeat(Math.floor(countdown * 50))}
-      {!!countdown && <br />}
+      {!!countdown && (
+        <>
+          {".".repeat(Math.floor(countdown * 50))}
+          <br />
+        </>
+      )}
       <button
         onClick={() => {
           microphoneIsOn ? handleRequestStop() : handleRequestActive();
