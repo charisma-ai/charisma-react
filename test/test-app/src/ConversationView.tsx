@@ -132,11 +132,7 @@ const ConversationView = ({
 
   const playthroughStartSpeechRecognition = () => {
     playthrough.playthrough?.startSpeechRecognition({
-      service: "unified:deepgram",
-      customServiceParameters: {
-        endpointing: 1200,
-        utterance_end_ms: 2000,
-      },
+      service: "unified:aws",
     });
   };
 

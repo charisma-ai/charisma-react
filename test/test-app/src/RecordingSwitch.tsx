@@ -5,7 +5,7 @@ import {
 import { useState } from "react";
 
 const speechRecognitionStartEvent: SpeechRecognitionStartEvent = {
-  service: "unified:deepgram",
+  service: "unified:aws",
   languageCode: "en-US",
 };
 
