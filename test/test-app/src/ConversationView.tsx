@@ -23,7 +23,6 @@ type ConversationViewProps = {
   speechRecognitionResponse: SpeechRecognitionResponse | null;
   speechIsRecording: boolean;
   speaker: any;
-  microphone: any;
   conversation: ConversationType;
 };
 
