@@ -62,6 +62,7 @@ const MyChat = ({ conversationParameters }: MyChatProps) => {
   return (
     <SingleConversationPlaythrough
       playthroughToken={playthroughToken}
+      charismaUrl={charismaUrl}
       conversationUuid={conversationUuid}
       conversationOptions={{
         onMessage: (event) => {

@@ -25,12 +25,14 @@ export interface SingleConversationPlaythroughProps
   extends Omit<ConversationWithSpeakerProps, "children"> {
   playthroughToken?: string;
   conversationUuid?: string;
+  charismaUrl: string;
   children: (props: SingleConversationPlaythroughChildProps) => React.ReactNode;
 }
 
 const SingleConversationPlaythrough = ({
   playthroughToken,
   conversationUuid,
+  charismaUrl,
   children,
   ...props
 }: SingleConversationPlaythroughProps) => {
@@ -86,7 +88,7 @@ const SingleConversationPlaythrough = ({
   return (
     <Playthrough
       playthroughToken={playthroughToken}
-      charismaUrl="https://play.charisma.ai"
+      charismaUrl={charismaUrl}
       autoconnect
     >
       <ConversationUuidProvider value={conversationUuid}>
