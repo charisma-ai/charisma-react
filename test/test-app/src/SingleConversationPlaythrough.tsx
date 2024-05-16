@@ -9,28 +9,30 @@ import {
 } from "@charisma-ai/react";
 
 import Conversation, {
-  ConversationWithMicrophoneAndSpeakerProps,
-  ConversationWithMicrophoneAndSpeakerChildProps,
-} from "./ConversationWithMicrophoneAndSpeaker";
+  ConversationWithSpeakerProps,
+  ConversationWithSpeakerChildProps,
+} from "./ConversationWithSpeaker";
 import { ConversationUuidProvider } from "./ConversationUuidContext";
 
 export interface SingleConversationPlaythroughChildProps
-  extends ConversationWithMicrophoneAndSpeakerChildProps {
+  extends ConversationWithSpeakerChildProps {
   disabled: boolean;
   problemAlertOpen: boolean;
   setProblemAlertOpen: (problemAlertOpen: boolean) => void;
 }
 
 export interface SingleConversationPlaythroughProps
-  extends Omit<ConversationWithMicrophoneAndSpeakerProps, "children"> {
+  extends Omit<ConversationWithSpeakerProps, "children"> {
   playthroughToken?: string;
   conversationUuid?: string;
+  charismaUrl: string;
   children: (props: SingleConversationPlaythroughChildProps) => React.ReactNode;
 }
 
 const SingleConversationPlaythrough = ({
   playthroughToken,
   conversationUuid,
+  charismaUrl,
   children,
   ...props
 }: SingleConversationPlaythroughProps) => {
@@ -86,7 +88,7 @@ const SingleConversationPlaythrough = ({
   return (
     <Playthrough
       playthroughToken={playthroughToken}
-      charismaUrl="https://play.charisma.ai"
+      charismaUrl={charismaUrl}
       autoconnect
     >
       <ConversationUuidProvider value={conversationUuid}>
@@ -98,7 +100,6 @@ const SingleConversationPlaythrough = ({
             conversationUuid,
             speechConfig,
           }}
-          microphoneOptions={{ microphoneTimeout: 60000 }}
         >
           {(childProps) =>
             children({
