@@ -14,6 +14,11 @@ import {
   type AudioOutputsServicePlayOptions,
   type AudioManagerOptions as OriginalAudioManagerOptions,
 } from "@charisma-ai/sdk";
+import {
+  AudioManagerConnectionError,
+  AudioManagerInitialisationError,
+  AudioPlaybackError,
+} from "./errors/AudioManagerErrors";
 
 type AudioManagerContextType = {
   isListening: boolean;
@@ -41,9 +46,9 @@ export type ModifiedAudioManagerOptions = Omit<
 >;
 
 export enum RecordingStatus {
-  off,
-  starting,
-  recording,
+  OFF,
+  STARTING,
+  RECORDING,
 }
 
 const AudioManagerContext = createContext<AudioManagerContextType | undefined>(
@@ -62,36 +67,41 @@ export const AudioManagerProvider = ({
   const [isBrowserSupported, setIsBrowserSupported] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>(
-    RecordingStatus.off,
+    RecordingStatus.OFF,
   );
 
   useEffect(() => {
-    const customHandleTranscript = (transcriptText: string) => {
-      if (transcriptText.trim().length > 0) {
-        setTranscript(transcriptText);
-      }
-    };
+    try {
+      const customHandleTranscript = (transcriptText: string) => {
+        if (transcriptText.trim().length > 0) {
+          setTranscript(transcriptText);
+        }
+      };
 
-    const customHandleStartSTT = () => {
-      setRecordingStatus(RecordingStatus.recording);
-    };
+      const customHandleStartSTT = () => {
+        setRecordingStatus(RecordingStatus.RECORDING);
+      };
 
-    const customHandleStopSTT = () => {
-      setRecordingStatus(RecordingStatus.off);
-    };
+      const customHandleStopSTT = () => {
+        setRecordingStatus(RecordingStatus.OFF);
+      };
 
-    const modifiedOptions = {
-      ...options,
-      handleTranscript: customHandleTranscript,
-      handleStartSTT: customHandleStartSTT,
-      handleStopSTT: customHandleStopSTT,
-    };
+      const modifiedOptions = {
+        ...options,
+        handleTranscript: customHandleTranscript,
+        handleStartSTT: customHandleStartSTT,
+        handleStopSTT: customHandleStopSTT,
+      };
 
-    const audioManager = new AudioManager(modifiedOptions);
-    audioManagerRef.current = audioManager;
+      const audioManager = new AudioManager(modifiedOptions);
+      audioManagerRef.current = audioManager;
 
-    // Check if browser STT is supported.
-    setIsBrowserSupported(audioManager.browserIsSupported());
+      // Check if browser STT is supported.
+      setIsBrowserSupported(audioManager.browserIsSupported());
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to initialise AudioManager:", error);
+    }
 
     return () => {
       audioManagerRef.current?.stopListening();
@@ -103,18 +113,53 @@ export const AudioManagerProvider = ({
   }, []);
 
   const startListening = useCallback(() => {
-    setRecordingStatus(RecordingStatus.starting);
-    audioManagerRef.current?.startListening();
-    setIsListening(true);
+    try {
+      if (!audioManagerRef.current) {
+        throw new AudioManagerInitialisationError(
+          "AudioManager is not initialised",
+        );
+      }
+
+      setRecordingStatus(RecordingStatus.STARTING);
+      audioManagerRef.current.startListening();
+      setIsListening(true);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to start listening:", error);
+      setRecordingStatus(RecordingStatus.OFF);
+    }
   }, []);
 
   const stopListening = useCallback(() => {
-    audioManagerRef.current?.stopListening();
-    setIsListening(false);
+    try {
+      if (!audioManagerRef.current) {
+        throw new AudioManagerInitialisationError(
+          "AudioManager is not initialised",
+        );
+      }
+
+      audioManagerRef.current?.stopListening();
+      setIsListening(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to stop listening:", error);
+    }
   }, []);
 
   const connect = useCallback((token: string, playerSessionId: string) => {
-    audioManagerRef.current?.connect(token, playerSessionId);
+    try {
+      if (!audioManagerRef.current) {
+        throw new AudioManagerInitialisationError(
+          "AudioManager is not initialised",
+        );
+      }
+
+      audioManagerRef.current.connect(token, playerSessionId);
+    } catch (error) {
+      throw new AudioManagerConnectionError(
+        "Failed to connect to AudioManager",
+      );
+    }
   }, []);
 
   const resetTimeout = useCallback((timeout: number) => {
@@ -122,11 +167,23 @@ export const AudioManagerProvider = ({
   }, []);
 
   const playOutput = useCallback(
-    (
+    async (
       audio: ArrayBuffer,
       playOptions: boolean | AudioOutputsServicePlayOptions,
     ) => {
-      return audioManagerRef.current?.outputServicePlay(audio, playOptions);
+      try {
+        if (!audioManagerRef.current) {
+          throw new AudioManagerInitialisationError(
+            "AudioManager is not initialised",
+          );
+        }
+        return await audioManagerRef.current.outputServicePlay(
+          audio,
+          playOptions,
+        );
+      } catch (error) {
+        throw new AudioPlaybackError("Failed to play output");
+      }
     },
     [],
   );
