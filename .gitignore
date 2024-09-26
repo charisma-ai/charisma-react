@@ -9,3 +9,5 @@ src/**/*.js
 
 # IDE
 .vscode/*
+
+coverage/

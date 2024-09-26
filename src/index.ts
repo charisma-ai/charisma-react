@@ -39,16 +39,16 @@ export {
 } from "./QueuedConversation.js";
 
 export {
-  default as useBackgroundAudio,
-  type BackgroundAudioElementProps,
-} from "./useBackgroundAudio.js";
-export {
   default as useBackgroundVideo,
   type BackgroundVideoElementProps,
 } from "./useBackgroundVideo.js";
 
-export { useMicrophone, type UseMicrophoneOptions } from "./useMicrophone.js";
-export { useSpeaker, type UseSpeakerOptions } from "./useSpeaker.js";
+export {
+  useAudioManager,
+  AudioManagerProvider,
+  RecordingStatus,
+} from "./useAudioManager.js";
+export type { ModifiedAudioManagerOptions as AudioManagerOptions } from "./useAudioManager.js";
 
 export { prefetchMedia } from "./fetchMedia.js";
 
