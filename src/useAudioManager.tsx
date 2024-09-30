@@ -100,6 +100,7 @@ export const AudioManagerProvider = ({
 
     return () => {
       audioManagerRef.current?.stopListening();
+      audioManagerRef.current = null;
     };
   }, [options]);
 
