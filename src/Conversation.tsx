@@ -20,6 +20,7 @@ import {
   ProblemEvent,
 } from "@charisma-ai/sdk";
 
+import { ConversationProvider } from "./ConversationContext.js";
 import { useQueuedConversation } from "./QueuedConversation.js";
 import { usePlaythroughContext } from "./PlaythroughContext.js";
 
@@ -363,11 +364,17 @@ export const useConversation = ({
 };
 
 export interface ConversationProps extends UseConversationOptions {
-  children: (conversation: ConversationChildProps) => ReactNode;
+  children:
+    | React.ReactNode
+    | ((conversation: ConversationChildProps) => ReactNode);
 }
 
 export const Conversation = ({ children, ...props }: ConversationProps) => {
   const conversation = useConversation(props);
 
-  return <>{children(conversation)}</>;
+  return (
+    <ConversationProvider value={conversation}>
+      {typeof children === "function" ? children(conversation) : children}
+    </ConversationProvider>
+  );
 };

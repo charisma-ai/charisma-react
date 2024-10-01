@@ -45,11 +45,7 @@ export type ModifiedAudioManagerOptions = Omit<
   "handleTranscript" | "handleStartSTT" | "handleStopSTT"
 >;
 
-export enum RecordingStatus {
-  OFF,
-  STARTING,
-  RECORDING,
-}
+export type RecordingStatus = "OFF" | "STARTING" | "RECORDING";
 
 const AudioManagerContext = createContext<AudioManagerContextType | undefined>(
   undefined,
@@ -66,9 +62,8 @@ export const AudioManagerProvider = ({
   const [isListening, setIsListening] = useState(false);
   const [isBrowserSupported, setIsBrowserSupported] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>(
-    RecordingStatus.OFF,
-  );
+  const [recordingStatus, setRecordingStatus] =
+    useState<RecordingStatus>("OFF");
 
   useEffect(() => {
     try {
@@ -79,11 +74,11 @@ export const AudioManagerProvider = ({
       };
 
       const customHandleStartSTT = () => {
-        setRecordingStatus(RecordingStatus.RECORDING);
+        setRecordingStatus("RECORDING");
       };
 
       const customHandleStopSTT = () => {
-        setRecordingStatus(RecordingStatus.OFF);
+        setRecordingStatus("OFF");
       };
 
       const modifiedOptions = {
@@ -105,6 +100,7 @@ export const AudioManagerProvider = ({
 
     return () => {
       audioManagerRef.current?.stopListening();
+      audioManagerRef.current = null;
     };
   }, [options]);
 
@@ -120,13 +116,13 @@ export const AudioManagerProvider = ({
         );
       }
 
-      setRecordingStatus(RecordingStatus.STARTING);
+      setRecordingStatus("STARTING");
       audioManagerRef.current.startListening();
       setIsListening(true);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Failed to start listening:", error);
-      setRecordingStatus(RecordingStatus.OFF);
+      setRecordingStatus("OFF");
     }
   }, []);
 
