@@ -15,10 +15,10 @@ import MuteBackgroundButton from "./MuteBackgroundButton";
 
 interface Props {
   storyId: number;
-  storyKey: string;
+  apiKey: string;
 }
 
-const Player = ({ storyId, storyKey }: Props) => {
+const Player = ({ storyId, apiKey }: Props) => {
   const { playOutput, stopAllMedia, playMediaAudio } = useAudioManager();
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
@@ -29,7 +29,7 @@ const Player = ({ storyId, storyKey }: Props) => {
       const tokenResult = await createPlaythroughToken({
         storyId: storyId,
         version: -1,
-        apiKey: storyKey,
+        apiKey,
       });
       const conversationResult = await createConversation(tokenResult.token);
 

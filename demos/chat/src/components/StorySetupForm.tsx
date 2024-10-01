@@ -1,14 +1,14 @@
 interface Props {
   setStoryId: (storyId: number) => void;
-  setStoryKey: (storyKey: string) => void;
+  setApiKey: (apiKey: string) => void;
 }
 
-const StorySetupForm = ({ setStoryId, setStoryKey }: Props) => {
+const StorySetupForm = ({ setStoryId, setApiKey }: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setStoryId(e.currentTarget.storyId.value);
-    setStoryKey(e.currentTarget.storyKey.value);
+    setApiKey(e.currentTarget.apiKey.value);
   };
 
   return (
@@ -22,12 +22,12 @@ const StorySetupForm = ({ setStoryId, setStoryKey }: Props) => {
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
       <br />
-      <label htmlFor="storyKey">Story Key</label>
+      <label htmlFor="apiKey">Story Key</label>
       <input
         type="text"
-        id="storyKey"
-        name="storyKey"
-        onChange={(e) => setStoryKey(e.target.value)}
+        id="apiKey"
+        name="apiKey"
+        onChange={(e) => setApiKey(e.target.value)}
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
       <br />

@@ -8,7 +8,7 @@ import StorySetupForm from "./components/StorySetupForm";
 
 function App() {
   const [storyId, setStoryId] = useState<number>();
-  const [storyKey, setStoryKey] = useState<string>();
+  const [apiKey, setApiKey] = useState<string>();
 
   // AudioManager options are initialised here. They can't be changed after initialisation.
   const options: AudioManagerOptions = {
@@ -23,12 +23,12 @@ function App() {
 
   return (
     <div className="app">
-      {storyId && storyKey ? (
+      {storyId && apiKey ? (
         <AudioManagerProvider options={options}>
-          <Player storyId={storyId} storyKey={storyKey} />
+          <Player storyId={storyId} apiKey={apiKey} />
         </AudioManagerProvider>
       ) : (
-        <StorySetupForm setStoryId={setStoryId} setStoryKey={setStoryKey} />
+        <StorySetupForm setStoryId={setStoryId} setApiKey={setApiKey} />
       )}
     </div>
   );
