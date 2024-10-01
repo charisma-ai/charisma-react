@@ -1,5 +1,5 @@
 interface Props {
-  setStoryId: (storyId: string) => void;
+  setStoryId: (storyId: number) => void;
   setStoryKey: (storyKey: string) => void;
 }
 
@@ -15,11 +15,10 @@ const StorySetupForm = ({ setStoryId, setStoryKey }: Props) => {
     <form onSubmit={handleSubmit}>
       <label htmlFor="storyId">Story ID</label>
       <input
-        type="text"
+        type="number"
         id="storyId"
         name="storyId"
-        value="31943"
-        onChange={(e) => setStoryId(e.target.value)}
+        onChange={(e) => setStoryId(Number(e.target.value))}
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
       <br />
@@ -28,7 +27,6 @@ const StorySetupForm = ({ setStoryId, setStoryKey }: Props) => {
         type="text"
         id="storyKey"
         name="storyKey"
-        value="854ed3aa-b5a9-4f6c-88c5-3c9c12dea4ac"
         onChange={(e) => setStoryKey(e.target.value)}
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
