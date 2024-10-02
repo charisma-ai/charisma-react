@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { useAudioManager } from "@charisma-ai/react";
+import { useAudioManager, useConversationContext } from "@charisma-ai/react";
 
 const RecordToggleButton = () => {
   const { startListening, stopListening, recordingStatus } = useAudioManager();
+  const conversation = useConversationContext();
 
   useEffect(() => {
     if (recordingStatus === "RECORDING") {
@@ -22,12 +23,16 @@ const RecordToggleButton = () => {
     }
   };
 
+  if (!conversation) return null;
+
   return (
-    <button disabled={recordingStatus === "STARTING"} onClick={onClick}>
-      {recordingStatus === "OFF" && "Record"}
-      {recordingStatus === "STARTING" && "Starting..."}
-      {recordingStatus === "RECORDING" && "Stop"}
-    </button>
+    conversation.messages.length > 0 && (
+      <button disabled={recordingStatus === "STARTING"} onClick={onClick}>
+        {recordingStatus === "OFF" && "Record"}
+        {recordingStatus === "STARTING" && "Starting..."}
+        {recordingStatus === "RECORDING" && "Stop"}
+      </button>
+    )
   );
 };
 

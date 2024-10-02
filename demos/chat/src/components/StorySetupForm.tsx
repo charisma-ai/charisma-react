@@ -22,7 +22,7 @@ const StorySetupForm = ({ setStoryId, setApiKey }: Props) => {
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
       <br />
-      <label htmlFor="apiKey">Story Key</label>
+      <label htmlFor="apiKey">Story API Key</label>
       <input
         type="text"
         id="apiKey"

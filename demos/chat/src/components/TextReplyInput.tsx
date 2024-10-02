@@ -18,8 +18,8 @@ const TextReplyInput = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (inputRef.current?.value.trim() && inputRef.current) {
-      conversation?.reply({ text: inputRef.current?.value });
+    if (inputRef.current?.value.trim()) {
+      conversation?.reply({ text: inputRef.current.value });
       inputRef.current.value = "";
       stopListening();
     }
@@ -27,7 +27,7 @@ const TextReplyInput = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input ref={inputRef} type="text" />
+      <input ref={inputRef} type="text" placeholder="Your reply..." />
       <button type="submit">Submit</button>
     </form>
   );

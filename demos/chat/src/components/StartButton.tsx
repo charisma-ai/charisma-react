@@ -15,7 +15,6 @@ const StartButton = () => {
 
     initialise();
     if (playerSessionId && playthroughToken) {
-      console.log("Connecting to sudio");
       connect(playthroughToken, playerSessionId);
     }
   };
