@@ -1,14 +1,17 @@
+import { StoryParams } from "../App";
+
 interface Props {
-  setStoryId: (storyId: number) => void;
-  setApiKey: (apiKey: string) => void;
+  setStoryParams: (storyParams: StoryParams) => void;
 }
 
-const StorySetupForm = ({ setStoryId, setApiKey }: Props) => {
+const StorySetupForm = ({ setStoryParams }: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setStoryId(e.currentTarget.storyId.value);
-    setApiKey(e.currentTarget.apiKey.value);
+    setStoryParams({
+      storyId: Number(e.currentTarget.storyId.value),
+      apiKey: e.currentTarget.apiKey.value,
+    });
   };
 
   return (
@@ -18,7 +21,6 @@ const StorySetupForm = ({ setStoryId, setApiKey }: Props) => {
         type="number"
         id="storyId"
         name="storyId"
-        onChange={(e) => setStoryId(Number(e.target.value))}
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
       <br />
@@ -27,7 +29,6 @@ const StorySetupForm = ({ setStoryId, setApiKey }: Props) => {
         type="text"
         id="apiKey"
         name="apiKey"
-        onChange={(e) => setApiKey(e.target.value)}
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
       <br />

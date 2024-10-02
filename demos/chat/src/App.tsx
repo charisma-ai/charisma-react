@@ -3,12 +3,26 @@ import {
   type AudioManagerOptions,
 } from "@charisma-ai/react";
 import Player from "./components/Player";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StorySetupForm from "./components/StorySetupForm";
 
+export interface StoryParams {
+  storyId: number;
+  apiKey: string;
+}
+
 function App() {
-  const [storyId, setStoryId] = useState<number>();
-  const [apiKey, setApiKey] = useState<string>();
+  const [storyParams, setStoryParams] = useState<StoryParams>({
+    storyId: 0,
+    apiKey: "",
+  });
+  const [readyToPlay, setReadyToPlay] = useState(false);
+
+  useEffect(() => {
+    if (storyParams.storyId && storyParams.apiKey) {
+      setReadyToPlay(true);
+    }
+  }, [storyParams]);
 
   // AudioManager options are initialised here. They can't be changed after initialisation.
   const options: AudioManagerOptions = {
@@ -23,12 +37,12 @@ function App() {
 
   return (
     <div className="app">
-      {storyId && apiKey ? (
+      {readyToPlay ? (
         <AudioManagerProvider options={options}>
-          <Player storyId={storyId} apiKey={apiKey} />
+          <Player storyId={storyParams.storyId} apiKey={storyParams.apiKey} />
         </AudioManagerProvider>
       ) : (
-        <StorySetupForm setStoryId={setStoryId} setApiKey={setApiKey} />
+        <StorySetupForm setStoryParams={setStoryParams} />
       )}
     </div>
   );
