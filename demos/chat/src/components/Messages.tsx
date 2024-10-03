@@ -5,20 +5,28 @@ const Messages = () => {
 
   if (!conversation) return null;
 
+  const filteredMessages = () => {
+    return conversation.messages.filter((message) => {
+      return message.type === "character" || message.type === "player";
+    });
+  };
+
   return (
     <div className="messages">
       {conversation.messages.length > 0 ? (
         <>
-          {conversation.messages.map((message) => {
-            return (
+          {filteredMessages().map((message) => {
+            return message.type === "player" ? (
               <div key={message.message.text}>
                 <p>
-                  <strong>
-                    {message.type === "player"
-                      ? "You"
-                      : message.message.character?.name}
-                  </strong>
-                  : {message.message.text}
+                  <strong>You</strong>: {message.message.text}
+                </p>
+              </div>
+            ) : (
+              <div key={message.eventId}>
+                <p>
+                  <strong>{message.message.character?.name || "???"}</strong>:{" "}
+                  {message.message.text}
                 </p>
               </div>
             );
