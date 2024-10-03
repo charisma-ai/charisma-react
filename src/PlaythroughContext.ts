@@ -10,11 +10,15 @@ export type PlaythroughContextType = {
   connectionStatus: ConnectionStatus;
   playthrough: Playthrough | undefined;
   playthroughToken: string | undefined;
+  playerSessionId: string | undefined;
 };
 
-export const PlaythroughContext = createContext<
-  PlaythroughContextType | undefined
->(undefined);
+export const PlaythroughContext = createContext<PlaythroughContextType>({
+  connectionStatus: "disconnected",
+  playthrough: undefined,
+  playthroughToken: undefined,
+  playerSessionId: undefined,
+});
 
 export const PlaythroughProvider = PlaythroughContext.Provider;
 export const PlaythroughConsumer = PlaythroughContext.Consumer;

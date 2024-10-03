@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.0.0
+
+- Add context provider to `Conversation`.
+- Create `useAudioManager` hook and context provider.
+- Remove `useBackgroundAudio`, `useSpeaker`, `useMicrophone` hooks.
+
 ### 4.0.3
 
 - Update @charisma-ai/sdk to 4.0.5
