@@ -9,12 +9,16 @@ import StorySetupForm from "./components/StorySetupForm";
 export interface StoryParams {
   storyId: number;
   apiKey: string;
+  startGraphReferenceId?: string;
+  storyVersion?: number;
 }
 
 function App() {
   const [storyParams, setStoryParams] = useState<StoryParams>({
     storyId: 0,
     apiKey: "",
+    startGraphReferenceId: undefined,
+    storyVersion: -1,
   });
   const [readyToPlay, setReadyToPlay] = useState(false);
 

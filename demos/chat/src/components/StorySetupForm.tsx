@@ -11,6 +11,9 @@ const StorySetupForm = ({ setStoryParams }: Props) => {
     setStoryParams({
       storyId: Number(e.currentTarget.storyId.value),
       apiKey: e.currentTarget.apiKey.value,
+      startGraphReferenceId:
+        e.currentTarget.startGraphReferenceId.value || undefined,
+      storyVersion: Number(e.currentTarget.storyVersion.value) || undefined,
     });
   };
 
@@ -29,6 +32,24 @@ const StorySetupForm = ({ setStoryParams }: Props) => {
         type="text"
         id="apiKey"
         name="apiKey"
+        style={{ margin: "10px", width: "50%", padding: "5px" }}
+      />
+      <br />
+      <label htmlFor="startGraphReferenceId">Start Graph Reference Id</label>
+      <input
+        type="text"
+        id="startGraphReferenceId"
+        name="startGraphReferenceId"
+        style={{ margin: "10px", width: "50%", padding: "5px" }}
+      />
+      <span>Required for pro stories</span>
+      <br />
+      <label htmlFor="storyVersion">Story Version</label>
+      <input
+        type="text"
+        id="storyVersion"
+        name="storyVersion"
+        defaultValue={-1}
         style={{ margin: "10px", width: "50%", padding: "5px" }}
       />
       <br />
