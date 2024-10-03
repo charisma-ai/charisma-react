@@ -1,6 +1,6 @@
 {
   "name": "@charisma-ai/react",
-  "version": "4.0.3",
+  "version": "5.0.0",
   "description": "Charisma.ai chat component for React",
   "source": "src/index.ts",
   "type": "module",
@@ -17,8 +17,8 @@
     "build": "tsc && swc src -d dist",
     "cm": "git-cz",
     "lint": "eslint --fix --ext js,ts,tsx .",
-    "playground": "cd test/test-app && pnpm start",
-    "playground:setup": "pnpm run build && cd test/test-app && rm -rf node_modules && pnpm i && cd ../..",
+    "demo": "cd demos/chat && pnpm dev",
+    "demo:setup": "pnpm run build && cd demos/chat && rm -rf node_modules && pnpm i && cd ../..",
     "prebuild": "rimraf dist",
     "prepublish": "pnpm run build",
     "semantic-release": "semantic-release",
