@@ -43,7 +43,7 @@ function App() {
     <div className="app">
       {readyToPlay ? (
         <AudioManagerProvider options={options}>
-          <Player storyId={storyParams.storyId} apiKey={storyParams.apiKey} />
+          <Player storyParams={storyParams} />
         </AudioManagerProvider>
       ) : (
         <StorySetupForm setStoryParams={setStoryParams} />
