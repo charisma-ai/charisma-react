@@ -4,14 +4,18 @@ import {
   useConversationContext,
 } from "@charisma-ai/react";
 
-const StartButton = () => {
+interface Props {
+  startGraphReferenceId?: string;
+}
+
+const StartButton = ({ startGraphReferenceId }: Props) => {
   const { connectionStatus, playerSessionId, playthroughToken } =
     usePlaythroughContext();
   const { initialise, connect } = useAudioManager();
   const conversation = useConversationContext();
 
   const handleStart = () => {
-    conversation?.start();
+    conversation?.start({ startGraphReferenceId });
 
     initialise();
     if (playerSessionId && playthroughToken) {

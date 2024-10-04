@@ -12,13 +12,13 @@ import RecordToggleButton from "./RecordToggleButton";
 import TextReplyInput from "./TextReplyInput";
 import StartButton from "./StartButton";
 import MuteBackgroundButton from "./MuteBackgroundButton";
+import { type StoryParams } from "../App";
 
 interface Props {
-  storyId: number;
-  apiKey: string;
+  storyParams: StoryParams;
 }
 
-const Player = ({ storyId, apiKey }: Props) => {
+const Player = ({ storyParams }: Props) => {
   const { playOutput, stopAllMedia, playMediaAudio } = useAudioManager();
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
@@ -27,9 +27,9 @@ const Player = ({ storyId, apiKey }: Props) => {
   useEffect(() => {
     const getParameters = async () => {
       const tokenResult = await createPlaythroughToken({
-        storyId: storyId,
-        version: -1,
-        apiKey,
+        storyId: storyParams.storyId,
+        version: storyParams.storyVersion,
+        apiKey: storyParams.apiKey,
       });
       const conversationResult = await createConversation(tokenResult.token);
 
@@ -80,7 +80,9 @@ const Player = ({ storyId, apiKey }: Props) => {
         }}
       >
         <>
-          <StartButton />
+          <StartButton
+            startGraphReferenceId={storyParams.startGraphReferenceId}
+          />
           <Messages />
           <RecordToggleButton />
           <TextReplyInput />
