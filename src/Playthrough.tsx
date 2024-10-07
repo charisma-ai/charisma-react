@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   Playthrough as PlaythroughClass,
   ConnectionStatus,
   setGlobalBaseUrl,
 } from "@charisma-ai/sdk";
 
-import { PlaythroughProvider } from "./PlaythroughContext.js";
 import useChangeableRef from "./useChangeableRef.js";
 
 export interface UsePlaythroughOptions {
@@ -88,17 +87,29 @@ export const usePlaythrough = ({
   };
 };
 
+interface PlaythroughContextType {
+  connectionStatus: ConnectionStatus;
+  playthrough: PlaythroughClass | undefined;
+  playthroughToken: string | undefined;
+  playerSessionId: string | undefined;
+}
+
+const PlaythroughContext = createContext<PlaythroughContextType | undefined>(
+  undefined,
+);
+
 export interface PlaythroughProps extends UsePlaythroughOptions {
-  children:
-    | React.ReactNode
-    | ((playthrough?: ReturnType<typeof usePlaythrough>) => React.ReactNode);
+  children: React.ReactNode;
 }
 
 export const Playthrough = ({ children, ...props }: PlaythroughProps) => {
   const playthrough = usePlaythrough(props);
+
   return (
-    <PlaythroughProvider value={playthrough}>
-      {typeof children === "function" ? children(playthrough) : children}
-    </PlaythroughProvider>
+    <PlaythroughContext.Provider value={playthrough}>
+      {children}
+    </PlaythroughContext.Provider>
   );
 };
+
+export const usePlaythroughContext = () => useContext(PlaythroughContext);
