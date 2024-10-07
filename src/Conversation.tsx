@@ -4,7 +4,8 @@ import React, {
   useCallback,
   useReducer,
   useState,
-  ReactNode,
+  createContext,
+  useContext,
 } from "react";
 import {
   Conversation as ConversationType,
@@ -20,9 +21,8 @@ import {
   ProblemEvent,
 } from "@charisma-ai/sdk";
 
-import { ConversationProvider } from "./ConversationContext.js";
 import { useQueuedConversation } from "./QueuedConversation.js";
-import { usePlaythroughContext } from "./PlaythroughContext.js";
+import { usePlaythroughContext } from "./Playthrough.js";
 
 export enum ChatMode {
   Tap = "tap",
@@ -363,18 +363,22 @@ export const useConversation = ({
   };
 };
 
+const ConversationContext = createContext<ConversationChildProps | undefined>(
+  undefined,
+);
+
 export interface ConversationProps extends UseConversationOptions {
-  children:
-    | React.ReactNode
-    | ((conversation: ConversationChildProps) => ReactNode);
+  children: React.ReactNode;
 }
 
 export const Conversation = ({ children, ...props }: ConversationProps) => {
   const conversation = useConversation(props);
 
   return (
-    <ConversationProvider value={conversation}>
-      {typeof children === "function" ? children(conversation) : children}
-    </ConversationProvider>
+    <ConversationContext.Provider value={conversation}>
+      {children}
+    </ConversationContext.Provider>
   );
 };
+
+export const useConversationContext = () => useContext(ConversationContext);

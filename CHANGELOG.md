@@ -5,6 +5,7 @@
 - Add context provider to `Conversation`.
 - Create `useAudioManager` hook and context provider.
 - Remove `useBackgroundAudio`, `useSpeaker`, `useMicrophone` hooks.
+- Remove function returns in Playthrough and Conversation. They are now only context providers.
 
 ### 4.0.3
 
