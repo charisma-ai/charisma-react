@@ -18,7 +18,7 @@ import {
   AudioManagerConnectionError,
   AudioManagerInitialisationError,
   AudioPlaybackError,
-} from "./errors/AudioManagerErrors";
+} from "./errors/AudioManagerErrors.js";
 
 type AudioManagerContextType = {
   isListening: boolean;
