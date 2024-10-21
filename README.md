@@ -28,7 +28,7 @@ Finally the story ID can be found in the url, eg. `https://charisma.ai/stories/1
 
 From the root of this project, run `pnpm install` and `pnpm build` to install dependencies in `node_modules`, and create the `dist` directory with the compiled package respectively.
 
-Navigate to `./demos/chat` and run `pnpm install` to inatall the demos dependencies. You can now start the demo app which has a form to input your story parameters. You can launch the demo app by running `pnpm run dev`.
+Navigate to `./demos/chat` and run `pnpm install` to install the demos dependencies. You can now start the demo app which has a form to input your story parameters. You can launch the demo app by running `pnpm run dev`.
 
 In your browser, go to `localhost:3000`. Once the page loads, enter your conversation parameters, and click the `Submit` button. This opens the chat, where you can click start, and would expect to see the first character nodes from your story start to appear on the page.
 
