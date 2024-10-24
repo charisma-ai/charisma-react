@@ -184,6 +184,10 @@ export const AudioManagerProvider = ({
     [],
   );
 
+  const setOutputVolume = useCallback((volume: number) => {
+    audioManagerRef.current?.outputServiceSetVolume(volume);
+  }, []);
+
   const playMediaAudio = useCallback((audioTracks: AudioTrack[]) => {
     audioManagerRef.current?.mediaAudioPlay(audioTracks);
   }, []);
@@ -212,6 +216,7 @@ export const AudioManagerProvider = ({
       connect,
       resetTimeout,
       playOutput,
+      setOutputVolume,
       playMediaAudio,
       setMediaVolume,
       toggleMediaMute,
@@ -228,6 +233,7 @@ export const AudioManagerProvider = ({
       connect,
       resetTimeout,
       playOutput,
+      setOutputVolume,
       playMediaAudio,
       setMediaVolume,
       toggleMediaMute,
