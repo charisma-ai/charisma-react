@@ -42,7 +42,7 @@ The `<Playthrough>` component handles the connection to charisma.ai. This compon
 
 #### Props
 
-| Prop                 | Type                                                |                                                                               |
+| Prop                 | Type                                                |                                                                  Description |
 | -------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------- |
 | `playthroughToken`   | string or undefined                                 | If your story is not published, this is required.                             |
 | `autoconnect`        | boolean                                             | If true, the component will automatically connect to charisma.ai              |
@@ -64,8 +64,8 @@ The `<Conversation>` component handles the conversation. This component is a con
 
 #### Props
 
-| Prop                    | Type                                    |                                                                                                                       |
-| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Prop                    | Type                                    |  Description                                                                                                                     |
+| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `conversationUuid`      | string or undefined                     | References the current conversation. This is returned from `createConversation` function.                             |
 | `onMessage`             | `(event: MessageEvent) => Promise<void> | void`                                                                                                                 | If provided, this function will be called when a message is received. |
 | `onStartTyping`         | `(event: StartTypingEvent) => void`     | If provided, this function will be called when the character starts typing.                                           |
@@ -92,7 +92,7 @@ const {isRestarting, isTyping, messages, mode, start, reply, tap, action, resume
 
 #### Values
 
-| Value          | Type                                 |                                                         |
+| Value          | Type                                 | Description                                             |
 | -------------- | ------------------------------------ | ------------------------------------------------------- |
 | `isRestarting` | boolean                              | Is true when `restart` is called.                       |
 | `isTyping`     | boolean                              | Is true when the character is typing.                   |
@@ -133,7 +133,7 @@ Hook that provides access to the AudioManagerProvider context.
 
 #### Values
 
-| Value                | Type                                                                                              |                                                                                                                                     |
+| Value                | Type                                                                                              |   Description                                                                                                                                  |
 | -------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `isListening`        | boolean                                                                                           | Is true when microphone is listening for STT.                                                                                       |
 | `isBrowserSupported` | boolean                                                                                           | Is true when the current browser supports local STT.                                                                                |
