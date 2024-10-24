@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.1
+
+- Add `setOutputVolume` function to AudioManager.
+
 ### 5.0.0
 
 - Add context provider to `Conversation`.

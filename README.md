@@ -42,7 +42,7 @@ The `<Playthrough>` component handles the connection to charisma.ai. This compon
 
 #### Props
 
-| Prop                 | Type                                                |                                                                  Description |
+| Prop                 | Type                                                | Description                                                                   |
 | -------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------- |
 | `playthroughToken`   | string or undefined                                 | If your story is not published, this is required.                             |
 | `autoconnect`        | boolean                                             | If true, the component will automatically connect to charisma.ai              |
@@ -64,8 +64,8 @@ The `<Conversation>` component handles the conversation. This component is a con
 
 #### Props
 
-| Prop                    | Type                                    |  Description                                                                                                                     |
-| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Prop                    | Type                                    | Description                                                                                                           |
+| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `conversationUuid`      | string or undefined                     | References the current conversation. This is returned from `createConversation` function.                             |
 | `onMessage`             | `(event: MessageEvent) => Promise<void> | void`                                                                                                                 | If provided, this function will be called when a message is received. |
 | `onStartTyping`         | `(event: StartTypingEvent) => void`     | If provided, this function will be called when the character starts typing.                                           |
@@ -133,7 +133,7 @@ Hook that provides access to the AudioManagerProvider context.
 
 #### Values
 
-| Value                | Type                                                                                              |   Description                                                                                                                                  |
+| Value                | Type                                                                                              | Description                                                                                                                         |
 | -------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `isListening`        | boolean                                                                                           | Is true when microphone is listening for STT.                                                                                       |
 | `isBrowserSupported` | boolean                                                                                           | Is true when the current browser supports local STT.                                                                                |
@@ -145,6 +145,7 @@ Hook that provides access to the AudioManagerProvider context.
 | `connect`            | `(token: string, playerSessionId: string) => void`                                                | Connects to the AudioManager. See `StartButton.tsx` in the chat demo for an example.                                                |
 | `resetTimeout`       | `(timeout: number) => void`                                                                       | Resets the STT timeout before the microphone automatically stops listening for STT.                                                 |
 | `playOutput`         | `(audio: ArrayBuffer, playOptions: AudioOutputsServicePlayOptions) => Promise<void> or undefined` | Plays character speech from a MessageEvent.                                                                                         |
+| `setOutputVolume`    | `(volume: number) => void`                                                                        | Sets the volume of character speech. Must be between 0 and 1.                                                                       |
 | `playMediaAudio`     | `(audioTracks: AudioTrack[]) => void`                                                             | Plays media audio from a MessageEvent. This is used for playing background music.                                                   |
 | `setMediaVolume`     | `(volume: number) => void`                                                                        | Sets the volume of media audio. Must be between 0 and 1.                                                                            |
 | `toggleMediaMute`    | `() => void`                                                                                      | Toggles the mute state of media audio.                                                                                              |
