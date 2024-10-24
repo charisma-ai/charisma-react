@@ -6,7 +6,7 @@
 pnpm i @charisma-ai/react
 ```
 
-This package is a react wrapper for the Charisma AI Javascript SDK. It provides a simple way to embed a chat in your React app along with accessing conversation data.
+This package is a react wrapper for the Charisma AI Javascript SDK. It provides a simple way to embed a chat in your React app along with accessing conversation data. It also handles audio playback and speech to text.
 
 ## Setup in Charisma
 
@@ -42,9 +42,9 @@ The `<Playthrough>` component handles the connection to charisma.ai. This compon
 
 #### Props
 
-|                      |                                                     |                                                                               |
+| Prop                 | Type                                                |                                                                               |
 | -------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `playthroughToken`   | string \| undefined                                 | If your story is not published, this is required.                             |
+| `playthroughToken`   | string or undefined                                 | If your story is not published, this is required.                             |
 | `autoconnect`        | boolean                                             | If true, the component will automatically connect to charisma.ai              |
 | `onConnectionStatus` | `(connectionStatus: ConnectionStatus) => void`      | If provided, this function will be called when the connection status changes. |
 | `onError`            | `(error: any) => void`                              | If provided, this function will be called when an error occurs.               |
@@ -64,9 +64,9 @@ The `<Conversation>` component handles the conversation. This component is a con
 
 #### Props
 
-|                         |                                         |                                                                                                                       |
+| Prop                    | Type                                    |                                                                                                                       |
 | ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `conversationUuid`      | string \| undefined                     | References the current conversation. This is returned from `createConversation` function.                             |
+| `conversationUuid`      | string or undefined                     | References the current conversation. This is returned from `createConversation` function.                             |
 | `onMessage`             | `(event: MessageEvent) => Promise<void> | void`                                                                                                                 | If provided, this function will be called when a message is received. |
 | `onStartTyping`         | `(event: StartTypingEvent) => void`     | If provided, this function will be called when the character starts typing.                                           |
 | `onStopTyping`          | `(event: StopTypingEvent) => void`      | If provided, this function will be called when the character stops typing.                                            |
@@ -92,7 +92,7 @@ const {isRestarting, isTyping, messages, mode, start, reply, tap, action, resume
 
 #### Values
 
-|                |                                      |                                                         |
+| Value          | Type                                 |                                                         |
 | -------------- | ------------------------------------ | ------------------------------------------------------- |
 | `isRestarting` | boolean                              | Is true when `restart` is called.                       |
 | `isTyping`     | boolean                              | Is true when the character is typing.                   |
@@ -121,7 +121,7 @@ Provides audio. This component is a context provider and must wrap `<Playthrough
 | ------------------- | ---------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `duckVolumeLevel`   | `number`                           | 0                        | Volume level when ducking (0 to 1)                                                                                                      |
 | `normalVolumeLevel` | `number`                           | 1                        | Regular volume level (0 to 1)                                                                                                           |
-| `sttService`        | `"charisma/deepgram" \| "browser"` | `"charisma/deepgram"`    | Speech-to-text service to use (see below).                                                                                              |
+| `sttService`        | `"charisma/deepgram" or "browser"` | `"charisma/deepgram"`    | Speech-to-text service to use (see below).                                                                                              |
 | `streamTimeslice`   | `number`                           | 100                      | The number of milliseconds to record into each Blob. See https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/start#timeslice |
 | `handleError`       | `(error: string) => void`          | `console.error(error)`   | Callback to handle errors.                                                                                                              |
 | `handleDisconnect`  | `(message: string) => void`        | `console.error(message)` | Callback to handle when the transcription service disconnects.                                                                          |
@@ -133,7 +133,7 @@ Hook that provides access to the AudioManagerProvider context.
 
 #### Values
 
-|                      |                                                                                                   |                                                                                                                                     |
+| Value                | Type                                                                                              |                                                                                                                                     |
 | -------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `isListening`        | boolean                                                                                           | Is true when microphone is listening for STT.                                                                                       |
 | `isBrowserSupported` | boolean                                                                                           | Is true when the current browser supports local STT.                                                                                |
@@ -144,7 +144,7 @@ Hook that provides access to the AudioManagerProvider context.
 | `stopListening`      | `() => void`                                                                                      | Stops listening for STT.                                                                                                            |
 | `connect`            | `(token: string, playerSessionId: string) => void`                                                | Connects to the AudioManager. See `StartButton.tsx` in the chat demo for an example.                                                |
 | `resetTimeout`       | `(timeout: number) => void`                                                                       | Resets the STT timeout before the microphone automatically stops listening for STT.                                                 |
-| `playOutput`         | `(audio: ArrayBuffer, playOptions: AudioOutputsServicePlayOptions) => Promise<void> \| undefined` | Plays character speech from a MessageEvent.                                                                                         |
+| `playOutput`         | `(audio: ArrayBuffer, playOptions: AudioOutputsServicePlayOptions) => Promise<void> or undefined` | Plays character speech from a MessageEvent.                                                                                         |
 | `playMediaAudio`     | `(audioTracks: AudioTrack[]) => void`                                                             | Plays media audio from a MessageEvent. This is used for playing background music.                                                   |
 | `setMediaVolume`     | `(volume: number) => void`                                                                        | Sets the volume of media audio. Must be between 0 and 1.                                                                            |
 | `toggleMediaMute`    | `() => void`                                                                                      | Toggles the mute state of media audio.                                                                                              |
