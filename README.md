@@ -65,7 +65,7 @@ The `<Conversation>` component handles the conversation. This component is a con
 #### Props
 
 | Prop                    | Type                                    | Description                                                                                                           |
-| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `conversationUuid`      | string or undefined                     | References the current conversation. This is returned from `createConversation` function.                             |
 | `onMessage`             | `(event: MessageEvent) => Promise<void> | void`                                                                                                                 | If provided, this function will be called when a message is received. |
 | `onStartTyping`         | `(event: StartTypingEvent) => void`     | If provided, this function will be called when the character starts typing.                                           |
