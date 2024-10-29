@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.0.2
+
+- Update JS SDK package version to include reconnect attempts timeout.
+- Add `setOutputVolume` type to audio context.
+
 ### 5.0.1
 
 - Add `setOutputVolume` function to AudioManager.
