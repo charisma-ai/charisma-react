@@ -34,6 +34,7 @@ type AudioManagerContextType = {
     audio: ArrayBuffer,
     playOptions: boolean | AudioOutputsServicePlayOptions,
   ) => Promise<void> | undefined;
+  setOutputVolume: (volume: number) => void;
   playMediaAudio: (audioTracks: AudioTrack[]) => void;
   setMediaVolume: (volume: number) => void;
   toggleMediaMute: () => void;
