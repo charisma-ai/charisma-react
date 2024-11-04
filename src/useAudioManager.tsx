@@ -101,6 +101,7 @@ export const AudioManagerProvider = ({
 
     return () => {
       audioManagerRef.current?.stopListening();
+      audioManagerRef.current?.mediaAudioStopAll();
       audioManagerRef.current = null;
     };
   }, [options]);
