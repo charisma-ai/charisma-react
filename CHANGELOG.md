@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.3
+
+- Stop media audio when audio manager provider is unmounted.
+
 ### 5.0.2
 
 - Update JS SDK package version to include reconnect attempts timeout.
