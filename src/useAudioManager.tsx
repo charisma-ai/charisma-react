@@ -26,6 +26,7 @@ type AudioManagerContextType = {
   initialise: () => void;
   transcript: string;
   recordingStatus: RecordingStatus;
+  clearTranscript: () => void;
   startListening: () => void;
   stopListening: () => void;
   connect: (token: string, playerSessionId: string) => void;
