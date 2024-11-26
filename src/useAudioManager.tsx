@@ -110,6 +110,10 @@ export const AudioManagerProvider = ({
     audioManagerRef.current?.initialise();
   }, []);
 
+  const clearTranscript = useCallback(() => {
+    setTranscript("");
+  }, []);
+
   const startListening = useCallback(() => {
     try {
       if (!audioManagerRef.current) {
@@ -213,6 +217,7 @@ export const AudioManagerProvider = ({
       transcript,
       recordingStatus,
       initialise,
+      clearTranscript,
       startListening,
       stopListening,
       connect,
@@ -230,6 +235,7 @@ export const AudioManagerProvider = ({
       recordingStatus,
       transcript,
       initialise,
+      clearTranscript,
       startListening,
       stopListening,
       connect,
