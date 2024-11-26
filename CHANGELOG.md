@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.4
+
+- Add `clearTranscript` function to audio manager.
+
 ### 5.0.3
 
 - Stop media audio when audio manager provider is unmounted.

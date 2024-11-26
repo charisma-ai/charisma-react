@@ -26,6 +26,7 @@ type AudioManagerContextType = {
   initialise: () => void;
   transcript: string;
   recordingStatus: RecordingStatus;
+  clearTranscript: () => void;
   startListening: () => void;
   stopListening: () => void;
   connect: (token: string, playerSessionId: string) => void;
@@ -108,6 +109,10 @@ export const AudioManagerProvider = ({
 
   const initialise = useCallback(() => {
     audioManagerRef.current?.initialise();
+  }, []);
+
+  const clearTranscript = useCallback(() => {
+    setTranscript("");
   }, []);
 
   const startListening = useCallback(() => {
@@ -213,6 +218,7 @@ export const AudioManagerProvider = ({
       transcript,
       recordingStatus,
       initialise,
+      clearTranscript,
       startListening,
       stopListening,
       connect,
@@ -230,6 +236,7 @@ export const AudioManagerProvider = ({
       recordingStatus,
       transcript,
       initialise,
+      clearTranscript,
       startListening,
       stopListening,
       connect,
