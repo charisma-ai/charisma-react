@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.5
+
+- Add `timeout` parameter to `startListening` function.
+
 ### 5.0.4
 
 - Add `clearTranscript` function to audio manager.

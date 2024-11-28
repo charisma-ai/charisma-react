@@ -65,7 +65,7 @@ The `<Conversation>` component handles the conversation. This component is a con
 #### Props
 
 | Prop                    | Type                                    | Description                                                                                                           |
-| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| ----------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `conversationUuid`      | string or undefined                     | References the current conversation. This is returned from `createConversation` function.                             |
 | `onMessage`             | `(event: MessageEvent) => Promise<void> | void`                                                                                                                 | If provided, this function will be called when a message is received. |
 | `onStartTyping`         | `(event: StartTypingEvent) => void`     | If provided, this function will be called when the character starts typing.                                           |
@@ -140,7 +140,7 @@ Hook that provides access to the AudioManagerProvider context.
 | `initialise`         | `() => void`                                                                                      | Initialises the AudioManager. This must be called via a user interaction, such as a button click. See the chat demo for an example. |
 | `transcript`         | string                                                                                            | The current transcript from STT.                                                                                                    |
 | `recordingStatus`    | RecordingStatus                                                                                   | The current recording status. Can be "OFF", "STARTING" or "RECORDING".                                                              |
-| `startListening`     | `() => void`                                                                                      | Starts listening for STT.                                                                                                           |
+| `startListening`     | `(timeout?: number) => void`                                                                      | Starts listening for STT.                                                                                                           |
 | `stopListening`      | `() => void`                                                                                      | Stops listening for STT.                                                                                                            |
 | `connect`            | `(token: string, playerSessionId: string) => void`                                                | Connects to the AudioManager. See `StartButton.tsx` in the chat demo for an example.                                                |
 | `resetTimeout`       | `(timeout: number) => void`                                                                       | Resets the STT timeout before the microphone automatically stops listening for STT.                                                 |
