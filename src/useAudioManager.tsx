@@ -27,7 +27,7 @@ type AudioManagerContextType = {
   transcript: string;
   recordingStatus: RecordingStatus;
   clearTranscript: () => void;
-  startListening: () => void;
+  startListening: (timeout?: number) => void;
   stopListening: () => void;
   connect: (token: string, playerSessionId: string) => void;
   resetTimeout: (timeout: number) => void;
@@ -115,7 +115,7 @@ export const AudioManagerProvider = ({
     setTranscript("");
   }, []);
 
-  const startListening = useCallback(() => {
+  const startListening = useCallback((timeout?: number) => {
     try {
       if (!audioManagerRef.current) {
         throw new AudioManagerInitialisationError(
@@ -124,7 +124,7 @@ export const AudioManagerProvider = ({
       }
 
       setRecordingStatus("STARTING");
-      audioManagerRef.current.startListening();
+      audioManagerRef.current.startListening(timeout);
       setIsListening(true);
     } catch (error) {
       // eslint-disable-next-line no-console

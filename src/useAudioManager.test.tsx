@@ -37,7 +37,7 @@ const TestComponent = () => {
       <button type="button" onClick={initialise}>
         Initialise
       </button>
-      <button type="button" onClick={startListening}>
+      <button type="button" onClick={() => startListening()}>
         Start Listening
       </button>
       <button type="button" onClick={stopListening}>
