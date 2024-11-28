@@ -26,7 +26,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "5.0.5",
+    "@charisma-ai/sdk": "5.0.6",
     "immutability-helper": "^3.1.1",
     "p-queue": "^7.3.4"
   },
