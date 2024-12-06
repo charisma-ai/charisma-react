@@ -30,6 +30,7 @@ type AudioManagerContextType = {
   startListening: (timeout?: number) => void;
   stopListening: () => void;
   connect: (token: string, playerSessionId: string) => void;
+  disconnect: () => void;
   resetTimeout: (timeout: number) => void;
   playOutput: (
     audio: ArrayBuffer,
@@ -165,6 +166,11 @@ export const AudioManagerProvider = ({
     }
   }, []);
 
+  const disconnect = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    audioManagerRef.current?.disconnect();
+  }, []);
+
   const resetTimeout = useCallback((timeout: number) => {
     audioManagerRef.current?.resetTimeout(timeout);
   }, []);
@@ -222,6 +228,7 @@ export const AudioManagerProvider = ({
       startListening,
       stopListening,
       connect,
+      disconnect,
       resetTimeout,
       playOutput,
       setOutputVolume,
@@ -240,6 +247,7 @@ export const AudioManagerProvider = ({
       startListening,
       stopListening,
       connect,
+      disconnect,
       resetTimeout,
       playOutput,
       setOutputVolume,
