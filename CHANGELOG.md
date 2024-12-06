@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.6
+
+- Add `disconnect` function to audio manager.
+
 ### 5.0.5
 
 - Add `timeout` parameter to `startListening` function.
