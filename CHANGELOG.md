@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.7
+
+- recordingStatus will not always become "OFF" when stopListening is called
+
 ### 5.0.6
 
 - Add `disconnect` function to audio manager.
