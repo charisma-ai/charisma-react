@@ -1,50 +1,55 @@
 # Changelog
 
-### 5.0.7
+### vNext
+
+- update js sdk to v6.0.0-alpha.1
+- convert outputServiceSetVolume to setCharacterSpeechVolume
+
+### v5.0.7
 
 - recordingStatus will not always become "OFF" when stopListening is called
 
-### 5.0.6
+### v5.0.6
 
 - Add `disconnect` function to audio manager.
 
-### 5.0.5
+### v5.0.5
 
 - Add `timeout` parameter to `startListening` function.
 
-### 5.0.4
+### v5.0.4
 
 - Add `clearTranscript` function to audio manager.
 
-### 5.0.3
+### v5.0.3
 
 - Stop media audio when audio manager provider is unmounted.
 
-### 5.0.2
+### v5.0.2
 
 - Update JS SDK package version to include reconnect attempts timeout.
 - Add `setOutputVolume` type to audio context.
 
-### 5.0.1
+### v5.0.1
 
 - Add `setOutputVolume` function to AudioManager.
 
-### 5.0.0
+### v5.0.0
 
 - Add context provider to `Conversation`.
 - Create `useAudioManager` hook and context provider.
 - Remove `useBackgroundAudio`, `useSpeaker`, `useMicrophone` hooks.
 - Remove function returns in Playthrough and Conversation. They are now only context providers.
 
-### 4.0.3
+### v4.0.3
 
 - Update @charisma-ai/sdk to 4.0.5
 
-### 4.0.1
+### v4.0.1
 
 - Expose `Conversation` type as `ConversationType`.
 
-### 4.0.0
+### v4.0.0
 
 - **BREAKING:** This packages now exports ES Module only.
 - **BREAKING:** `playthroughId`s and `conversationId`s have been changed from `number` to `string` type everywhere in this SDK, and renamed to `playthroughUuid` and `conversationUuid`.

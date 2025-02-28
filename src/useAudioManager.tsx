@@ -36,7 +36,7 @@ type AudioManagerContextType = {
     audio: ArrayBuffer,
     playOptions: boolean | AudioOutputsServicePlayOptions,
   ) => Promise<void> | undefined;
-  setOutputVolume: (volume: number) => void;
+  setCharacterSpeechVolume: (volume: number) => void;
   playMediaAudio: (audioTracks: AudioTrack[]) => void;
   setMediaVolume: (volume: number) => void;
   toggleMediaMute: () => void;
@@ -186,7 +186,7 @@ export const AudioManagerProvider = ({
             "AudioManager is not initialised",
           );
         }
-        return await audioManagerRef.current.outputServicePlay(
+        return await audioManagerRef.current.playCharacterSpeech(
           audio,
           playOptions,
         );
@@ -197,8 +197,8 @@ export const AudioManagerProvider = ({
     [],
   );
 
-  const setOutputVolume = useCallback((volume: number) => {
-    audioManagerRef.current?.outputServiceSetVolume(volume);
+  const setCharacterSpeechVolume = useCallback((volume: number) => {
+    audioManagerRef.current?.setCharacterSpeechVolume(volume);
   }, []);
 
   const playMediaAudio = useCallback((audioTracks: AudioTrack[]) => {
@@ -231,7 +231,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
-      setOutputVolume,
+      setCharacterSpeechVolume,
       playMediaAudio,
       setMediaVolume,
       toggleMediaMute,
@@ -250,7 +250,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
-      setOutputVolume,
+      setCharacterSpeechVolume,
       playMediaAudio,
       setMediaVolume,
       toggleMediaMute,

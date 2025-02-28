@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@charisma-ai/sdk':
-        specifier: 5.0.8
-        version: 5.0.8
+        specifier: 6.0.0-alpha.1
+        version: 6.0.0-alpha.1
       immutability-helper:
         specifier: ^3.1.1
         version: 3.1.1
@@ -315,8 +315,8 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==, tarball: https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz}
 
-  '@charisma-ai/sdk@5.0.8':
-    resolution: {integrity: sha512-lA66srBWJGWgutwsdXiQrBPynfeZ6+yJTyt4Qi+OtBvih9eYQFtFwvxYUS65pgAF7/OzEgyb1yMD5/bdtZAdWw==, tarball: https://registry.npmjs.org/@charisma-ai/sdk/-/sdk-5.0.8.tgz}
+  '@charisma-ai/sdk@6.0.0-alpha.1':
+    resolution: {integrity: sha512-C2fCyBp3oJ7JjVgVt4lQI6HJti7tcgyySBZ8iC9NqgAav9Tu349f8xjT6ZRZlDh+wfkdTS9iejluDKs7Y2d3uQ==, tarball: https://registry.npmjs.org/@charisma-ai/sdk/-/sdk-6.0.0-alpha.1.tgz}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==, tarball: https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz}
@@ -1455,16 +1455,6 @@ packages:
 
   debug@4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-
-  debug@https://registry.npmjs.org/debug/-/debug-4.3.4.tgz:
-    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==, tarball: https://registry.npmjs.org/debug/-/debug-4.3.4.tgz}
-    version: 4.3.4
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -3133,10 +3123,6 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  ms@https://registry.npmjs.org/ms/-/ms-2.1.2.tgz:
-    resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==, tarball: https://registry.npmjs.org/ms/-/ms-2.1.2.tgz}
-    version: 2.1.2
-
   mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
 
@@ -4778,7 +4764,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@charisma-ai/sdk@5.0.8':
+  '@charisma-ai/sdk@6.0.0-alpha.1':
     dependencies:
       colyseus.js: 0.14.13
       eventemitter3: 5.0.1
@@ -4813,7 +4799,7 @@ snapshots:
       '@types/node': 14.18.34
       chalk: 4.1.2
       cosmiconfig: 8.1.3
-      cosmiconfig-typescript-loader: 4.3.0(@types/node@14.18.34)(cosmiconfig@8.1.3)(ts-node@10.9.1(@swc/core@1.3.57)(@types/node@14.18.34)(typescript@5.0.4))(typescript@5.0.4)
+      cosmiconfig-typescript-loader: 4.3.0(@types/node@14.18.34)(cosmiconfig@8.1.3)(ts-node@10.9.1(@swc/core@1.3.57)(@types/node@18.11.14)(typescript@5.0.4))(typescript@5.0.4)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -5613,7 +5599,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: https://registry.npmjs.org/debug/-/debug-4.3.4.tgz
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
 
@@ -6113,11 +6099,11 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@4.3.0(@types/node@14.18.34)(cosmiconfig@8.1.3)(ts-node@10.9.1(@swc/core@1.3.57)(@types/node@14.18.34)(typescript@5.0.4))(typescript@5.0.4):
+  cosmiconfig-typescript-loader@4.3.0(@types/node@14.18.34)(cosmiconfig@8.1.3)(ts-node@10.9.1(@swc/core@1.3.57)(@types/node@18.11.14)(typescript@5.0.4))(typescript@5.0.4):
     dependencies:
       '@types/node': 14.18.34
       cosmiconfig: 8.1.3
-      ts-node: 10.9.1(@swc/core@1.3.57)(@types/node@14.18.34)(typescript@5.0.4)
+      ts-node: 10.9.1(@swc/core@1.3.57)(@types/node@18.11.14)(typescript@5.0.4)
       typescript: 5.0.4
     optional: true
 
@@ -6215,10 +6201,6 @@ snapshots:
   debug@4.3.4:
     dependencies:
       ms: 2.1.2
-
-  debug@https://registry.npmjs.org/debug/-/debug-4.3.4.tgz:
-    dependencies:
-      ms: https://registry.npmjs.org/ms/-/ms-2.1.2.tgz
 
   decamelize-keys@1.1.1:
     dependencies:
@@ -7208,7 +7190,7 @@ snapshots:
     dependencies:
       '@tootallnate/once': 2.0.0
       agent-base: 6.0.2
-      debug: https://registry.npmjs.org/debug/-/debug-4.3.4.tgz
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
 
@@ -7222,7 +7204,7 @@ snapshots:
   https-proxy-agent@5.0.1:
     dependencies:
       agent-base: 6.0.2
-      debug: https://registry.npmjs.org/debug/-/debug-4.3.4.tgz
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
 
@@ -8237,8 +8219,6 @@ snapshots:
   ms@2.1.2: {}
 
   ms@2.1.3: {}
-
-  ms@https://registry.npmjs.org/ms/-/ms-2.1.2.tgz: {}
 
   mute-stream@0.0.8: {}
 
