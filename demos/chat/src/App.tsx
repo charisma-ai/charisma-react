@@ -18,19 +18,19 @@ function App() {
     storyId: 0,
     apiKey: "",
     startGraphReferenceId: undefined,
-    storyVersion: -1,
+    storyVersion: undefined,
   });
   const [readyToPlay, setReadyToPlay] = useState(false);
 
   useEffect(() => {
-    if (storyParams.storyId && storyParams.apiKey) {
+    if (storyParams.storyId) {
       setReadyToPlay(true);
     }
   }, [storyParams]);
 
   // AudioManager options are initialised here. They can't be changed after initialisation.
   const options: AudioManagerOptions = {
-    duckVolumeLevel: 0.5,
+    duckVolumeLevel: 0.1,
     normalVolumeLevel: 1,
     sttService: "charisma/deepgram",
     streamTimeslice: 1000,

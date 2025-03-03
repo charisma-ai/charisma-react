@@ -8,7 +8,6 @@ import {
   useAudioManager,
 } from "@charisma-ai/react";
 import Messages from "./Messages";
-import RecordToggleButton from "./RecordToggleButton";
 import TextReplyInput from "./TextReplyInput";
 import StartButton from "./StartButton";
 import MuteBackgroundButton from "./MuteBackgroundButton";
@@ -84,7 +83,6 @@ const Player = ({ storyParams }: Props) => {
             startGraphReferenceId={storyParams.startGraphReferenceId}
           />
           <Messages />
-          <RecordToggleButton />
           <TextReplyInput />
           <MuteBackgroundButton />
         </>

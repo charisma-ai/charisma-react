@@ -25,6 +25,8 @@ type AudioManagerContextType = {
   isBrowserSupported: boolean;
   initialise: () => void;
   transcript: string;
+  interimTranscript: string;
+  liveTranscript: string;
   recordingStatus: RecordingStatus;
   clearTranscript: () => void;
   startListening: (timeout?: number) => void;
@@ -45,7 +47,10 @@ type AudioManagerContextType = {
 
 export type ModifiedAudioManagerOptions = Omit<
   OriginalAudioManagerOptions,
-  "handleTranscript" | "handleStartSTT" | "handleStopSTT"
+  | "handleTranscript"
+  | "handleInterimTranscript"
+  | "handleStartSTT"
+  | "handleStopSTT"
 >;
 
 export type RecordingStatus = "OFF" | "STARTING" | "RECORDING";
@@ -65,6 +70,8 @@ export const AudioManagerProvider = ({
   const [isListening, setIsListening] = useState(false);
   const [isBrowserSupported, setIsBrowserSupported] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [interimTranscript, setInterimTranscript] = useState("");
+  const [confirmedTranscripts, setConfirmedTranscripts] = useState("");
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatus>("OFF");
 
@@ -73,6 +80,16 @@ export const AudioManagerProvider = ({
       const customHandleTranscript = (transcriptText: string) => {
         if (transcriptText.trim().length > 0) {
           setTranscript(transcriptText);
+          setInterimTranscript("");
+          setConfirmedTranscripts((existing) =>
+            `${existing} ${transcriptText}`.trim(),
+          );
+        }
+      };
+
+      const customHandleInterimTranscript = (transcriptText: string) => {
+        if (transcriptText.trim().length > 0) {
+          setInterimTranscript(transcriptText);
         }
       };
 
@@ -87,6 +104,7 @@ export const AudioManagerProvider = ({
       const modifiedOptions = {
         ...options,
         handleTranscript: customHandleTranscript,
+        handleInterimTranscript: customHandleInterimTranscript,
         handleStartSTT: customHandleStartSTT,
         handleStopSTT: customHandleStopSTT,
       };
@@ -114,6 +132,8 @@ export const AudioManagerProvider = ({
 
   const clearTranscript = useCallback(() => {
     setTranscript("");
+    setInterimTranscript("");
+    setConfirmedTranscripts("");
   }, []);
 
   const startListening = useCallback((timeout?: number) => {
@@ -217,11 +237,15 @@ export const AudioManagerProvider = ({
     audioManagerRef.current?.mediaAudioStopAll();
   }, []);
 
+  const liveTranscript = `${confirmedTranscripts} ${interimTranscript}`.trim();
+
   const value = useMemo(
     () => ({
       isListening,
       isBrowserSupported,
       transcript,
+      interimTranscript,
+      liveTranscript,
       recordingStatus,
       initialise,
       clearTranscript,
@@ -242,6 +266,8 @@ export const AudioManagerProvider = ({
       isBrowserSupported,
       recordingStatus,
       transcript,
+      interimTranscript,
+      liveTranscript,
       initialise,
       clearTranscript,
       startListening,
