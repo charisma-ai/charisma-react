@@ -3,6 +3,8 @@ import { useAudioManager, useConversationContext } from "@charisma-ai/react";
 
 const TextReplyInput = () => {
   const {
+    transcript,
+    interimTranscript,
     liveTranscript,
     startListening,
     stopListening,
@@ -40,20 +42,29 @@ const TextReplyInput = () => {
     }
   };
 
-  if (!conversation?.messages.length) return null;
+  if (!conversation?.messages.length) {
+    return null;
+  }
 
   return (
     <form onSubmit={handleSubmit}>
-      <input ref={inputRef} type="text" placeholder="Your reply..." />
-      <button
-        disabled={recordingStatus === "STARTING"}
-        onClick={handleRecordButton}
-      >
-        {recordingStatus === "OFF" && "Record"}
-        {recordingStatus === "STARTING" && "Starting..."}
-        {recordingStatus === "RECORDING" && "Stop"}
-      </button>
-      <button type="submit">Submit</button>
+      <input
+        ref={inputRef}
+        type="text"
+        placeholder="Your reply..."
+        style={{ width: "90%" }}
+      />
+      <div>
+        <button
+          disabled={recordingStatus === "STARTING"}
+          onClick={handleRecordButton}
+        >
+          {recordingStatus === "OFF" && "Record"}
+          {recordingStatus === "STARTING" && "Starting..."}
+          {recordingStatus === "RECORDING" && "Stop"}
+        </button>
+        <button type="submit">Submit</button>
+      </div>
     </form>
   );
 };
