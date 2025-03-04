@@ -79,17 +79,19 @@ export const AudioManagerProvider = ({
     try {
       const customHandleTranscript = (transcriptText: string) => {
         if (transcriptText.trim().length > 0) {
-          setTranscript(transcriptText);
-          setInterimTranscript("");
-          setConfirmedTranscripts((existing) =>
-            `${existing} ${transcriptText}`.trim(),
-          );
+          queueMicrotask(() => {
+            setTranscript(transcriptText);
+            setInterimTranscript("");
+            setConfirmedTranscripts((existing) =>
+              `${existing} ${transcriptText}`.trim(),
+            );
+          });
         }
       };
 
       const customHandleInterimTranscript = (transcriptText: string) => {
         if (transcriptText.trim().length > 0) {
-          setInterimTranscript(transcriptText);
+          queueMicrotask(() => setInterimTranscript(transcriptText));
         }
       };
 

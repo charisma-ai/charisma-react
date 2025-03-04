@@ -2,9 +2,10 @@
 
 ### vNext
 
-- update js sdk to v6.0.0-alpha.3
+- update js sdk to v6.0.0-alpha.4
 - **BREAKING:** convert outputServiceSetVolume to setCharacterSpeechVolume
 - add interim transcripts
+- prioritise transcript processing
 
 ### v5.0.7
 
