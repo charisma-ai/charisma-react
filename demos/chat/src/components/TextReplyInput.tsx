@@ -3,8 +3,6 @@ import { useAudioManager, useConversationContext } from "@charisma-ai/react";
 
 const TextReplyInput = () => {
   const {
-    transcript,
-    interimTranscript,
     liveTranscript,
     startListening,
     stopListening,

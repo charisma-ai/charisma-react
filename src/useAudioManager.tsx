@@ -38,6 +38,7 @@ type AudioManagerContextType = {
     audio: ArrayBuffer,
     playOptions: boolean | AudioOutputsServicePlayOptions,
   ) => Promise<void> | undefined;
+  characterSpeechVolume: number | undefined;
   setCharacterSpeechVolume: (volume: number) => void;
   playMediaAudio: (audioTracks: AudioTrack[]) => void;
   setMediaVolume: (volume: number) => void;
@@ -74,6 +75,9 @@ export const AudioManagerProvider = ({
   const [confirmedTranscripts, setConfirmedTranscripts] = useState("");
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatus>("OFF");
+  const [characterSpeechVolume, setCharacterSpeechVolumeState] = useState<
+    number | undefined
+  >(audioManagerRef.current?.characterSpeechVolume);
 
   useEffect(() => {
     try {
@@ -113,8 +117,7 @@ export const AudioManagerProvider = ({
 
       const audioManager = new AudioManager(modifiedOptions);
       audioManagerRef.current = audioManager;
-
-      // Check if browser STT is supported.
+      setCharacterSpeechVolumeState(audioManager.characterSpeechVolume);
       setIsBrowserSupported(audioManager.browserIsSupported());
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -220,7 +223,11 @@ export const AudioManagerProvider = ({
   );
 
   const setCharacterSpeechVolume = useCallback((volume: number) => {
-    audioManagerRef.current?.setCharacterSpeechVolume(volume);
+    if (!audioManagerRef.current) {
+      return;
+    }
+    audioManagerRef.current.characterSpeechVolume = volume;
+    setCharacterSpeechVolumeState(volume);
   }, []);
 
   const playMediaAudio = useCallback((audioTracks: AudioTrack[]) => {
@@ -257,6 +264,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
+      characterSpeechVolume,
       setCharacterSpeechVolume,
       playMediaAudio,
       setMediaVolume,
@@ -278,6 +286,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
+      characterSpeechVolume,
       setCharacterSpeechVolume,
       playMediaAudio,
       setMediaVolume,
