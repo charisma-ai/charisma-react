@@ -41,6 +41,9 @@ type AudioManagerContextType = {
   setMediaVolume: (volume: number) => void;
   toggleMediaMute: () => void;
   stopAllMedia: () => void;
+  getAudioStream: () => MediaStream | null | undefined;
+  getAnalyserNode: () => AnalyserNode | null | undefined;
+  // disconnectAudioStream: (destination: AudioNode) => void;
 };
 
 export type ModifiedAudioManagerOptions = Omit<
@@ -217,6 +220,18 @@ export const AudioManagerProvider = ({
     audioManagerRef.current?.mediaAudioStopAll();
   }, []);
 
+  const getAudioStream = useCallback(() => {
+    return audioManagerRef.current?.getAudioStream();
+  }, []);
+
+  const getAnalyserNode = useCallback(() => {
+    return audioManagerRef.current?.getAnalyserNode();
+  }, []);
+
+  /* const disconnectAudioStream = useCallback(() => {
+    audioManagerRef.current?.mediaAudioStopAll();
+  }, []); */
+
   const value = useMemo(
     () => ({
       isListening,
@@ -236,6 +251,8 @@ export const AudioManagerProvider = ({
       setMediaVolume,
       toggleMediaMute,
       stopAllMedia,
+      getAudioStream,
+      getAnalyserNode,
     }),
     [
       isListening,
@@ -255,6 +272,8 @@ export const AudioManagerProvider = ({
       setMediaVolume,
       toggleMediaMute,
       stopAllMedia,
+      getAudioStream,
+      getAnalyserNode,
     ],
   );
 
