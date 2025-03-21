@@ -9,10 +9,16 @@ interface Props {
 }
 
 const StartButton = ({ startGraphReferenceId }: Props) => {
-  const { connectionStatus, playerSessionId, playthroughToken } =
-    usePlaythroughContext();
+  const playthroughContext = usePlaythroughContext();
   const { initialise, connect } = useAudioManager();
   const conversation = useConversationContext();
+
+  if (!playthroughContext) {
+    return null;
+  }
+
+  const { connectionStatus, playerSessionId, playthroughToken } =
+    playthroughContext;
 
   const handleStart = () => {
     conversation?.start({ startGraphReferenceId });

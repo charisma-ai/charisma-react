@@ -25,6 +25,8 @@ type AudioManagerContextType = {
   isBrowserSupported: boolean;
   initialise: () => void;
   transcript: string;
+  interimTranscript: string;
+  liveTranscript: string;
   recordingStatus: RecordingStatus;
   clearTranscript: () => void;
   startListening: (timeout?: number) => void;
@@ -36,19 +38,21 @@ type AudioManagerContextType = {
     audio: ArrayBuffer,
     playOptions: boolean | AudioOutputsServicePlayOptions,
   ) => Promise<void> | undefined;
-  setOutputVolume: (volume: number) => void;
+  characterSpeechVolume: number | undefined;
+  setCharacterSpeechVolume: (volume: number) => void;
   playMediaAudio: (audioTracks: AudioTrack[]) => void;
   setMediaVolume: (volume: number) => void;
   toggleMediaMute: () => void;
   stopAllMedia: () => void;
-  getAudioStream: () => MediaStream | null | undefined;
   getAnalyserNode: () => AnalyserNode | null | undefined;
-  // disconnectAudioStream: (destination: AudioNode) => void;
 };
 
 export type ModifiedAudioManagerOptions = Omit<
   OriginalAudioManagerOptions,
-  "handleTranscript" | "handleStartSTT" | "handleStopSTT"
+  | "handleTranscript"
+  | "handleInterimTranscript"
+  | "handleStartSTT"
+  | "handleStopSTT"
 >;
 
 export type RecordingStatus = "OFF" | "STARTING" | "RECORDING";
@@ -68,14 +72,31 @@ export const AudioManagerProvider = ({
   const [isListening, setIsListening] = useState(false);
   const [isBrowserSupported, setIsBrowserSupported] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [interimTranscript, setInterimTranscript] = useState("");
+  const [confirmedTranscripts, setConfirmedTranscripts] = useState("");
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatus>("OFF");
+  const [characterSpeechVolume, setCharacterSpeechVolumeState] = useState<
+    number | undefined
+  >(audioManagerRef.current?.characterSpeechVolume);
 
   useEffect(() => {
     try {
       const customHandleTranscript = (transcriptText: string) => {
         if (transcriptText.trim().length > 0) {
-          setTranscript(transcriptText);
+          queueMicrotask(() => {
+            setTranscript(transcriptText);
+            setInterimTranscript("");
+            setConfirmedTranscripts((existing) =>
+              `${existing} ${transcriptText}`.trim(),
+            );
+          });
+        }
+      };
+
+      const customHandleInterimTranscript = (transcriptText: string) => {
+        if (transcriptText.trim().length > 0) {
+          queueMicrotask(() => setInterimTranscript(transcriptText));
         }
       };
 
@@ -90,14 +111,14 @@ export const AudioManagerProvider = ({
       const modifiedOptions = {
         ...options,
         handleTranscript: customHandleTranscript,
+        handleInterimTranscript: customHandleInterimTranscript,
         handleStartSTT: customHandleStartSTT,
         handleStopSTT: customHandleStopSTT,
       };
 
       const audioManager = new AudioManager(modifiedOptions);
       audioManagerRef.current = audioManager;
-
-      // Check if browser STT is supported.
+      setCharacterSpeechVolumeState(audioManager.characterSpeechVolume);
       setIsBrowserSupported(audioManager.browserIsSupported());
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -117,6 +138,8 @@ export const AudioManagerProvider = ({
 
   const clearTranscript = useCallback(() => {
     setTranscript("");
+    setInterimTranscript("");
+    setConfirmedTranscripts("");
   }, []);
 
   const startListening = useCallback((timeout?: number) => {
@@ -189,7 +212,7 @@ export const AudioManagerProvider = ({
             "AudioManager is not initialised",
           );
         }
-        return await audioManagerRef.current.outputServicePlay(
+        return await audioManagerRef.current.playCharacterSpeech(
           audio,
           playOptions,
         );
@@ -200,8 +223,12 @@ export const AudioManagerProvider = ({
     [],
   );
 
-  const setOutputVolume = useCallback((volume: number) => {
-    audioManagerRef.current?.outputServiceSetVolume(volume);
+  const setCharacterSpeechVolume = useCallback((volume: number) => {
+    if (!audioManagerRef.current) {
+      return;
+    }
+    audioManagerRef.current.characterSpeechVolume = volume;
+    setCharacterSpeechVolumeState(volume);
   }, []);
 
   const playMediaAudio = useCallback((audioTracks: AudioTrack[]) => {
@@ -220,23 +247,19 @@ export const AudioManagerProvider = ({
     audioManagerRef.current?.mediaAudioStopAll();
   }, []);
 
-  const getAudioStream = useCallback(() => {
-    return audioManagerRef.current?.getAudioStream();
-  }, []);
-
   const getAnalyserNode = useCallback(() => {
     return audioManagerRef.current?.getAnalyserNode();
   }, []);
 
-  /* const disconnectAudioStream = useCallback(() => {
-    audioManagerRef.current?.mediaAudioStopAll();
-  }, []); */
+  const liveTranscript = `${confirmedTranscripts} ${interimTranscript}`.trim();
 
   const value = useMemo(
     () => ({
       isListening,
       isBrowserSupported,
       transcript,
+      interimTranscript,
+      liveTranscript,
       recordingStatus,
       initialise,
       clearTranscript,
@@ -246,12 +269,12 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
-      setOutputVolume,
+      characterSpeechVolume,
+      setCharacterSpeechVolume,
       playMediaAudio,
       setMediaVolume,
       toggleMediaMute,
       stopAllMedia,
-      getAudioStream,
       getAnalyserNode,
     }),
     [
@@ -259,6 +282,8 @@ export const AudioManagerProvider = ({
       isBrowserSupported,
       recordingStatus,
       transcript,
+      interimTranscript,
+      liveTranscript,
       initialise,
       clearTranscript,
       startListening,
@@ -267,12 +292,12 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
-      setOutputVolume,
+      characterSpeechVolume,
+      setCharacterSpeechVolume,
       playMediaAudio,
       setMediaVolume,
       toggleMediaMute,
       stopAllMedia,
-      getAudioStream,
       getAnalyserNode,
     ],
   );

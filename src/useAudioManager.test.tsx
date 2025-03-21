@@ -12,7 +12,7 @@ jest.mock("@charisma-ai/sdk", () => ({
     stopListening: jest.fn(),
     connect: jest.fn(),
     resetTimeout: jest.fn(),
-    outputServicePlay: jest.fn(),
+    playCharacterSpeech: jest.fn(),
     mediaAudioPlay: jest.fn(),
     mediaAudioSetVolume: jest.fn(),
     mediaAudioToggleMute: jest.fn(),
