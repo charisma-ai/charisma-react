@@ -22,7 +22,6 @@
     "prebuild": "rimraf dist",
     "prepublish": "pnpm run build",
     "semantic-release": "semantic-release",
-    "prepare": "husky install",
     "test": "jest"
   },
   "dependencies": {
