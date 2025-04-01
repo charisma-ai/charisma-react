@@ -20,6 +20,11 @@
     "target": "esnext",
     "types": ["jest", "@testing-library/jest-dom"],
     "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
