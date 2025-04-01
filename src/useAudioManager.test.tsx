@@ -2,7 +2,8 @@
 import React from "react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { render, act } from "@testing-library/react";
-import { AudioManagerProvider, useAudioManager } from "./useAudioManager.js";
+// eslint-disable-next-line import/extensions
+import { AudioManagerProvider, useAudioManager } from "./useAudioManager.tsx";
 
 // Mock AudioManager class
 jest.mock("@charisma-ai/sdk", () => ({
