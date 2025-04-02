@@ -2,22 +2,26 @@
 import React from "react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { render, act } from "@testing-library/react";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { describe, it, vi, expect } from "vitest";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "@testing-library/jest-dom";
 import { AudioManagerProvider, useAudioManager } from "./useAudioManager.js";
 
 // Mock AudioManager class
-jest.mock("@charisma-ai/sdk", () => ({
-  AudioManager: jest.fn(() => ({
-    initialise: jest.fn(),
-    startListening: jest.fn(),
-    stopListening: jest.fn(),
-    connect: jest.fn(),
-    resetTimeout: jest.fn(),
-    playCharacterSpeech: jest.fn(),
-    mediaAudioPlay: jest.fn(),
-    mediaAudioSetVolume: jest.fn(),
-    mediaAudioToggleMute: jest.fn(),
-    mediaAudioStopAll: jest.fn(),
-    browserIsSupported: jest.fn(() => true),
+vi.mock("@charisma-ai/sdk", () => ({
+  AudioManager: vi.fn(() => ({
+    initialise: vi.fn(),
+    startListening: vi.fn(),
+    stopListening: vi.fn(),
+    connect: vi.fn(),
+    resetTimeout: vi.fn(),
+    playCharacterSpeech: vi.fn(),
+    mediaAudioPlay: vi.fn(),
+    mediaAudioSetVolume: vi.fn(),
+    mediaAudioToggleMute: vi.fn(),
+    mediaAudioStopAll: vi.fn(),
+    browserIsSupported: vi.fn(() => true),
   })),
 }));
 
@@ -57,7 +61,7 @@ const TestComponent = () => {
 
 describe("useAudioManager", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should initialise AudioManager and check browser support", () => {
