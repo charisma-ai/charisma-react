@@ -58,7 +58,7 @@ const TestComponent = () => {
 describe("useAudioManager", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  }, 1);
+  });
 
   it("should initialise AudioManager and check browser support", () => {
     const { getByText } = render(
