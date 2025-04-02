@@ -1,11 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React from "react";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { render, act } from "@testing-library/react";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { describe, it, vi, expect } from "vitest";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import "@testing-library/jest-dom";
+import { describe, it, vi, expect, beforeEach } from "vitest";
+import "@testing-library/jest-dom/vitest";
 import { AudioManagerProvider, useAudioManager } from "./useAudioManager.js";
 
 // Mock AudioManager class
@@ -62,7 +58,7 @@ const TestComponent = () => {
 describe("useAudioManager", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  }, 1);
 
   it("should initialise AudioManager and check browser support", () => {
     const { getByText } = render(

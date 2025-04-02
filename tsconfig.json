@@ -7,8 +7,8 @@
     "isolatedModules": true,
     "jsx": "react",
     "lib": ["ES2022", "dom"],
-    "module": "node16",
-    "moduleResolution": "node16",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
@@ -18,8 +18,12 @@
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "types": []
+    "types": ["vitest/globals"]
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "node_modules/.pnpm/vitest@3.1.1_@types+node@22.13.17_jiti@2.4.2_jsdom@26.0.0/node_modules/vitest/globals.d.ts",
+    "node_modules/.pnpm/vitest@3.1.1_@types+node@22.13.17_jiti@2.4.2_jsdom@26.0.0/node_modules/vitest/globals.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
