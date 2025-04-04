@@ -14,7 +14,7 @@
     "dist/*"
   ],
   "scripts": {
-    "build": "tsc && swc src -d dist",
+    "build": "tsc -p tsconfig.build.json && swc src -d dist",
     "cm": "git-cz",
     "lint": "eslint --fix --ext js,ts,tsx .",
     "demo": "cd demos/chat && pnpm dev",
