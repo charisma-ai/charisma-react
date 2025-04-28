@@ -45,6 +45,9 @@ type AudioManagerContextType = {
   toggleMediaMute: () => void;
   stopAllMedia: () => void;
   getAnalyserNode: () => AnalyserNode | null | undefined;
+  // NEW: Playback tracking
+  getCurrentPlaybackTime: () => number | undefined;
+  getIsPlaying: () => boolean | undefined;
 };
 
 export type ModifiedAudioManagerOptions = Omit<
@@ -62,9 +65,9 @@ const AudioManagerContext = createContext<AudioManagerContextType | undefined>(
 );
 
 export const AudioManagerProvider = ({
-  children,
-  options,
-}: {
+                                       children,
+                                       options,
+                                     }: {
   children: ReactNode;
   options: ModifiedAudioManagerOptions;
 }) => {
@@ -251,6 +254,16 @@ export const AudioManagerProvider = ({
     return audioManagerRef.current?.getAnalyserNode();
   }, []);
 
+  // NEW: Get current playback time
+  const getCurrentPlaybackTime = useCallback(() => {
+    return audioManagerRef.current?.getCurrentPlaybackTime();
+  }, []);
+
+  // NEW: Get playing status
+  const getIsPlaying = useCallback(() => {
+    return audioManagerRef.current?.getIsPlaying();
+  }, []);
+
   const liveTranscript = `${confirmedTranscripts} ${interimTranscript}`.trim();
 
   const value = useMemo(
@@ -276,6 +289,8 @@ export const AudioManagerProvider = ({
       toggleMediaMute,
       stopAllMedia,
       getAnalyserNode,
+      getCurrentPlaybackTime, // NEW
+      getIsPlaying, // NEW
     }),
     [
       isListening,
@@ -299,6 +314,8 @@ export const AudioManagerProvider = ({
       toggleMediaMute,
       stopAllMedia,
       getAnalyserNode,
+      getCurrentPlaybackTime, // NEW
+      getIsPlaying, // NEW
     ],
   );
 
