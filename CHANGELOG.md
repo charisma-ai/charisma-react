@@ -1,5 +1,10 @@
 # Changelog
 
+### v6.0.1
+
+- Exclude tests from build
+- Use vitest instead of jest and update tests to get them running
+
 ### v6.0.0
 
 - update js sdk to v6.0.0-alpha.5
