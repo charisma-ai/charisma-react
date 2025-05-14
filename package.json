@@ -1,6 +1,6 @@
 {
   "name": "@charisma-ai/react",
-  "version": "6.0.2-alpha.2",
+  "version": "6.0.2-alpha.3",
   "description": "Charisma.ai chat component for React",
   "source": "src/index.ts",
   "type": "module",
