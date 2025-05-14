@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@charisma-ai/sdk':
-        specifier: 6.0.0
-        version: 6.0.0
+        specifier: 6.0.1-alpha.1
+        version: 6.0.1-alpha.1
       immutability-helper:
         specifier: ^3.1.1
         version: 3.1.1
@@ -126,8 +126,8 @@ packages:
     resolution: {integrity: sha512-VtPOkrdPHZsKc/clNqyi9WUA8TINkZ4cGk63UUE3u4pmB2k+ZMQRDuIOagv8UVd6j7k0T3+RRIb7beKTebNbcw==, tarball: https://registry.npmjs.org/@babel/runtime/-/runtime-7.27.0.tgz}
     engines: {node: '>=6.9.0'}
 
-  '@charisma-ai/sdk@6.0.0':
-    resolution: {integrity: sha512-QiyvEzayLCFEjnlWH07Bnb0NFM61OSFDx0xHwTGKHGaDC/GfQ+I0u8Qn0rUnb3c2enhAu3BGmaTz0jqHHwH1XQ==, tarball: https://registry.npmjs.org/@charisma-ai/sdk/-/sdk-6.0.0.tgz}
+  '@charisma-ai/sdk@6.0.1-alpha.1':
+    resolution: {integrity: sha512-EVuvzOrKLgArQ8SBM+rN4R8NOo3jrB093jK5NJ+gxK7AAvduviM30QY9fL4uEeZe+2I56o5qHA3ATntmF4EZKw==, tarball: https://registry.npmjs.org/@charisma-ai/sdk/-/sdk-6.0.1-alpha.1.tgz}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==, tarball: https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz}
@@ -3963,7 +3963,7 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  '@charisma-ai/sdk@6.0.0':
+  '@charisma-ai/sdk@6.0.1-alpha.1':
     dependencies:
       colyseus.js: 0.14.13
       eventemitter3: 5.0.1
