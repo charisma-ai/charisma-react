@@ -211,8 +211,9 @@ export const AudioManagerProvider = ({
             "AudioManager is not initialised",
           );
         }
-        audioManagerRef.current.characterSpeechVolume =
-          characterSpeechVolume || 1;
+        if (typeof characterSpeechVolume === "number") {
+          audioManagerRef.current.characterSpeechVolume = characterSpeechVolume;
+        }
         return await audioManagerRef.current.playCharacterSpeech(
           audio,
           playOptions,
