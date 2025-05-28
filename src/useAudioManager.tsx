@@ -38,6 +38,7 @@ type AudioManagerContextType = {
     audio: ArrayBuffer,
     playOptions: boolean | AudioOutputsServicePlayOptions,
   ) => Promise<void> | undefined;
+  onCharacterSpeechEnd: (callback: () => void) => void;
   characterSpeechVolume: number | undefined;
   setCharacterSpeechVolume: (volume: number) => void;
   playMediaAudio: (audioTracks: AudioTrack[]) => void;
@@ -45,7 +46,6 @@ type AudioManagerContextType = {
   toggleMediaMute: () => void;
   stopAllMedia: () => void;
   getAnalyserNode: () => AnalyserNode | null | undefined;
-  // NEW: Playback tracking
   getCurrentPlaybackTime: () => number | undefined;
   getIsPlaying: () => boolean | undefined;
 };
@@ -65,9 +65,9 @@ const AudioManagerContext = createContext<AudioManagerContextType | undefined>(
 );
 
 export const AudioManagerProvider = ({
-                                       children,
-                                       options,
-                                     }: {
+  children,
+  options,
+}: {
   children: ReactNode;
   options: ModifiedAudioManagerOptions;
 }) => {
@@ -226,6 +226,10 @@ export const AudioManagerProvider = ({
     [],
   );
 
+  const onCharacterSpeechEnd = useCallback((callback: () => void) => {
+    audioManagerRef.current?.onCharacterSpeechEnd(callback);
+  }, []);
+
   const setCharacterSpeechVolume = useCallback((volume: number) => {
     if (!audioManagerRef.current) {
       return;
@@ -282,6 +286,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
+      onCharacterSpeechEnd,
       characterSpeechVolume,
       setCharacterSpeechVolume,
       playMediaAudio,
@@ -289,8 +294,8 @@ export const AudioManagerProvider = ({
       toggleMediaMute,
       stopAllMedia,
       getAnalyserNode,
-      getCurrentPlaybackTime, // NEW
-      getIsPlaying, // NEW
+      getCurrentPlaybackTime,
+      getIsPlaying,
     }),
     [
       isListening,
@@ -307,6 +312,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playOutput,
+      onCharacterSpeechEnd,
       characterSpeechVolume,
       setCharacterSpeechVolume,
       playMediaAudio,
@@ -314,8 +320,8 @@ export const AudioManagerProvider = ({
       toggleMediaMute,
       stopAllMedia,
       getAnalyserNode,
-      getCurrentPlaybackTime, // NEW
-      getIsPlaying, // NEW
+      getCurrentPlaybackTime,
+      getIsPlaying,
     ],
   );
 
