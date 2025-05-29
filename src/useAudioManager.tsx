@@ -34,15 +34,19 @@ type AudioManagerContextType = {
   connect: (token: string, playerSessionId: string) => void;
   disconnect: () => void;
   resetTimeout: (timeout: number) => void;
-  playOutput: (
+  playCharacterSpeech: (
     audio: ArrayBuffer,
     playOptions: boolean | AudioOutputsServicePlayOptions,
   ) => Promise<void> | undefined;
-  characterSpeechVolume: number | undefined;
+  characterSpeechVolume: number;
   setCharacterSpeechVolume: (volume: number) => void;
+  characterSpeechIsMuted: boolean;
+  setCharacterSpeechMuted: (muted: boolean) => void;
   playMediaAudio: (audioTracks: AudioTrack[]) => void;
-  setMediaVolume: (volume: number) => void;
-  toggleMediaMute: () => void;
+  mediaAudioVolume: number;
+  setMediaAudioVolume: (volume: number) => void;
+  mediaAudioIsMuted: boolean;
+  setMediaAudioMuted: (muted: boolean) => void;
   stopAllMedia: () => void;
 };
 
@@ -75,9 +79,6 @@ export const AudioManagerProvider = ({
   const [confirmedTranscripts, setConfirmedTranscripts] = useState("");
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatus>("OFF");
-  const [characterSpeechVolume, setCharacterSpeechVolumeState] = useState<
-    number | undefined
-  >(audioManagerRef.current?.characterSpeechVolume);
 
   useEffect(() => {
     try {
@@ -117,7 +118,6 @@ export const AudioManagerProvider = ({
 
       const audioManager = new AudioManager(modifiedOptions);
       audioManagerRef.current = audioManager;
-      setCharacterSpeechVolumeState(audioManager.characterSpeechVolume);
       setIsBrowserSupported(audioManager.browserIsSupported());
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -200,7 +200,7 @@ export const AudioManagerProvider = ({
     audioManagerRef.current?.resetTimeout(timeout);
   }, []);
 
-  const playOutput = useCallback(
+  const playCharacterSpeech = useCallback(
     async (
       audio: ArrayBuffer,
       playOptions: boolean | AudioOutputsServicePlayOptions,
@@ -210,9 +210,6 @@ export const AudioManagerProvider = ({
           throw new AudioManagerInitialisationError(
             "AudioManager is not initialised",
           );
-        }
-        if (typeof characterSpeechVolume === "number") {
-          audioManagerRef.current.characterSpeechVolume = characterSpeechVolume;
         }
         return await audioManagerRef.current.playCharacterSpeech(
           audio,
@@ -225,24 +222,64 @@ export const AudioManagerProvider = ({
     [],
   );
 
+  const characterSpeechVolume = audioManagerRef.current
+    ? audioManagerRef.current.characterSpeechVolume
+    : 1;
+
   const setCharacterSpeechVolume = useCallback((volume: number) => {
     if (!audioManagerRef.current) {
+      console.warn(
+        "setMediaAudioMuted called but AudioManager is not initialised",
+      );
       return;
     }
     audioManagerRef.current.characterSpeechVolume = volume;
-    setCharacterSpeechVolumeState(volume);
+  }, []);
+
+  const characterSpeechIsMuted = audioManagerRef.current
+    ? audioManagerRef.current.characterSpeechIsMuted
+    : false;
+
+  const setCharacterSpeechMuted = useCallback((mute: boolean) => {
+    if (!audioManagerRef.current) {
+      console.warn(
+        "setMediaAudioMuted called but AudioManager is not initialised",
+      );
+      return;
+    }
+    audioManagerRef.current.characterSpeechIsMuted = mute;
   }, []);
 
   const playMediaAudio = useCallback((audioTracks: AudioTrack[]) => {
     audioManagerRef.current?.mediaAudioPlay(audioTracks);
   }, []);
 
-  const setMediaVolume = useCallback((volume: number) => {
-    audioManagerRef.current?.mediaAudioSetVolume(volume);
+  const mediaAudioVolume = audioManagerRef.current
+    ? audioManagerRef.current.mediaAudioVolume
+    : 1;
+
+  const setMediaAudioVolume = useCallback((volume: number) => {
+    if (!audioManagerRef.current) {
+      console.warn(
+        "setMediaAudioMuted called but AudioManager is not initialised",
+      );
+      return;
+    }
+    audioManagerRef.current.mediaAudioVolume = volume;
   }, []);
 
-  const toggleMediaMute = useCallback(() => {
-    audioManagerRef.current?.mediaAudioToggleMute();
+  const mediaAudioIsMuted = audioManagerRef.current
+    ? audioManagerRef.current.mediaAudioIsMuted
+    : false;
+
+  const setMediaAudioMuted = useCallback((mute: boolean) => {
+    if (!audioManagerRef.current) {
+      console.warn(
+        "setMediaAudioMuted called but AudioManager is not initialised",
+      );
+      return;
+    }
+    audioManagerRef.current.mediaAudioIsMuted = mute;
   }, []);
 
   const stopAllMedia = useCallback(() => {
@@ -255,45 +292,53 @@ export const AudioManagerProvider = ({
     () => ({
       isListening,
       isBrowserSupported,
+      initialise,
       transcript,
       interimTranscript,
       liveTranscript,
-      recordingStatus,
-      initialise,
       clearTranscript,
+      recordingStatus,
       startListening,
       stopListening,
       connect,
       disconnect,
       resetTimeout,
-      playOutput,
+      playCharacterSpeech,
       characterSpeechVolume,
       setCharacterSpeechVolume,
+      characterSpeechIsMuted,
+      setCharacterSpeechMuted,
       playMediaAudio,
-      setMediaVolume,
-      toggleMediaMute,
+      mediaAudioVolume,
+      setMediaAudioVolume,
+      mediaAudioIsMuted,
+      setMediaAudioMuted,
       stopAllMedia,
     }),
     [
       isListening,
       isBrowserSupported,
-      recordingStatus,
+      initialise,
       transcript,
       interimTranscript,
       liveTranscript,
-      initialise,
       clearTranscript,
+      recordingStatus,
       startListening,
       stopListening,
       connect,
       disconnect,
       resetTimeout,
-      playOutput,
+      playCharacterSpeech,
       characterSpeechVolume,
       setCharacterSpeechVolume,
+      characterSpeechIsMuted,
+      setCharacterSpeechMuted,
       playMediaAudio,
-      setMediaVolume,
-      toggleMediaMute,
+      mediaAudioVolume,
+      setMediaAudioVolume,
+      mediaAudioIsMuted,
+      setMediaAudioMuted,
       stopAllMedia,
     ],
   );

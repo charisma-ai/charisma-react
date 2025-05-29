@@ -26,7 +26,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "6.0.1-alpha.1",
+    "@charisma-ai/sdk": "7.0.0-alpha.1",
     "immutability-helper": "^3.1.1",
     "p-queue": "^7.3.4"
   },

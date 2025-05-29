@@ -1,5 +1,9 @@
 # Changelog
 
+### v7.0.0
+
+- Update and add audio volume functions
+
 ### v6.0.2
 
 - Improve character speech volume reactivity by setting it prior to each play speech request
