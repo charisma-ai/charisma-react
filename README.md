@@ -189,3 +189,7 @@ A playthrough can have many simultaneous conversations. In order to start intera
 ---
 
 Note: The `@charisma-ai/sdk` package is a peer dependency of `@charisma-ai/react` all of its exports are re-exported in this package. View the [SDK documentation](https://github.com/charisma-ai/charisma-sdk-js) for more information.
+
+## Tips
+
+Remember that you probably want to render AudioManagerProvider only once, so don't define its options inside a component where they may be set as a new object on rerender unless you have a way around them being replaced (useRef/useMemo).
