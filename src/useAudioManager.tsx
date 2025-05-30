@@ -79,6 +79,7 @@ export const AudioManagerProvider = ({
   const [confirmedTranscripts, setConfirmedTranscripts] = useState("");
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatus>("OFF");
+  const [, forceUpdate] = useState(0);
 
   useEffect(() => {
     try {
@@ -234,6 +235,7 @@ export const AudioManagerProvider = ({
       return;
     }
     audioManagerRef.current.characterSpeechVolume = volume;
+    forceUpdate((x) => x + 1);
   }, []);
 
   const characterSpeechIsMuted = audioManagerRef.current
@@ -248,6 +250,7 @@ export const AudioManagerProvider = ({
       return;
     }
     audioManagerRef.current.characterSpeechIsMuted = mute;
+    forceUpdate((x) => x + 1);
   }, []);
 
   const playMediaAudio = useCallback((audioTracks: AudioTrack[]) => {
@@ -266,6 +269,7 @@ export const AudioManagerProvider = ({
       return;
     }
     audioManagerRef.current.mediaAudioVolume = volume;
+    forceUpdate((x) => x + 1);
   }, []);
 
   const mediaAudioIsMuted = audioManagerRef.current
@@ -280,6 +284,7 @@ export const AudioManagerProvider = ({
       return;
     }
     audioManagerRef.current.mediaAudioIsMuted = mute;
+    forceUpdate((x) => x + 1);
   }, []);
 
   const stopAllMedia = useCallback(() => {
