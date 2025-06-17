@@ -5,6 +5,7 @@ import {
 import Player from "./components/Player";
 import { useEffect, useState } from "react";
 import StorySetupForm from "./components/StorySetupForm";
+import AudioControls from "./components/AudioControls";
 
 export interface StoryParams {
   storyId: number;
@@ -12,6 +13,16 @@ export interface StoryParams {
   startGraphReferenceId?: string;
   storyVersion?: number;
 }
+
+const audioOptions: AudioManagerOptions = {
+  duckVolumeLevel: 0.1,
+  sttService: "charisma/deepgram",
+  streamTimeslice: 1000,
+  handleConnect: () => console.log("Connected from App.tsx"),
+  handleDisconnect: () => console.log("Disconnected from App.tsx"),
+  handleError: (error: string) => console.error("Error from App.tsx", error),
+  debugLogFunction: (message: string) => console.log(message),
+};
 
 function App() {
   const [storyParams, setStoryParams] = useState<StoryParams>({
@@ -28,26 +39,16 @@ function App() {
     }
   }, [storyParams]);
 
-  // AudioManager options are initialised here. They can't be changed after initialisation.
-  const options: AudioManagerOptions = {
-    duckVolumeLevel: 0.1,
-    normalVolumeLevel: 1,
-    sttService: "charisma/deepgram",
-    streamTimeslice: 1000,
-    handleConnect: () => console.log("Connected from App.tsx"),
-    handleDisconnect: () => console.log("Disconnected from App.tsx"),
-    handleError: (error: string) => console.error("Error from App.tsx", error),
-  };
-
   return (
     <div className="app">
-      {readyToPlay ? (
-        <AudioManagerProvider options={options}>
+      <AudioManagerProvider options={audioOptions}>
+        {readyToPlay ? (
           <Player storyParams={storyParams} />
-        </AudioManagerProvider>
-      ) : (
-        <StorySetupForm setStoryParams={setStoryParams} />
-      )}
+        ) : (
+          <StorySetupForm setStoryParams={setStoryParams} />
+        )}
+        <AudioControls />
+      </AudioManagerProvider>
     </div>
   );
 }

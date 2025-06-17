@@ -1,6 +1,6 @@
 {
   "name": "@charisma-ai/react",
-  "version": "6.0.1",
+  "version": "7.0.0-alpha.2",
   "description": "Charisma.ai chat component for React",
   "source": "src/index.ts",
   "type": "module",
@@ -26,7 +26,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "6.0.0",
+    "@charisma-ai/sdk": "7.0.0",
     "immutability-helper": "^3.1.1",
     "p-queue": "^7.3.4"
   },

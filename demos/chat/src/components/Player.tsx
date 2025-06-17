@@ -10,7 +10,6 @@ import {
 import Messages from "./Messages";
 import TextReplyInput from "./TextReplyInput";
 import StartButton from "./StartButton";
-import MuteBackgroundButton from "./MuteBackgroundButton";
 import { type StoryParams } from "../App";
 
 interface Props {
@@ -18,7 +17,8 @@ interface Props {
 }
 
 const Player = ({ storyParams }: Props) => {
-  const { playOutput, stopAllMedia, playMediaAudio } = useAudioManager();
+  const { playCharacterSpeech, stopAllMedia, playMediaAudio } =
+    useAudioManager();
 
   const [playthroughToken, setPlaythroughToken] = useState<string>();
   const [conversationUuid, setConversationUuid] = useState<string>();
@@ -46,7 +46,7 @@ const Player = ({ storyParams }: Props) => {
     if (!characterMessage) return;
 
     if (characterMessage.speech) {
-      playOutput(characterMessage.speech.audio as ArrayBuffer, {
+      playCharacterSpeech(characterMessage.speech.audio as ArrayBuffer, {
         trackId: String(characterMessage.character?.id),
         interrupt: "track",
       });
@@ -84,7 +84,6 @@ const Player = ({ storyParams }: Props) => {
           />
           <Messages />
           <TextReplyInput />
-          <MuteBackgroundButton />
         </>
       </Conversation>
     </Playthrough>
