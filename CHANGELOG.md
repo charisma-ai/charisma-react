@@ -1,5 +1,7 @@
 # Changelog
 
+### vNext
+
 ### v7.0.0
 
 - Update and add audio volume functions
