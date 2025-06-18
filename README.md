@@ -10,7 +10,7 @@ This package is a react wrapper for the Charisma AI Javascript SDK. It provides 
 
 ## Setup in Charisma
 
-After you have signed up at [Charisma.ai](https://charisma.ai), and logged in, make sure you have a valid licence (a free trial licence is available).
+After you have signed up and logged in, make sure you have a valid licence (a free trial licence is available).
 
 Then, on your `My Stories` page, click to `Create a new game story`.
 
@@ -117,15 +117,15 @@ Provides audio. This component is a context provider and must wrap `<Playthrough
 
 #### Options
 
-| Option              | Type                               | Default                  | Description                                                                                                                             |
-| ------------------- | ---------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `duckVolumeLevel`   | `number`                           | 0                        | Volume level when ducking (0 to 1)                                                                                                      |
-| `normalVolumeLevel` | `number`                           | 1                        | Regular volume level (0 to 1)                                                                                                           |
-| `sttService`        | `"charisma/deepgram" or "browser"` | `"charisma/deepgram"`    | Speech-to-text service to use (see below).                                                                                              |
-| `streamTimeslice`   | `number`                           | 100                      | The number of milliseconds to record into each Blob. See https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/start#timeslice |
-| `handleError`       | `(error: string) => void`          | `console.error(error)`   | Callback to handle errors.                                                                                                              |
-| `handleDisconnect`  | `(message: string) => void`        | `console.error(message)` | Callback to handle when the transcription service disconnects.                                                                          |
-| `handleConnect`     | `(message: string) => void`        | `console.log(message)`   | Callback to handle when the transcription service connects.                                                                             |
+| Option                     | Type                               | Default                  | Description                                                                                                                             |
+| -------------------------- | ---------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `duckVolumeLevel`          | `number`                           | 0                        | Volume level when ducking (0 to 1)                                                                                                      |
+| `sttService`               | `"charisma/deepgram" or "browser"` | `"charisma/deepgram"`    | Speech-to-text service to use (see below).                                                                                              |
+| `streamTimeslice`          | `number`                           | 100                      | The number of milliseconds to record into each Blob. See https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/start#timeslice |
+| `reconnectAttemptsTimeout` | `number`                           | 0                        | Interval in ms after which to attempt to reconnect the charisma/deepgram speech to text server                                          |
+| `handleError`              | `(error: string) => void`          | `console.error(error)`   | Callback to handle errors.                                                                                                              |
+| `handleDisconnect`         | `(message: string) => void`        | `console.error(message)` | Callback to handle when the transcription service disconnects.                                                                          |
+| `handleConnect`            | `(message: string) => void`        | `console.log(message)`   | Callback to handle when the transcription service connects.                                                                             |
 
 ### useAudioManager
 
@@ -141,18 +141,23 @@ Hook that provides access to the AudioManagerProvider context.
 | `transcript`               | string                                                                                            | The current transcript from STT.                                                                                                    |
 | `interimTranscript`        | string                                                                                            | The current unfinished transcript from STT.                                                                                         |
 | `liveTranscript`           | string                                                                                            | The current combination of confirmed transcripts plus current interim transcript from STT.                                          |
+| `clearTranscript`          | `() => void`                                                                                      | Clear the all the transcript data ready to listen again.                                                                            |
 | `recordingStatus`          | RecordingStatus                                                                                   | The current recording status. Can be "OFF", "STARTING" or "RECORDING".                                                              |
 | `startListening`           | `(timeout?: number) => void`                                                                      | Starts listening for STT.                                                                                                           |
 | `stopListening`            | `() => void`                                                                                      | Stops listening for STT.                                                                                                            |
 | `connect`                  | `(token: string, playerSessionId: string) => void`                                                | Connects to the AudioManager. See `StartButton.tsx` in the chat demo for an example.                                                |
 | `disconnect`               | `() => void`                                                                                      | Disconnects from the server                                                                                                         |
 | `resetTimeout`             | `(timeout: number) => void`                                                                       | Resets the STT timeout before the microphone automatically stops listening for STT.                                                 |
-| `playOutput`               | `(audio: ArrayBuffer, playOptions: AudioOutputsServicePlayOptions) => Promise<void> or undefined` | Plays character speech from a MessageEvent.                                                                                         |
-| `characterSpeechVolume`    | `number or undefined`                                                                             | Gets the normal volume of character speech. Between 0 and 1.                                                                        |
+| `playCharacterSpeech`      | `(audio: ArrayBuffer, playOptions: AudioOutputsServicePlayOptions) => Promise<void> or undefined` | Plays character speech from a MessageEvent.                                                                                         |
+| `characterSpeechVolume`    | `number`                                                                                          | Gets the normal volume of character speech. Between 0 and 1.                                                                        |
 | `setCharacterSpeechVolume` | `(volume: number) => void`                                                                        | Sets the volume of character speech. Must be between 0 and 1.                                                                       |
+| `characterSpeechIsMuted`   | `boolean`                                                                                         | Whether the character speech is currently muted.                                                                                    |
+| `setCharacterSpeechMuted`  | `(muted: boolean) => void`                                                                        | Sets character speech. to be muted or not.                                                                                          |
 | `playMediaAudio`           | `(audioTracks: AudioTrack[]) => void`                                                             | Plays media audio from a MessageEvent. This is used for playing background music.                                                   |
-| `setMediaVolume`           | `(volume: number) => void`                                                                        | Sets the volume of media audio. Must be between 0 and 1.                                                                            |
-| `toggleMediaMute`          | `() => void`                                                                                      | Toggles the mute state of media audio.                                                                                              |
+| `mediaAudioVolume`         | `number`                                                                                          | Gets the normal volume of all background audio. Between 0 and 1.                                                                    |
+| `setMediaAudioVolume`      | `(volume: number) => void`                                                                        | Sets the volume of media audio. Must be between 0 and 1.                                                                            |
+| `mediaAudioIsMuted`        | `boolean`                                                                                         | Whether the background audio is currently muted.                                                                                    |
+| `setMediaAudioMuted`       | `() => void`                                                                                      | Toggles the mute state of media audio.                                                                                              |
 | `stopAllMedia`             | `() => void`                                                                                      | Stops all media audio.                                                                                                              |
 
 ### createPlaythroughToken
@@ -184,3 +189,7 @@ A playthrough can have many simultaneous conversations. In order to start intera
 ---
 
 Note: The `@charisma-ai/sdk` package is a peer dependency of `@charisma-ai/react` all of its exports are re-exported in this package. View the [SDK documentation](https://github.com/charisma-ai/charisma-sdk-js) for more information.
+
+## Tips
+
+Remember that you probably want to render AudioManagerProvider only once, so don't define its options inside a component where they may be set as a new object on rerender unless you have a way around them being replaced (useRef/useMemo).
