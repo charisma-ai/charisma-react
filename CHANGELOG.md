@@ -2,6 +2,8 @@
 
 ### vNext
 
+- Add Character Speech Analyser Node
+
 ### v7.0.0
 
 - Update and add audio volume functions

@@ -38,6 +38,7 @@ type AudioManagerContextType = {
     audio: ArrayBuffer,
     playOptions: boolean | AudioOutputsServicePlayOptions,
   ) => Promise<void> | undefined;
+  getCharacterSpeechAnalyserNode: () => AnalyserNode | undefined;
   characterSpeechVolume: number;
   setCharacterSpeechVolume: (volume: number) => void;
   characterSpeechIsMuted: boolean;
@@ -291,6 +292,10 @@ export const AudioManagerProvider = ({
     audioManagerRef.current?.mediaAudioStopAll();
   }, []);
 
+  const getCharacterSpeechAnalyserNode = useCallback(() => {
+    return audioManagerRef.current?.getCharacterSpeechAnalyserNode();
+  }, []);
+
   const liveTranscript = `${confirmedTranscripts} ${interimTranscript}`.trim();
 
   const value = useMemo(
@@ -309,6 +314,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playCharacterSpeech,
+      getCharacterSpeechAnalyserNode,
       characterSpeechVolume,
       setCharacterSpeechVolume,
       characterSpeechIsMuted,
@@ -335,6 +341,7 @@ export const AudioManagerProvider = ({
       disconnect,
       resetTimeout,
       playCharacterSpeech,
+      getCharacterSpeechAnalyserNode,
       characterSpeechVolume,
       setCharacterSpeechVolume,
       characterSpeechIsMuted,
