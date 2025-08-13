@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@charisma-ai/sdk':
-        specifier: git+https://github.com/charisma-ai/charisma-sdk-js.git#rnd-expose-audio-streams
-        version: https://codeload.github.com/charisma-ai/charisma-sdk-js/tar.gz/5f32ed079eee762e2ac5779230f591c90aad5122
+        specifier: 7.0.1
+        version: 7.0.1
       immutability-helper:
         specifier: ^3.1.1
         version: 3.1.1
@@ -126,9 +126,8 @@ packages:
     resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==, tarball: https://registry.npmjs.org/@babel/runtime/-/runtime-7.27.6.tgz}
     engines: {node: '>=6.9.0'}
 
-  '@charisma-ai/sdk@https://codeload.github.com/charisma-ai/charisma-sdk-js/tar.gz/5f32ed079eee762e2ac5779230f591c90aad5122':
-    resolution: {tarball: https://codeload.github.com/charisma-ai/charisma-sdk-js/tar.gz/5f32ed079eee762e2ac5779230f591c90aad5122}
-    version: 7.0.0
+  '@charisma-ai/sdk@7.0.1':
+    resolution: {integrity: sha512-vwIWxPtuoaDlJFv+zWaQIIw8W8+6QDKJM8liGPYy2o1BIuV6FSEGWnIuLQb76FDukDG6mm43C6sORBckeO9/pw==, tarball: https://registry.npmjs.org/@charisma-ai/sdk/-/sdk-7.0.1.tgz}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==, tarball: https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz}
@@ -3975,7 +3974,7 @@ snapshots:
 
   '@babel/runtime@7.27.6': {}
 
-  '@charisma-ai/sdk@https://codeload.github.com/charisma-ai/charisma-sdk-js/tar.gz/5f32ed079eee762e2ac5779230f591c90aad5122':
+  '@charisma-ai/sdk@7.0.1':
     dependencies:
       colyseus.js: 0.14.13
       eventemitter3: 5.0.1

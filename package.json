@@ -25,7 +25,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@charisma-ai/sdk": "git+https://github.com/charisma-ai/charisma-sdk-js.git#rnd-expose-audio-streams",
+    "@charisma-ai/sdk": "7.0.1",
     "immutability-helper": "^3.1.1",
     "p-queue": "^7.3.4"
   },
