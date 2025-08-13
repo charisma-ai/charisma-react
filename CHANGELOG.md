@@ -2,6 +2,8 @@
 
 ### vNext
 
+### v7.0.1
+
 - Add Character Speech Analyser Node
 
 ### v7.0.0
