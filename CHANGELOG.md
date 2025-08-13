@@ -2,6 +2,10 @@
 
 ### vNext
 
+### v7.0.2
+
+- Minor fix to a type
+
 ### v7.0.1
 
 - Add Character Speech Analyser Node
